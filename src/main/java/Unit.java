@@ -1,6 +1,6 @@
 
 
-public class Unit {
+public abstract class Unit {
 
     /**
      *A Unit is a superclass for a troop.
@@ -43,13 +43,9 @@ public class Unit {
         this.healthPoints = healthPoints;
     }
 
-    public int getAttackBonus() {
+    public abstract int getAttackBonus();
 
-    }
-
-    public int getResistBonus() {
-
-    }
+    public abstract int getResistBonus();
 
     @Override
     public String toString() {
