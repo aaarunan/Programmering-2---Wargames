@@ -1,4 +1,4 @@
-
+import java.util.Objects;
 
 public abstract class Unit {
 
@@ -54,5 +54,18 @@ public abstract class Unit {
                 " healthPoints=" + healthPoints +
                 " attackPoints=" + attackPoints +
                 " armorPoints=" + armorPoints;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Unit)) return false;
+        Unit unit = (Unit) o;
+        return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && type.equals(unit.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, healthPoints, attackPoints, armorPoints);
     }
 }
