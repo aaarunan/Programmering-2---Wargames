@@ -1,3 +1,5 @@
+import Unit.Unit;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -6,26 +8,25 @@ public class Army {
     private final String name;
     private final ArrayList<Unit> units;
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     public Army(String name) {
         this.name = name;
         this.units = new ArrayList<>();
     }
+
     public Army(String name, ArrayList<Unit> units) {
         this.name = name;
         this.units = units;
     }
 
 
-    public void add (Unit unit) {
+    public void add(Unit unit) {
         units.add(unit);
     }
 
-    public void addAll (ArrayList<Unit> units) {
-        for (Unit unit: units) {
-            this.units.add(unit);
-        }
+    public void addAll(ArrayList<Unit> units) {
+        this.units.addAll(units);
     }
 
     public void remove(Unit unit) {
@@ -48,7 +49,7 @@ public class Army {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (Unit unit: this.units) {
+        for (Unit unit : this.units) {
             sb.append(unit.toString());
             sb.append("\n");
         }
