@@ -1,18 +1,20 @@
+package Unit;
+
 import java.util.Objects;
 
 public abstract class Unit {
 
     /**
-     *A Unit is a superclass for a troop.
+     *A Unit.Unit is a superclass for a troop.
      */
 
-    private final String type;
+    private final String name;
     private int healthPoints;
     private int attackPoints;
     private int armorPoints;
 
-    public Unit(String type, int healthPoints, int attackPoints, int armorPoints) {
-        this.type = type;
+    public Unit(String name, int healthPoints, int attackPoints, int armorPoints) {
+        this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
         this.armorPoints = armorPoints;
@@ -23,8 +25,12 @@ public abstract class Unit {
         opponent.setHealthPoints(newHealthPoints);
     }
 
+    public boolean isDead() {
+        return healthPoints <= 0;
+    }
+
     public String getType() {
-        return type;
+        return name;
     }
 
     public int getHealthPoints() {
@@ -50,7 +56,7 @@ public abstract class Unit {
     @Override
     public String toString() {
         return
-                "Type" + type +
+                "Type" + name +
                 " healthPoints=" + healthPoints +
                 " attackPoints=" + attackPoints +
                 " armorPoints=" + armorPoints;
@@ -61,11 +67,11 @@ public abstract class Unit {
         if (this == o) return true;
         if (!(o instanceof Unit)) return false;
         Unit unit = (Unit) o;
-        return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && type.equals(unit.type);
+        return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && name.equals(unit.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, healthPoints, attackPoints, armorPoints);
+        return Objects.hash(name, healthPoints, attackPoints, armorPoints);
     }
 }
