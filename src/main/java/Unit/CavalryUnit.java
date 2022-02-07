@@ -5,6 +5,7 @@ public class CavalryUnit extends Unit {
     private int resistBonus = 1;
 
     public CavalryUnit(String name, int health) {
+
         super(name, health, 20, 12);
     }
 

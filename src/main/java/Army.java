@@ -1,5 +1,4 @@
-import Unit.Unit;
-
+import Unit.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -20,6 +19,9 @@ public class Army {
         this.units = units;
     }
 
+    public Unit get(int index) {
+        return units.get(index);
+    }
 
     public void add(Unit unit) {
         units.add(unit);
@@ -34,7 +36,7 @@ public class Army {
     }
 
     public boolean hasUnits() {
-        return units.isEmpty();
+        return !units.isEmpty();
     }
 
     public Unit getRandom() {

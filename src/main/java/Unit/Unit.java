@@ -5,7 +5,7 @@ import java.util.Objects;
 public abstract class Unit {
 
     /**
-     *A Unit.Unit is a superclass for a troop.
+     *A Unit is a superclass for a troop.
      */
 
     private final String name;
@@ -21,7 +21,7 @@ public abstract class Unit {
     }
 
     public void attack(Unit opponent) {
-        int newHealthPoints = opponent.getHealthPoints()-attackPoints+this.getAttackBonus() + opponent.attackPoints +opponent.getResistBonus();
+        int newHealthPoints = opponent.getHealthPoints() - this.getAttackPoints() - this.getAttackBonus() + opponent.getArmorPoints() + opponent.getResistBonus();
         opponent.setHealthPoints(newHealthPoints);
     }
 
@@ -29,7 +29,7 @@ public abstract class Unit {
         return healthPoints <= 0;
     }
 
-    public String getType() {
+    public String getName() {
         return name;
     }
 
@@ -45,8 +45,8 @@ public abstract class Unit {
         return armorPoints;
     }
 
-    public void setHealthPoints(int healthPoints) {
-        this.healthPoints = healthPoints;
+    public void setHealthPoints(int newHealthPoints) {
+        this.healthPoints = newHealthPoints;
     }
 
     public abstract int getAttackBonus();
