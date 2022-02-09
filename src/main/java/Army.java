@@ -1,47 +1,131 @@
 import Unit.*;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+
+import java.util.*;
 
 public class Army {
+
+    /**
+     * An Army is a collection of Units.
+     * It has a name that defines it.
+     * <p>
+     * The Army class uses an ArrayList for storing the Units.
+     * This is because there can be stored multiples of the same Unit,
+     * and the order of the Units does not matter.
+     */
+
     private final String name;
     private final ArrayList<Unit> units;
 
-    private final Random rand = new Random();
+    private final Random rand = new Random(); //Used to get a random Unit
 
-    public Army(String name) {
+    /**
+     * Constructs the Army with an empty ArrayList.
+     *
+     * @param name must not be empty.
+     * @throws IllegalArgumentException if the name is blank.
+     */
+
+    public Army(String name) throws IllegalArgumentException {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException(("Name must not be blank."));
+        }
+
         this.name = name;
         this.units = new ArrayList<>();
+
     }
 
-    public Army(String name, ArrayList<Unit> units) {
+    /**
+     * Constructs the Army with a given ArrayList of Units
+     *
+     * @param name  must not be empty.
+     * @param units ArrayList of Units.
+     * @throws IllegalArgumentException if the name is blank.
+     */
+
+    public Army(String name, ArrayList<Unit> units) throws IllegalArgumentException {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Name must not be blank.");
+        }
+
         this.name = name;
         this.units = units;
+
     }
+
+    /**
+     * Get a specific Unit in the Army by a given index.
+     *
+     * @param index in the collection.
+     * @return the targeted Unit.
+     */
 
     public Unit get(int index) {
         return units.get(index);
     }
 
+    /**
+     * Add a Unit to the Army.
+     *
+     * @param unit Unit that is being added.
+     */
+
     public void add(Unit unit) {
         units.add(unit);
     }
+
+    /**
+     * Add an ArrayList of Units to the Army.
+     *
+     * @param units that is being added.
+     */
 
     public void addAll(ArrayList<Unit> units) {
         this.units.addAll(units);
     }
 
-    public void remove(Unit unit) {
-        units.removeIf(target -> target.equals(unit));
+    /**
+     * Remove a Unit in the Army.
+     * Usually done if the Units is dead.
+     *
+     * @param unit the Unit that is being removed.
+     * @return true if removed, or false if not removed.
+     */
+
+    public boolean remove(Unit unit) {
+        return units.removeIf(target -> target.equals(unit));
     }
+
+    /**
+     * Checks if there are no Units in the Army.
+     *
+     * @return false if empty, true if there is atleast one Unit.
+     */
 
     public boolean hasUnits() {
         return !units.isEmpty();
     }
 
-    public Unit getRandom() {
+    /**
+     * Get a random Unit in the Army.
+     *
+     * @return A random Unit.
+     * @throws IllegalStateException if the Army has no Units.
+     */
+
+    public Unit getRandom() throws IllegalStateException {
+        if (!this.hasUnits()) {
+            throw new IllegalStateException("Army has no units");
+        }
+
         return units.get(rand.nextInt(units.size()));
     }
+
+    /**
+     * Get the name of the Army.
+     *
+     * @return this.name.
+     */
 
     public String getName() {
         return name;
