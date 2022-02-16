@@ -1,6 +1,6 @@
 package Unit;
 
-public class CommanderUnit extends Unit {
+public class CommanderUnit extends CavalryUnit {
 
     /**
      * The CommanderUnit is a more capable CavalryUnit.
@@ -13,10 +13,8 @@ public class CommanderUnit extends Unit {
      * resistBonus: 1
      */
 
-    private final int baseAttackBonus = 2;
-    private int attackBonus = 4 + baseAttackBonus;
-
-    private final int resistBonus = 1;
+    private final static int attackPoints = 25;
+    private final static int armorPoints = 15;
 
     /**
      * Constructs the CommanderUnit with the given stats
@@ -25,33 +23,15 @@ public class CommanderUnit extends Unit {
      * @param health must be greater than 0
      */
 
+
     public CommanderUnit(String name, int health) {
-        super(name, health, 25, 15);
+        super(name, health, attackPoints, armorPoints);
     }
+
 
     @Override
-    public int getAttackBonus() {
-        return attackBonus;
+    public CommanderUnit copy() {
+        return new CommanderUnit(this.getName(), this.getHealthPoints());
     }
 
-    @Override
-    public int getResistBonus() {
-        return resistBonus;
-    }
-
-    /**
-     * Calls the super method, and manages the units special ability.
-     * Attacking once will demote to baseAttackBonus
-     *
-     * @param opponent The opposing unit that is being attacked
-     */
-
-    @Override
-    public void attack(Unit opponent) {
-        super.attack(opponent);
-
-        if (attackBonus != baseAttackBonus) {
-            attackBonus = baseAttackBonus;
-        }
-    }
 }
