@@ -47,21 +47,27 @@ public abstract class Unit {
         this.armorPoints = armorPoints;
     }
 
+    public abstract Unit copy();
+
     /**
      * Attacking deals damage to a given opponent.
      * The damage is measured by:
      * opponent.healthPoints - this.attackPoints - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus
      *
      * @param opponent The opposing unit that is being attacked
+     * @throws IllegalStateException if damage dealt is positive
      */
 
-    public void attack(Unit opponent) {
+    public void attack(Unit opponent) throws IllegalStateException {
         int newHealthPoints = opponent.getHealthPoints() -
                 this.getAttackPoints() -
                 this.getAttackBonus() +
                 opponent.getArmorPoints() +
                 opponent.getResistBonus();
 
+        if (newHealthPoints > opponent.getHealthPoints()) {
+            throw new IllegalStateException("Attacking can not give healthPoints");
+        }
         opponent.hit(newHealthPoints);
     }
 

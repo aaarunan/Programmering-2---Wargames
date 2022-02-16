@@ -71,9 +71,14 @@ public class Army {
      */
 
     public void add(Unit unit) {
-        units.add(unit);
+        units.add((unit.copy()));
     }
 
+    public void add(Unit unit, int count) {
+        for (int i = 0; i < count; i++) {
+           units.add(unit);
+        }
+    }
     /**
      * Add an ArrayList of Units to the Army.
      *
@@ -81,7 +86,9 @@ public class Army {
      */
 
     public void addAll(ArrayList<Unit> units) {
-        this.units.addAll(units);
+        for (Unit unit : units) {
+            this.add(unit.copy());
+        }
     }
 
     /**
@@ -105,7 +112,6 @@ public class Army {
     public boolean hasUnits() {
         return !units.isEmpty();
     }
-
     /**
      * Get a random Unit in the Army.
      *
@@ -129,6 +135,20 @@ public class Army {
 
     public String getName() {
         return name;
+    }
+
+    public Army deepCopy() {
+        ArrayList<Unit> copy = new ArrayList<>();
+
+        for (Unit unit : this.units) {
+            copy.add(unit.copy());
+        }
+
+        return new Army(this.name, copy);
+    }
+
+    public int getUnits() {
+        return units.size();
     }
 
     @Override
