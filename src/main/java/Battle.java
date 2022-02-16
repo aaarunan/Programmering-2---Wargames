@@ -1,7 +1,6 @@
-import Unit.Unit;
+import Unit.*;
 
 public class Battle {
-
     /**
      * A Battle is where Armies fight.
      * A fight is done by a random Unit in a random Army attacking
@@ -10,6 +9,8 @@ public class Battle {
 
     private Army attacker;
     private Army defender;
+
+    private int numOfAttacks = 0;
 
     /**
      * Constructs a Battle by a defending army, and an attacking Army.
@@ -34,30 +35,37 @@ public class Battle {
      * @throws IllegalStateException if the armies has no Units.
      */
 
-    public Army simulate() throws IllegalStateException{
+    public Army simulate() throws IllegalStateException {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
 
-        while (attacker.hasUnits() || defender.hasUnits()) {
+        Army temp;
+
+        while (attacker.hasUnits() && defender.hasUnits()) {
             Unit attackerUnit = attacker.getRandom();
             Unit defenderUnit = defender.getRandom();
 
-            attacker.getRandom().attack(defenderUnit);
+            attackerUnit.attack(defenderUnit);
 
             if (defenderUnit.isDead()) {
-                attacker.remove(attackerUnit);
-            }
-
-            defender.getRandom().attack(attackerUnit);
-
-            if (attackerUnit.isDead()) {
                 defender.remove(defenderUnit);
             }
+
+            temp = attacker;
+            attacker = defender;
+            defender = temp;
+
+            numOfAttacks++;
+
         }
 
         return attacker.hasUnits() ? attacker : defender;
 
+    }
+
+    public int getNumOfAttacks() {
+        return numOfAttacks;
     }
 
     @Override
