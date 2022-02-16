@@ -29,6 +29,20 @@ public class CommanderUnit extends CavalryUnit {
     }
 
 
+    /**
+     * Constructor designed for Unit classes that needs to
+     * change the stats for the Unit.
+     *
+     * @param name must not be empty
+     * @param health must be greater than 0
+     * @param attackPoints must be greater than 0
+     * @param armorPoints must be greater than 0;
+     */
+
+    protected CommanderUnit(String name, int health, int attackPoints, int armorPoints) {
+        super(name, health, attackPoints, armorPoints);
+    }
+
     @Override
     public CommanderUnit copy() {
         return new CommanderUnit(this.getName(), this.getHealthPoints());

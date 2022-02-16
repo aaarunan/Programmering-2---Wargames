@@ -19,7 +19,6 @@ public class InfantryUnit extends Unit {
     private static final int RESIST_BONUS = 1;
 
 
-
     /**
      * Constructs the InfantryUnit with the given stats
      *
@@ -29,6 +28,20 @@ public class InfantryUnit extends Unit {
 
     public InfantryUnit(String name, int health) {
         super(name, health, ATTACK_POINTS, ARMOR_POINTS);
+    }
+
+    /**
+     * Constructor designed for Unit classes that needs to
+     * change the stats for the Unit.
+     *
+     * @param name must not be empty
+     * @param health must be greater than 0
+     * @param attackPoints must be greater than 0
+     * @param armorPoints must be greater than 0;
+     */
+
+    protected InfantryUnit(String name, int health, int attackPoints, int armorPoints) {
+        super(name, health, attackPoints, armorPoints);
     }
 
     @Override
