@@ -13,8 +13,8 @@ public class CommanderUnit extends CavalryUnit {
      * resistBonus: 1
      */
 
-    private final static int attackPoints = 25;
-    private final static int armorPoints = 15;
+    private final static int ATTACK_POINTS = 25;
+    private final static int ARMOR_POINTS = 15;
 
     /**
      * Constructs the CommanderUnit with the given stats
@@ -25,7 +25,7 @@ public class CommanderUnit extends CavalryUnit {
 
 
     public CommanderUnit(String name, int health) {
-        super(name, health, attackPoints, armorPoints);
+        super(name, health, ATTACK_POINTS, ARMOR_POINTS);
     }
 
 

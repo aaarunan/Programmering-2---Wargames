@@ -12,9 +12,13 @@ public class InfantryUnit extends Unit {
      * resistBonus of 1
      */
 
-    private final int attackBonus = 2;
+    private static final int ATTACK_POINTS = 15;
+    private static final int ARMOR_POINTS = 10;
 
-    private final int resistBonus = 1;
+    private static final int ATTACK_BONUS = 2;
+    private static final int RESIST_BONUS = 1;
+
+
 
     /**
      * Constructs the InfantryUnit with the given stats
@@ -24,17 +28,22 @@ public class InfantryUnit extends Unit {
      */
 
     public InfantryUnit(String name, int health) {
-        super(name, health, 15, 10);
+        super(name, health, ATTACK_POINTS, ARMOR_POINTS);
+    }
+
+    @Override
+    public InfantryUnit copy() {
+        return new InfantryUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override
     public int getAttackBonus() {
-        return attackBonus;
+        return ATTACK_BONUS;
     }
 
     @Override
     public int getResistBonus() {
-        return resistBonus;
+        return RESIST_BONUS;
     }
 
 

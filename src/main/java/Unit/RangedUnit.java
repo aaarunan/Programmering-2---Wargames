@@ -13,10 +13,14 @@ public class RangedUnit extends Unit {
      * resistBonus: 6 4 2
      */
 
-    private final int attackBonus = 3;
+    private final static int ATTACK_POINTS = 15;
+    private final static int ARMOR_POINTS = 8;
 
-    private final int baseResistBonus = 2;
-    private int resistBonus = 3 * baseResistBonus;
+    private final static int ATTACK_BONUS = 3;
+    private final static int BASE_RESIST_BONUS = 2;
+    private final static int RESIST_INTERVAL = 2;
+
+    private int resistBonus = 3 * BASE_RESIST_BONUS;
 
     /**
      * Constructs the CavalryUnit with the given stats
@@ -26,12 +30,18 @@ public class RangedUnit extends Unit {
      */
 
     public RangedUnit(String name, int health) {
-        super(name, health, 15, 8);
+        super(name, health, ATTACK_POINTS,ARMOR_POINTS);
+    }
+
+
+    @Override
+    public RangedUnit copy() {
+        return new RangedUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override
     public int getAttackBonus() {
-        return attackBonus;
+        return ATTACK_BONUS;
     }
 
     @Override
@@ -41,8 +51,8 @@ public class RangedUnit extends Unit {
 
     /**
      * When the RangedUnit is hit it will call the super method,
-     * and lower its resistBonus by the baseResistBonus until it is equal
-     * to the baseResistBonus
+     * and lower its resistBonus by the BASE_RESIST_BONUS until it is equal
+     * to the BASE_RESIST_BONUS
      *
      * @param newHealthPoints the newHealthPoints of the unit
      */
@@ -51,8 +61,8 @@ public class RangedUnit extends Unit {
     public void hit(int newHealthPoints) {
         super.hit(newHealthPoints);
 
-        if (resistBonus > baseResistBonus) {
-            resistBonus -= baseResistBonus;
+        if (resistBonus > BASE_RESIST_BONUS) {
+            resistBonus -= RESIST_INTERVAL;
         }
     }
 }

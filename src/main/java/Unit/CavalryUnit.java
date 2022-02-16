@@ -13,10 +13,16 @@ public class CavalryUnit extends Unit {
      * resistBonus of 1
      */
 
-    private final int baseAttackBonus = 2;
-    private int attackBonus = 4 + baseAttackBonus;
+    private final static int BASE_ATTACK_BONUS = 2;
+    private final int FIRST_ATTACK_BONUS = 4;
+    private final static int RESIST_BONUS = 1;
 
-    private final int resistBonus = 1;
+    private int attackBonus = BASE_ATTACK_BONUS + FIRST_ATTACK_BONUS;
+
+    private boolean hasAttacked = false;
+
+    private final static int ATTACK_POINTS = 20;
+    private final static int ARMOR_POINTS = 12;
 
     /**
      * Constructs the CavalryUnit with the given stats
@@ -26,7 +32,16 @@ public class CavalryUnit extends Unit {
      */
 
     public CavalryUnit(String name, int health) {
-        super(name, health, 20, 12);
+        super(name, health, ATTACK_POINTS, ARMOR_POINTS);
+    }
+
+    public CavalryUnit(String name, int health, int attackPoints, int armorPoints) {
+        super(name, health, attackPoints, armorPoints);
+    }
+
+    @Override
+    public CavalryUnit copy() {
+        return new CavalryUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override
@@ -36,12 +51,13 @@ public class CavalryUnit extends Unit {
 
     @Override
     public int getResistBonus() {
-        return resistBonus;
+        return RESIST_BONUS;
     }
+
 
     /**
      * Calls the super method, and manages the units special ability.
-     * Attacking once will demote to baseAttackBonus
+     * Attacking once will demote to BASE_ATTACK_BONUS
      *
      * @param opponent The opposing unit that is being attacked
      */
@@ -50,8 +66,10 @@ public class CavalryUnit extends Unit {
     public void attack(Unit opponent) {
         super.attack(opponent);
 
-        if (attackBonus != baseAttackBonus) {
-            attackBonus = baseAttackBonus;
+        //bedre å bruke boolean for å sjekke??
+        if (!hasAttacked) {
+            hasAttacked = true;
+            attackBonus = BASE_ATTACK_BONUS;
         }
     }
 }
