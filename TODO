@@ -1,0 +1,5 @@
+1. Change equals in each Units
+2. Add compareTo.
+3. Override equals.
+4. Add tests on construction
+5. git
