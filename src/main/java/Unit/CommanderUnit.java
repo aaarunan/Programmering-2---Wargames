@@ -13,8 +13,8 @@ public class CommanderUnit extends CavalryUnit {
      * resistBonus: 1
      */
 
-    private final static int ATTACK_POINTS = 25;
-    private final static int ARMOR_POINTS = 15;
+    protected final static int ATTACK_POINTS = 25;
+    protected final static int ARMOR_POINTS = 15;
 
     /**
      * Constructs the CommanderUnit with the given stats

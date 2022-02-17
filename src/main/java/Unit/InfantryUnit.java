@@ -12,11 +12,11 @@ public class InfantryUnit extends Unit {
      * resistBonus of 1
      */
 
-    private static final int ATTACK_POINTS = 15;
-    private static final int ARMOR_POINTS = 10;
+    protected static final int ATTACK_POINTS = 15;
+    protected static final int ARMOR_POINTS = 10;
 
-    private static final int ATTACK_BONUS = 2;
-    private static final int RESIST_BONUS = 1;
+    protected static final int ATTACK_BONUS = 2;
+    protected static final int RESIST_BONUS = 1;
 
 
     /**

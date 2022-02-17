@@ -13,12 +13,12 @@ public class RangedUnit extends Unit {
      * resistBonus: 6 4 2
      */
 
-    private final static int ATTACK_POINTS = 15;
-    private final static int ARMOR_POINTS = 8;
+    protected final static int ATTACK_POINTS = 15;
+    protected final static int ARMOR_POINTS = 8;
 
-    private final static int ATTACK_BONUS = 3;
-    private final static int BASE_RESIST_BONUS = 2;
-    private final static int RESIST_INTERVAL = 2;
+    protected final static int ATTACK_BONUS = 3;
+    protected final static int BASE_RESIST_BONUS = 2;
+    protected final static int RESIST_INTERVAL = 2;
 
     private int resistBonus = 3 * BASE_RESIST_BONUS;
 

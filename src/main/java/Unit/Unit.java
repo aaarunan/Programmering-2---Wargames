@@ -1,8 +1,9 @@
 package Unit;
 
+import java.util.Comparator;
 import java.util.Objects;
 
-public abstract class Unit {
+public abstract class Unit implements Comparable<Unit> {
 
     /**
      * A Unit is a superclass for a specific Unit.
@@ -46,6 +47,12 @@ public abstract class Unit {
         this.attackPoints = attackPoints;
         this.armorPoints = armorPoints;
     }
+
+    /**
+     * An abstract method for making a copy of the Unit.
+     *
+     * @return copy
+     */
 
     public abstract Unit copy();
 
