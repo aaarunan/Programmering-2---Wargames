@@ -13,16 +13,16 @@ public class CavalryUnit extends Unit {
      * resistBonus of 1
      */
 
-    private final static int BASE_ATTACK_BONUS = 2;
-    private final int FIRST_ATTACK_BONUS = 4;
-    private final static int RESIST_BONUS = 1;
+    protected final static int BASE_ATTACK_BONUS = 2;
+    protected final static int FIRST_ATTACK_BONUS = 4;
+    protected final static int RESIST_BONUS = 1;
 
     private int attackBonus = BASE_ATTACK_BONUS + FIRST_ATTACK_BONUS;
 
     private boolean hasAttacked = false;
 
-    private final static int ATTACK_POINTS = 20;
-    private final static int ARMOR_POINTS = 12;
+    protected final static int ATTACK_POINTS = 20;
+    protected final static int ARMOR_POINTS = 12;
 
     /**
      * Constructs the CavalryUnit with the given stats
