@@ -162,17 +162,37 @@ public abstract class Unit implements Comparable<Unit> {
                         " armorPoints: " + armorPoints;
     }
 
-    @Override
-    public int compareTo(Unit unit) {
+    /**
+     * Compares to units together. Sorted by:
+     * name->healthpoints->armorpoints->attackbonus->defencebonus
+     *
+     * @param other unit that is being compared to
+     * @return integer that represents the difference
+     */
 
-        if(this == unit) {
+    @Override
+    public int compareTo(Unit other) {
+
+        if(this.equals(other)) {
             return 0;
         }
 
-        int result = this.getName().compareTo(unit.getName());
+        int result = this.getName().compareTo(other.getName());
 
         if (result == 0) {
-            result = this.getHealthPoints() - unit.getHealthPoints();
+            result = this.getHealthPoints() - other.getHealthPoints();
+        }
+
+        if (result == 0) {
+            result = this.getArmorPoints() - other.getArmorPoints();
+        }
+
+        if (result == 0) {
+          result = this.getAttackBonus() - other.getAttackBonus();
+        }
+
+        if (result == 0) {
+            result = this.getResistBonus() - other.getResistBonus();
         }
 
         return result;
