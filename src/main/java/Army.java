@@ -140,7 +140,8 @@ public class Army {
     private ArrayList<Unit> sort() {
         ArrayList<Unit> copy = new ArrayList<>(this.units);
 
-        //return Arrays.sort(copy);
+        Collections.sort(copy);
+
         return copy;
     }
 
@@ -164,6 +165,12 @@ public class Army {
         return new Army(this.name, copy);
     }
 
+    /**
+     * Get how many units there are in an Army.
+     *
+     * @return int
+     */
+
     public int getUnits() {
         return units.size();
     }
@@ -185,11 +192,11 @@ public class Army {
         if (this == o) return true;
         if (!(o instanceof Army)) return false;
         Army army = (Army) o;
-        return name.equals(army.name) && Objects.equals(units, army.units);
+        return name.equals(army.name) && Objects.equals(this.sort(), army.sort());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, units);
+        return Objects.hash(name, this.sort());
     }
 }
