@@ -74,18 +74,25 @@ public class Army {
         units.add((unit.copy()));
     }
 
+    /**
+     * Adding multiples of the same Unit.
+     *
+     * @param unit Unit that is added
+     * @param count how many there should be added.
+     */
     public void add(Unit unit, int count) {
         for (int i = 0; i < count; i++) {
-           units.add(unit);
+            units.add(unit.copy());
         }
     }
+
     /**
      * Add an ArrayList of Units to the Army.
      *
      * @param units that is being added.
      */
 
-    public void addAll(ArrayList<Unit> units) {
+    public void add(ArrayList<Unit> units) {
         for (Unit unit : units) {
             this.add(unit.copy());
         }
@@ -100,7 +107,7 @@ public class Army {
      */
 
     public boolean remove(Unit unit) {
-        return units.removeIf(target -> target.equals(unit));
+        return units.remove(unit);
     }
 
     /**
@@ -112,6 +119,7 @@ public class Army {
     public boolean hasUnits() {
         return !units.isEmpty();
     }
+
     /**
      * Get a random Unit in the Army.
      *
@@ -124,7 +132,16 @@ public class Army {
             throw new IllegalStateException("Army has no units");
         }
 
-        return units.get(rand.nextInt(units.size()));
+        Unit random = units.get(rand.nextInt(units.size()));
+
+        return random;
+    }
+
+    private ArrayList<Unit> sort() {
+        ArrayList<Unit> copy = new ArrayList<>(this.units);
+
+        //return Arrays.sort(copy);
+        return copy;
     }
 
     /**

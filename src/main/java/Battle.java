@@ -1,6 +1,7 @@
 import Unit.*;
 
 public class Battle {
+
     /**
      * A Battle is where Armies fight.
      * A fight is done by a random Unit in a random Army attacking
@@ -71,7 +72,7 @@ public class Battle {
     @Override
     public String toString() {
         return "Battle" +
-                "attacker: " + attacker +
-                "defender: " + defender;
+                " attacker: " + attacker +
+                " defender: " + defender;
     }
 }
