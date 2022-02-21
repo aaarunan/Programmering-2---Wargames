@@ -6,22 +6,23 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArmyTest {
+public class ArmyTest {
 
     Army attacker = new Army("Attacker");
     Army defender = new Army("Defender");
 
 
+    CavalryUnit unit = new CavalryUnit("unit", 20);
+    InfantryUnit unit1 = new InfantryUnit("unit1", 40);
+    CommanderUnit opUnit = new CommanderUnit("opUnit", 10000);
+
     @Test
     void addAll() {
-        CavalryUnit unit = new CavalryUnit("unit", 20);
-        InfantryUnit unit1 = new InfantryUnit("unit1", 40);
 
         ArrayList<Unit> units = new ArrayList<>();
-
         units.add(unit);
         units.add(unit1);
-        attacker.addAll(units);
+        attacker.add(units);
 
         for (int i = 0; i < units.size(); i++) {
             assertEquals(units.get(i), attacker.get(i));
@@ -30,11 +31,10 @@ class ArmyTest {
 
     @Test
     void testRemove() {
-        CavalryUnit unit = new CavalryUnit("unit", 20);
-
         attacker.add(unit);
         defender.add(unit);
-        defender.remove(unit);
+
+        assertTrue(defender.remove(unit));
 
         assertTrue(attacker.hasUnits());
         assertFalse(defender.hasUnits());
@@ -43,8 +43,6 @@ class ArmyTest {
     @Test
     @DisplayName("hasUnits() must be true if there are units in the army")
     void testHasUnits() {
-        CavalryUnit unit = new CavalryUnit("unit", 20);
-
         attacker.add(unit);
 
         assertTrue(attacker.hasUnits());
@@ -52,7 +50,33 @@ class ArmyTest {
     }
 
     @Test
-    void getRandom() {
+     void getRandom() {
+        int units = 6;
 
+        while (units > 0) {
+            attacker.add(unit);
+            units--;
+        }
+
+        while (attacker.hasUnits()) {
+            Unit temp = attacker.getRandom();
+            opUnit.attack(temp);
+            attacker.remove(temp);
+            units++;
+        }
+
+        assertEquals(6, units);
+        assertFalse(attacker.hasUnits());
+    }
+
+    @Test
+    @DisplayName("Check getRandom() on empty Army")
+    void getRandomEmpty() {
+        IllegalStateException thrown = assertThrows(
+                IllegalStateException.class,
+                () -> attacker.getRandom(),
+                "Army has no units."
+
+        );
     }
 }
