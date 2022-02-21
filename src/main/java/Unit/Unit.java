@@ -157,9 +157,26 @@ public abstract class Unit implements Comparable<Unit> {
     public String toString() {
         return
                 "name: " + name +
-                        "healthPoints: " + healthPoints +
-                        "attackPoints: " + attackPoints +
-                        "armorPoints: " + armorPoints;
+                        " healthPoints: " + healthPoints +
+                        " attackPoints: " + attackPoints +
+                        " armorPoints: " + armorPoints;
+    }
+
+    @Override
+    public int compareTo(Unit unit) {
+
+        if(this == unit) {
+            return 0;
+        }
+
+        int result = this.getName().compareTo(unit.getName());
+
+        if (result == 0) {
+            result = this.getHealthPoints() - unit.getHealthPoints();
+        }
+
+        return result;
+
     }
 
     @Override
@@ -167,11 +184,11 @@ public abstract class Unit implements Comparable<Unit> {
         if (this == o) return true;
         if (!(o instanceof Unit)) return false;
         Unit unit = (Unit) o;
-        return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && name.equals(unit.name);
+        return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && name.equals(unit.name) && this.getAttackBonus() == unit.getAttackBonus() && this.getResistBonus() == unit.getResistBonus();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, healthPoints, attackPoints, armorPoints);
+        return Objects.hash(name, healthPoints, attackPoints, armorPoints, this.getAttackBonus(), this.getResistBonus());
     }
 }
