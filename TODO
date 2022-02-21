@@ -3,3 +3,5 @@
 3. Override equals.
 4. Add tests on construction
 5. git
+6. Javadoc is structured wrong.
+7. Tests on equals
