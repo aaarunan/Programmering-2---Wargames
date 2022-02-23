@@ -11,61 +11,53 @@ public class ArmyTest {
     Army attacker = new Army("Attacker");
     Army defender = new Army("Defender");
 
-
-    CavalryUnit unit = new CavalryUnit("unit", 20);
-    InfantryUnit unit1 = new InfantryUnit("unit1", 40);
-    CommanderUnit opUnit = new CommanderUnit("opUnit", 10000);
+    CavalryUnit cavUnit = new CavalryUnit("unit", 20);
+    InfantryUnit infUnit = new InfantryUnit("unit1", 40);
+    CommanderUnit overPoweredUnit = new CommanderUnit("opUnit", 10000);
 
     @Test
-    void addAll() {
+    @DisplayName("Checks deletion when there are similar armies in the Army")
+    void testRemoveSimilarUnit() {
+        attacker.add(cavUnit);
+        defender.add(cavUnit);
+        defender.add(cavUnit);
 
-        ArrayList<Unit> units = new ArrayList<>();
-        units.add(unit);
-        units.add(unit1);
-        attacker.add(units);
+        defender.remove(cavUnit);
+        attacker.remove(cavUnit);
 
-        for (int i = 0; i < units.size(); i++) {
-            assertEquals(units.get(i), attacker.get(i));
-        }
+        assertFalse(attacker.hasUnits());
+        assertTrue(defender.hasUnits());
     }
 
     @Test
-    void testRemove() {
-        attacker.add(unit);
-        defender.add(unit);
+    @DisplayName("Checks deletion for character specific differences.")
+    void testRemoveSpecificUnit() {
+        attacker.add(cavUnit, 2);
 
-        assertTrue(defender.remove(unit));
+        Unit attackerUnit = attacker.get(0);
+        attackerUnit.attack(cavUnit);
+        attacker.remove(attackerUnit);
 
-        assertTrue(attacker.hasUnits());
-        assertFalse(defender.hasUnits());
+        assertNotEquals(attackerUnit, attacker.get(0));
+
     }
 
     @Test
-    @DisplayName("hasUnits() must be true if there are units in the army")
-    void testHasUnits() {
-        attacker.add(unit);
+    @DisplayName("Test that getRandom works")
+    void getRandom() {
+        int count = 100;
+        int units = 0;
 
-        assertTrue(attacker.hasUnits());
-        assertFalse(defender.hasUnits());
-    }
-
-    @Test
-     void getRandom() {
-        int units = 6;
-
-        while (units > 0) {
-            attacker.add(unit);
-            units--;
-        }
+        attacker.add(cavUnit, count);
 
         while (attacker.hasUnits()) {
             Unit temp = attacker.getRandom();
-            opUnit.attack(temp);
+            overPoweredUnit.attack(temp);
             attacker.remove(temp);
             units++;
         }
 
-        assertEquals(6, units);
+        assertEquals(count, units);
         assertFalse(attacker.hasUnits());
     }
 
@@ -78,5 +70,37 @@ public class ArmyTest {
                 "Army has no units."
 
         );
+    }
+
+    @Test
+    @DisplayName("Check sorting")
+    void testSort() {
+        CavalryUnit cUnit = new CavalryUnit("A", 30);
+        CavalryUnit cUnit1 = new CavalryUnit("C", 20);
+        InfantryUnit iUnit = new InfantryUnit("A", 20);
+        CommanderUnit comUnit = new CommanderUnit("C", 20);
+
+        Army unitsUnsorted = new Army("unsorted");
+        ArrayList<Unit> unitsSorted = new ArrayList();
+
+        unitsSorted.add(iUnit);
+        unitsSorted.add(cUnit);
+        unitsSorted.add(cUnit1);
+        unitsSorted.add(comUnit);
+
+        unitsUnsorted.add(cUnit);
+        unitsUnsorted.add(iUnit);
+        unitsUnsorted.add(comUnit);
+        unitsUnsorted.add(cUnit1);
+
+        assertEquals(unitsSorted, unitsUnsorted.sort());
+    }
+
+    @Test
+    @DisplayName("Testing sort on empty army")
+    void testSortOnEmpty() {
+        Army army = new Army("test");
+
+        assertEquals(new ArrayList<Unit>(), army.sort());
     }
 }

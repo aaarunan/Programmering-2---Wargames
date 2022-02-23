@@ -12,12 +12,6 @@ class CavalryUnitTest {
     CavalryUnit defender = new CavalryUnit("defender", 15);
 
     @Test
-    @DisplayName("Constructing CavalryUnit wrong")
-    void testWrongConstruction() {
-
-    }
-
-    @Test
     @DisplayName("Attacking once")
     void testAttack() {
         attacker.attack(defender);
@@ -40,7 +34,20 @@ class CavalryUnitTest {
     }
 
     @Test
-    @DisplayName("Test death of CavalryUnit")
+    @DisplayName("Test attackbonus after attacking twice")
+    void testAttackBonusTwice() {
+        int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
+        int attackBonus = CavalryUnit.BASE_ATTACK_BONUS + CavalryUnit.FIRST_ATTACK_BONUS;
+
+        attacker.attack(defender);
+        attacker.attack(defender);
+
+        assertEquals(baseAttackBonus, attacker.getAttackBonus());
+        assertEquals(attackBonus, defender.getAttackBonus());
+    }
+
+    @Test
+    @DisplayName("Death of CavalryUnit (attacking twice)")
     void testDeath() {
         attacker.attack(defender);
 
@@ -56,7 +63,6 @@ class CavalryUnitTest {
         assertTrue(defender.isDead());
         assertFalse(attacker.isDead());
     }
-
 
 }
 
