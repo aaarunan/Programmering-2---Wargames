@@ -39,10 +39,10 @@ public class CavalryUnit extends Unit {
      * Constructor designed for Unit classes that needs to
      * change the stats for the Unit.
      *
-     * @param name must not be empty
-     * @param health must be greater than 0
+     * @param name         must not be empty
+     * @param health       must be greater than 0
      * @param attackPoints must be greater than 0
-     * @param armorPoints must be greater than 0;
+     * @param armorPoints  must be greater than 0;
      */
 
     protected CavalryUnit(String name, int health, int attackPoints, int armorPoints) {

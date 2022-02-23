@@ -58,11 +58,8 @@ public class Battle {
             defender = temp;
 
             numOfAttacks++;
-
         }
-
         return attacker.hasUnits() ? attacker : defender;
-
     }
 
     public int getNumOfAttacks() {

@@ -50,7 +50,6 @@ public class Army {
 
         this.name = name;
         this.units = units;
-
     }
 
     /**
@@ -137,7 +136,7 @@ public class Army {
         return random;
     }
 
-    private ArrayList<Unit> sort() {
+    protected ArrayList<Unit> sort() {
         ArrayList<Unit> copy = new ArrayList<>(this.units);
 
         Collections.sort(copy);
@@ -171,7 +170,7 @@ public class Army {
      * @return int
      */
 
-    public int getUnits() {
+    public int size() {
         return units.size();
     }
 

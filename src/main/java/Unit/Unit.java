@@ -196,7 +196,6 @@ public abstract class Unit implements Comparable<Unit> {
         }
 
         return result;
-
     }
 
     @Override
