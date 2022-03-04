@@ -1,7 +1,8 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.ranges.Range;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +34,7 @@ class RangedUnitTest {
     }
 
     @Test
-    @DisplayName("Death of the Unit")
+    @DisplayName("Death of the edu.ntnu.arunang.wargames.Unit")
     void testDeath() {
         attacker.attack(defender);
 
@@ -53,6 +54,14 @@ class RangedUnitTest {
 
         assertTrue(defender.isDead());
         assertFalse(attacker.isDead());
+    }
+
+    @Test
+    @DisplayName("Test all fields on copying are equal when unit has attacked")
+    void testCopy() {
+        attacker.attack(defender);
+        RangedUnit copy = attacker.copy();
+        assertEquals(attacker, copy);
     }
 
 }

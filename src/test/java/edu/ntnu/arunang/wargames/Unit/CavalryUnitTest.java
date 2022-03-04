@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class CavalryUnitTest {
     @DisplayName("Checking attack bonus after attacking once")
     void testAttackBonus() {
         int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
-        int attackBonus = CavalryUnit.BASE_ATTACK_BONUS + CavalryUnit.FIRST_ATTACK_BONUS;
+        int attackBonus = CavalryUnit.FIRST_ATTACK_BONUS;
 
         attacker.attack(defender);
 
@@ -37,7 +37,7 @@ class CavalryUnitTest {
     @DisplayName("Test attackbonus after attacking twice")
     void testAttackBonusTwice() {
         int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
-        int attackBonus = CavalryUnit.BASE_ATTACK_BONUS + CavalryUnit.FIRST_ATTACK_BONUS;
+        int attackBonus = CavalryUnit.FIRST_ATTACK_BONUS;
 
         attacker.attack(defender);
         attacker.attack(defender);
@@ -62,6 +62,14 @@ class CavalryUnitTest {
 
         assertTrue(defender.isDead());
         assertFalse(attacker.isDead());
+    }
+
+    @Test
+    @DisplayName("Test all fields on copying are equal when unit has attacked")
+    void testCopy() {
+        attacker.attack(defender);
+        CavalryUnit copy = attacker.copy();
+        assertEquals(attacker, copy);
     }
 
 }

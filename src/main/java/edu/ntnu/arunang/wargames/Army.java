@@ -1,5 +1,6 @@
-import Unit.*;
+package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.Unit.*;
 import java.util.*;
 
 public class Army {
@@ -136,9 +137,16 @@ public class Army {
         return random;
     }
 
-    protected ArrayList<Unit> sort() {
-        ArrayList<Unit> copy = new ArrayList<>(this.units);
+    private ArrayList<Unit> deepCopy() {
+        ArrayList<Unit> copy = new ArrayList<>();
 
+        for (Unit unit : this.units) {
+            copy.add(unit.copy());
+        }
+        return copy;
+    }
+    protected ArrayList<Unit> sort() {
+        ArrayList<Unit> copy = this.deepCopy();
         Collections.sort(copy);
 
         return copy;

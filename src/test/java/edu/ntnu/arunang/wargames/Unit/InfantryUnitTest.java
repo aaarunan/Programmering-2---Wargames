@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class InfantryUnitTest {
 
         attacker.attack(defender);
 
-        //Unit should be dead
+        //edu.ntnu.arunang.wargames.Unit should be dead
         assertEquals(20, attacker.getHealthPoints());
         assertEquals(-3, defender.getHealthPoints());
 
@@ -49,6 +49,13 @@ class InfantryUnitTest {
         assertFalse(attacker.isDead());
     }
 
+    @Test
+    @DisplayName("Test all fields on copying are equal when unit has attacked")
+    void testCopy() {
+        attacker.attack(defender);
+        InfantryUnit copy = attacker.copy();
+        assertEquals(attacker, copy);
+    }
 
 }
 

@@ -1,4 +1,6 @@
-import Unit.*;
+package edu.ntnu.arunang.wargames;
+
+import edu.ntnu.arunang.wargames.Unit.*;
 
 public class Battle {
 

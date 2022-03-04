@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,7 +76,7 @@ class UnitTest {
     };
 
     @Test
-    @DisplayName("Constructing Unit wrong should throw exception")
+    @DisplayName("Constructing edu.ntnu.arunang.wargames.Unit wrong should throw exception")
     void testConstructWrong() {
         try {
             Unit unit = new Unit("", -21, -20, -20) {

@@ -1,8 +1,11 @@
+package edu.ntnu.arunang.wargames;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import Unit.*;
+import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.util.ArrayList;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,12 +19,14 @@ public class ArmyTest {
     CommanderUnit overPoweredUnit = new CommanderUnit("opUnit", 10000);
 
 
-    CavalryUnit P2 = new CavalryUnit("A", 30);
-    CavalryUnit P3 = new CavalryUnit("C", 20);
-    InfantryUnit P1 = new InfantryUnit("A", 20);
-    CommanderUnit P4 = new CommanderUnit("C", 20);
-    CommanderUnit P5 = new CommanderUnit("C", 20);
-    CommanderUnit P6 = new CommanderUnit("C", 20);
+    CavalryUnit P1 = new CavalryUnit("A", 30);
+    CavalryUnit P2 = new CavalryUnit("C", 20);
+    InfantryUnit P4 = new InfantryUnit("C", 25);
+    CommanderUnit P3 = new CommanderUnit("C", 20);
+    CommanderUnit P5 = new CommanderUnit("C", 40);
+    CommanderUnit P6 = new CommanderUnit("C", 40);
+    RangedUnit P8 = new RangedUnit("D", 40);
+    RangedUnit P7 = new RangedUnit("D", 40);
 
     @Test
     @DisplayName("Checks if wrong construction with name and units parameter. ")
@@ -47,7 +52,7 @@ public class ArmyTest {
 
     }
 
-    @DisplayName("Checks deletion when there are similar armies in the Army")
+    @DisplayName("Checks deletion when there are similar armies in the edu.ntnu.arunang.wargames.Army")
     void testRemoveSimilarUnit() {
         attacker.add(cavUnit);
         defender.add(cavUnit);
@@ -93,31 +98,31 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Check getRandom() on empty Army")
+    @DisplayName("Check getRandom() on empty edu.ntnu.arunang.wargames.Army")
     void getRandomEmpty() {
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
                 () -> attacker.getRandom(),
-                "Army has no units."
+                "edu.ntnu.arunang.wargames.Army has no units."
 
         );
     }
 
     @Test
-    @DisplayName("Check sorting if it matches a pre sorted Army.")
+    @DisplayName("Check sorting if it matches a pre sorted edu.ntnu.arunang.wargames.Army.")
     void testSortOnPreSortedArmy() {
         Army unitsUnsorted = new Army("unsorted");
         ArrayList<Unit> unitsSorted = new ArrayList();
-
-        P6.attack(cavUnit);
 
         unitsSorted.add(P1);
         unitsSorted.add(P2);
         unitsSorted.add(P3);
         unitsSorted.add(P4);
+        unitsSorted.add(P5);
         unitsSorted.add(P6);
 
         unitsUnsorted.add(P2);
+        unitsUnsorted.add(P5);
         unitsUnsorted.add(P1);
         unitsUnsorted.add(P4);
         unitsUnsorted.add(P3);
@@ -127,6 +132,32 @@ public class ArmyTest {
 
     }
 
+    @Test
+    @DisplayName("Check sorting if it matches a pre sorted with different attackBonuses edu.ntnu.arunang.wargames.Army.")
+    void testSortOnPreSortedArmyWithUniqueAttackBonus() {
+        Army unitsUnsorted = new Army("unsorted");
+        ArrayList<Unit> unitsSorted = new ArrayList<>();
+
+        P6.attack(cavUnit);
+        cavUnit.attack(P7);
+
+        unitsSorted.add(P1);
+        unitsSorted.add(P2);
+        unitsSorted.add(P3);
+        unitsSorted.add(P4);
+        unitsSorted.add(P7);
+        unitsSorted.add(P8);
+
+        unitsUnsorted.add(P8);
+        unitsUnsorted.add(P2);
+        unitsUnsorted.add(P1);
+        unitsUnsorted.add(P4);
+        unitsUnsorted.add(P3);
+        unitsUnsorted.add(P7);
+
+        assertEquals(unitsSorted, unitsUnsorted.sort());
+
+    }
     @Test
     @DisplayName("Testing sort on empty army")
     void testSortOnEmpty() {
