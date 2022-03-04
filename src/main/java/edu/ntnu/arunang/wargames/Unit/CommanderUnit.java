@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 public class CommanderUnit extends CavalryUnit {
 
@@ -45,7 +45,9 @@ public class CommanderUnit extends CavalryUnit {
 
     @Override
     public CommanderUnit copy() {
-        return new CommanderUnit(this.getName(), this.getHealthPoints());
+        CommanderUnit copy = new CommanderUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        copy.hasAttacked = this.hasAttacked;
+        return copy;
     }
 
 }

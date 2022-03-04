@@ -11,12 +11,6 @@ class RangedUnitTest {
     RangedUnit defender = new RangedUnit("Test2", 15);
 
     @Test
-    @DisplayName("Constructing RangedUnit wrong")
-    void testWrongConstruction() {
-
-    }
-
-    @Test
     @DisplayName("Test attacking once")
     void testAttack() {
         attacker.attack(defender);

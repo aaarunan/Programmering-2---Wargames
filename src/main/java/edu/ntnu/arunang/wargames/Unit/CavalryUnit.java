@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 public class CavalryUnit extends Unit {
 
@@ -14,12 +14,10 @@ public class CavalryUnit extends Unit {
      */
 
     protected final static int BASE_ATTACK_BONUS = 2;
-    protected final static int FIRST_ATTACK_BONUS = 4;
+    protected final static int FIRST_ATTACK_BONUS = 6;
     protected final static int RESIST_BONUS = 1;
 
-    private int attackBonus = BASE_ATTACK_BONUS + FIRST_ATTACK_BONUS;
-
-    private boolean hasAttacked = false;
+    protected boolean hasAttacked = false;
 
     protected final static int ATTACK_POINTS = 20;
     protected final static int ARMOR_POINTS = 12;
@@ -51,12 +49,14 @@ public class CavalryUnit extends Unit {
 
     @Override
     public CavalryUnit copy() {
-        return new CavalryUnit(this.getName(), this.getHealthPoints());
+        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints() );
+        copy.hasAttacked = this.hasAttacked;
+        return copy;
     }
 
     @Override
     public int getAttackBonus() {
-        return attackBonus;
+        return hasAttacked ? BASE_ATTACK_BONUS : FIRST_ATTACK_BONUS;
     }
 
     @Override
@@ -75,10 +75,8 @@ public class CavalryUnit extends Unit {
     @Override
     public void attack(Unit opponent) {
         super.attack(opponent);
-
-        if (!hasAttacked) {
-            hasAttacked = true;
-            attackBonus = BASE_ATTACK_BONUS;
-        }
+        hasAttacked = true;
     }
+
+
 }

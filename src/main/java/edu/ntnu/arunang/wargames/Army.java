@@ -154,16 +154,6 @@ public class Army {
         return name;
     }
 
-    public Army deepCopy() {
-        ArrayList<Unit> copy = new ArrayList<>();
-
-        for (Unit unit : this.units) {
-            copy.add(unit.copy());
-        }
-
-        return new Army(this.name, copy);
-    }
-
     /**
      * Get how many units there are in an Army.
      *

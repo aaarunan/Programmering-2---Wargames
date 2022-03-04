@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 public class RangedUnit extends Unit {
 
@@ -50,7 +50,9 @@ public class RangedUnit extends Unit {
 
     @Override
     public RangedUnit copy() {
-        return new RangedUnit(this.getName(), this.getHealthPoints());
+        RangedUnit copy =  new RangedUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        copy.resistBonus = this.resistBonus;
+        return copy;
     }
 
     @Override

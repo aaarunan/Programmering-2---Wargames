@@ -1,6 +1,5 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 public abstract class Unit implements Comparable<Unit> {
@@ -156,10 +155,12 @@ public abstract class Unit implements Comparable<Unit> {
     @Override
     public String toString() {
         return
-                "name: " + name +
-                        " healthPoints: " + healthPoints +
-                        " attackPoints: " + attackPoints +
-                        " armorPoints: " + armorPoints;
+                "Name: " + name +
+                        " HP: " + healthPoints +
+                        " Attack: " + attackPoints +
+                        " Armor: " + armorPoints +
+                        " Bonus(Attack/Resist): " + this.getAttackBonus() +
+                        "/" + this.getResistBonus();
     }
 
     /**
@@ -180,19 +181,19 @@ public abstract class Unit implements Comparable<Unit> {
         int result = this.getName().compareTo(other.getName());
 
         if (result == 0) {
-            result = this.getHealthPoints() - other.getHealthPoints();
+            result = Integer.compare(this.getHealthPoints(), other.getHealthPoints());
         }
 
         if (result == 0) {
-            result = this.getArmorPoints() - other.getArmorPoints();
+            result = Integer.compare(this.getAttackPoints(), other.getAttackPoints());
         }
 
         if (result == 0) {
-          result = this.getAttackBonus() - other.getAttackBonus();
+          result = Integer.compare(this.getAttackBonus(), other.getAttackBonus());
         }
 
         if (result == 0) {
-            result = this.getResistBonus() - other.getResistBonus();
+            result = Integer.compare(this.getResistBonus(), other.getResistBonus());
         }
 
         return result;

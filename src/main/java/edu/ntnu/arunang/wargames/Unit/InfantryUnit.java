@@ -1,4 +1,4 @@
-package Unit;
+package edu.ntnu.arunang.wargames.Unit;
 
 public class InfantryUnit extends Unit {
 
@@ -46,7 +46,7 @@ public class InfantryUnit extends Unit {
 
     @Override
     public InfantryUnit copy() {
-        return new InfantryUnit(this.getName(), this.getHealthPoints());
+        return new InfantryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
     }
 
     @Override
