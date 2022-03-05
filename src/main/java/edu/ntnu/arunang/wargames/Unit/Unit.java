@@ -2,20 +2,21 @@ package edu.ntnu.arunang.wargames.Unit;
 
 import java.util.Objects;
 
+/**
+ * A Unit is an abstract base class for a specific Unit.
+ * A unit is a military troop that can attack and deal damage, and be attacked and take damage
+ * It implements Comparable because the Unit implements compareTo.
+ * <p>
+ * The healthPoints of a Unit are points that determines the Unit state:
+ * HealthPoints > 0 = alive,  healthPoints < 0 = dead
+ * <p>
+ * AttackPoints represents the base-attack of a Unit.
+ * <p>
+ * ArmorPoints is a layer of protection over the healthPoints.
+ */
+
 public abstract class Unit implements Comparable<Unit> {
 
-    /**
-     * A Unit is a superclass for a specific Unit.
-     * A Unit needs to implement the methods:
-     * getAttackBonus() and getResistBonus(), that specializes the unit.
-     * <p>
-     * The healthPoints of a Unit are points that determines the Unit state:
-     * HealthPoints > 0 = alive,  healthPoints < 0 = dead
-     * <p>
-     * AttackPoints represents the base-attack of a Unit.
-     * <p>
-     * ArmorPoints is a layer of protection over the healthpoints.
-     */
 
     private final String name;
     private int healthPoints;
@@ -23,13 +24,13 @@ public abstract class Unit implements Comparable<Unit> {
     private int armorPoints;
 
     /**
-     * Constructs the Unit with a given name, healthPoints and attackPoints
+     * Constructs the Unit with a given name, healthPoints and attackPoints and armorPoints
      *
      * @param name         must not be empty
      * @param healthPoints must be greater than 0
      * @param attackPoints must be greater than or equal to 0
      * @param armorPoints  must be greater than or equal to 0
-     * @throws IllegalStateException if the following criteria is not met
+     * @throws IllegalStateException if the before mentioned criterias are not met
      */
 
     public Unit(String name, int healthPoints, int attackPoints, int armorPoints) throws IllegalStateException {
@@ -48,7 +49,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * An abstract method for making a copy of the Unit.
+     * Creates another instance of the Unit, by copying every field in the current object.
      *
      * @return copy
      */
@@ -58,7 +59,7 @@ public abstract class Unit implements Comparable<Unit> {
     /**
      * Attacking deals damage to a given opponent.
      * The damage is measured by:
-     * opponent.healthPoints - this.attackPoints - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus
+     * opponent.healthPoints - this.attackPoints - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
      *
      * @param opponent The opposing unit that is being attacked
      * @throws IllegalStateException if damage dealt is positive
@@ -78,7 +79,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Checks if the unit is dead. A Unit is dead if it has less than or equal to 0 healthPoints
+     * Checks if the unit is dead. A Unit is dead if it has less than or equal to 0 healthPoints.
      *
      * @return true if the unit is dead or false if it is alive
      */
@@ -88,7 +89,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Get the name of the unit
+     * Get the name of the unit.
      *
      * @return this.name
      */
@@ -98,7 +99,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Get the healthPoints of the Unit
+     * Get the healthPoints of the Unit.
      *
      * @return this.healthPoints
      */
@@ -108,7 +109,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Get the attackPoints of
+     * Get the attackPoints of the Unit.
      *
      * @return this.attackPoints
      */
@@ -117,7 +118,7 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * get the armorPoints of the unit
+     * get the armorPoints of the Unit.
      *
      * @return this.armorPoints
      */
@@ -127,8 +128,8 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * set the healthPoints of a Unit. this is usually done with combination with an attack.
-     * The method is always called when it has been attacked.
+     * When a Unit is hit this function will be called.
+     * A unit is hit is when it is being attack, and usually takes damage.
      *
      * @param newHealthPoints the newHealthPoints of the Unit
      */
@@ -138,10 +139,11 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * An abstract method that is used to specialize a specific Unit's attack
+     * An abstract method that is used to specialize the attack of an Unit.
      *
      * @return this.attackBonus
      */
+
     public abstract int getAttackBonus();
 
     /**
@@ -164,17 +166,17 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Compares to units together. Sorted by:
-     * name->healthpoints->armorpoints->attackbonus->defencebonus
+     * Compares to units together. In this sequence:
+     * name->healthPoints->armorPoints->attackBonus->defenceBonus
      *
-     * @param other unit that is being compared to
+     * @param other Unit that is being compared to
      * @return integer that represents the difference
      */
 
     @Override
     public int compareTo(Unit other) {
 
-        if(this.equals(other)) {
+        if (this.equals(other)) {
             return 0;
         }
 
@@ -189,7 +191,7 @@ public abstract class Unit implements Comparable<Unit> {
         }
 
         if (result == 0) {
-          result = Integer.compare(this.getAttackBonus(), other.getAttackBonus());
+            result = Integer.compare(this.getAttackBonus(), other.getAttackBonus());
         }
 
         if (result == 0) {

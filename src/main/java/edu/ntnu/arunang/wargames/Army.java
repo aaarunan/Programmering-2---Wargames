@@ -1,18 +1,19 @@
 package edu.ntnu.arunang.wargames;
 
 import edu.ntnu.arunang.wargames.Unit.*;
+
 import java.util.*;
 
-public class Army {
+/**
+ * An Army is a collection of Units.
+ * It has a name that defines it.
+ * <p>
+ * The Army class uses an ArrayList for storing the Units.
+ * This is because there can be duplicates of the same troop in the Army,
+ * and the order of the Units does not matter.
+ */
 
-    /**
-     * An Army is a collection of Units.
-     * It has a name that defines it.
-     * <p>
-     * The Army class uses an ArrayList for storing the Units.
-     * This is because there can be stored multiples of the same Unit,
-     * and the order of the Units does not matter.
-     */
+public class Army {
 
     private final String name;
     private final ArrayList<Unit> units;
@@ -76,11 +77,12 @@ public class Army {
 
     /**
      * Adding multiples of the same Unit.
+     * Used for testing purposes and easily adding multiples Units.
      *
-     * @param unit Unit that is added
-     * @param count how many there should be added.
+     * @param unit  Unit that is added
+     * @param count Amount of Units that should be added.
      */
-    public void add(Unit unit, int count) {
+    protected void add(Unit unit, int count) {
         for (int i = 0; i < count; i++) {
             units.add(unit.copy());
         }
@@ -100,10 +102,10 @@ public class Army {
 
     /**
      * Remove a Unit in the Army.
-     * Usually done if the Units is dead.
+     * Usually done if the Unit is dead.
      *
      * @param unit the Unit that is being removed.
-     * @return true if removed, or false if not removed.
+     * @return true if successful, false if unsuccessful.
      */
 
     public boolean remove(Unit unit) {
@@ -111,9 +113,9 @@ public class Army {
     }
 
     /**
-     * Checks if there are no Units in the Army.
+     * Checks if there are Units in the Army.
      *
-     * @return false if empty, true if there is atleast one Unit.
+     * @return false if empty, true if count > 0.
      */
 
     public boolean hasUnits() {
@@ -137,7 +139,15 @@ public class Army {
         return random;
     }
 
-    private ArrayList<Unit> deepCopy() {
+    /**
+     * Used for creating antoher instance of the same Army.
+     * Copies all units and put them in an ArrayList.
+     * Usually done before sorting, and for testing purposes.
+     *
+     * @return Arraylist of all the units in the Army.
+     */
+
+    protected ArrayList<Unit> deepCopy() {
         ArrayList<Unit> copy = new ArrayList<>();
 
         for (Unit unit : this.units) {
@@ -145,6 +155,14 @@ public class Army {
         }
         return copy;
     }
+
+    /**
+     * Sorts the Army given by the Unit's compareTo method.
+     * It copies the Army and puts all the Units in an Arraylist.
+     *
+     * @return a copy of a sorted Army.
+     */
+
     protected ArrayList<Unit> sort() {
         ArrayList<Unit> copy = this.deepCopy();
         Collections.sort(copy);
@@ -184,6 +202,14 @@ public class Army {
         return sb.toString();
     }
 
+    /**
+     * The Army is sorted when checkings equals because the order
+     * does not matter when checking if two armies are equal.
+     *
+     * @param o
+     * @return true if equal, false if unequal
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -191,6 +217,13 @@ public class Army {
         Army army = (Army) o;
         return name.equals(army.name) && Objects.equals(this.sort(), army.sort());
     }
+
+    /**
+     * When the army gets hashed, the order of the Army
+     * does not matter, therefore the Army is sorted before hashing.
+     *
+     * @return hash of the Army.
+     */
 
     @Override
     public int hashCode() {

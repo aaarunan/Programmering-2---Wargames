@@ -1,17 +1,18 @@
 package edu.ntnu.arunang.wargames.Unit;
 
-public class RangedUnit extends Unit {
+/**
+ * A RangedUnit is a Unit that has a ranged speciality.
+ * It has a special ability where it receives less damage with increased range.
+ * The resistBonus will go down in increments of 2.
+ * <p>
+ * Stats:
+ * attackPoints: 15
+ * armorPoints: 8
+ * attackBonus: 3
+ * resistBonus: 6 4 2
+ */
 
-    /**
-     * An RangedUnit is a unit that has a ranged advantage.
-     * It has a special ability where it receives less damage with increased range.
-     * <p>
-     * Stats:
-     * attackPoints: 15
-     * armorPoints: 8
-     * attackBonus: 3
-     * resistBonus: 6 4 2
-     */
+public class RangedUnit extends Unit {
 
     protected final static int ATTACK_POINTS = 15;
     protected final static int ARMOR_POINTS = 8;
@@ -35,13 +36,12 @@ public class RangedUnit extends Unit {
 
 
     /**
-     * Constructor designed for Unit classes that needs to
-     * change the stats for the Unit.
+     * Constructor for objects in the same package that needs access to all fields.
      *
-     * @param name must not be empty
-     * @param health must be greater than 0
+     * @param name         must not be empty
+     * @param health       must be greater than 0
      * @param attackPoints must be greater than 0
-     * @param armorPoints must be greater than 0;
+     * @param armorPoints  must be greater than 0;
      */
 
     protected RangedUnit(String name, int health, int attackPoints, int armorPoints) {
@@ -50,7 +50,7 @@ public class RangedUnit extends Unit {
 
     @Override
     public RangedUnit copy() {
-        RangedUnit copy =  new RangedUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        RangedUnit copy = new RangedUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
         copy.resistBonus = this.resistBonus;
         return copy;
     }
@@ -66,11 +66,10 @@ public class RangedUnit extends Unit {
     }
 
     /**
-     * When the RangedUnit is hit it will call the super method,
-     * and lower its resistBonus by the BASE_RESIST_BONUS until it is equal
-     * to the BASE_RESIST_BONUS
+     * When the RangedUnit is hit the resistBonus will go down in BASE_RESIST_INCREMENT
+     * till it is equal to BASE_RESIST_BONUS
      *
-     * @param newHealthPoints the newHealthPoints of the unit
+     * @param newHealthPoints the newHealthPoints of the Unit
      */
 
     @Override

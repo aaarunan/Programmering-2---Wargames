@@ -2,21 +2,21 @@ package edu.ntnu.arunang.wargames;
 
 import edu.ntnu.arunang.wargames.Unit.*;
 
-public class Battle {
+/**
+ * A Battle is a battlefield where two armies can fight.
+ * A battle has an attacking Army and a defending Army.
+ */
 
-    /**
-     * A Battle is where Armies fight.
-     * A fight is done by a random Unit in a random Army attacking
-     * the opposing Army.
-     */
+public class Battle {
 
     private Army attacker;
     private Army defender;
 
+    //num of attacks done, can be used for testing.
     private int numOfAttacks = 0;
 
     /**
-     * Constructs a Battle by a defending army, and an attacking Army.
+     * Constructs a Battle with a defending army, and an attacking Army.
      *
      * @param attacker attacking Army.
      * @param defender defending Army.
@@ -31,8 +31,8 @@ public class Battle {
     /**
      * This simulates a fight.
      * A random Unit from each army will attack a random Unit
-     * of the opposing Army. This happens in a loop unit there an army
-     * has no units left to attack with.
+     * of the opposing Army. This happens in a loop unit there is an army
+     * that has no units left to attack with.
      *
      * @return winning Army.
      * @throws IllegalStateException if the armies has no Units.
@@ -64,7 +64,7 @@ public class Battle {
         return attacker.hasUnits() ? attacker : defender;
     }
 
-    public int getNumOfAttacks() {
+    protected int getNumOfAttacks() {
         return numOfAttacks;
     }
 

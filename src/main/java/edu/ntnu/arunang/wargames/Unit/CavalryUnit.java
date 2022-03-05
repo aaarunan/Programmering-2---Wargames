@@ -1,17 +1,17 @@
 package edu.ntnu.arunang.wargames.Unit;
 
-public class CavalryUnit extends Unit {
+/**
+ * A CavalryUnit is a specialized melee unit, that does not have great defense.
+ * CavalryUnit has a special ability where its first hit deals more damage.
+ * <p>
+ * Stats:
+ * attackPoints of 20,
+ * armorPoints of 12,
+ * attackBonus of 4+2,
+ * resistBonus of 1
+ */
 
-    /**
-     * A CavalryUnit is a specialized melee unit, that does not have great defense.
-     * CavalryUnit has a special ability where its first hit deals more damage.
-     * <p>
-     * Stats:
-     * attackPoints of 20,
-     * armorPoints of 12,
-     * attackBonus of 4+2,
-     * resistBonus of 1
-     */
+public class CavalryUnit extends Unit {
 
     protected final static int BASE_ATTACK_BONUS = 2;
     protected final static int FIRST_ATTACK_BONUS = 6;
@@ -34,8 +34,8 @@ public class CavalryUnit extends Unit {
     }
 
     /**
-     * Constructor designed for Unit classes that needs to
-     * change the stats for the Unit.
+     * Constructor designed for objects in the same package that needs
+     * to change the Units stats.
      *
      * @param name         must not be empty
      * @param health       must be greater than 0
@@ -49,7 +49,7 @@ public class CavalryUnit extends Unit {
 
     @Override
     public CavalryUnit copy() {
-        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints() );
+        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
         copy.hasAttacked = this.hasAttacked;
         return copy;
     }
@@ -66,10 +66,9 @@ public class CavalryUnit extends Unit {
 
 
     /**
-     * Calls the super method, and manages the units special ability.
-     * Attacking once will demote to BASE_ATTACK_BONUS
+     * Attacking once will demote to from FIRST_ATTACK_BONUS to BASE_ATTACK_BONUS.
      *
-     * @param opponent The opposing unit that is being attacked
+     * @param opponent The opposing Unit that is being attacked
      */
 
     @Override

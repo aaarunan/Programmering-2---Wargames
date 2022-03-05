@@ -1,16 +1,17 @@
 package edu.ntnu.arunang.wargames.Unit;
 
+/**
+ * An InfantryUnit is a specialized melee unit that does not have a great defense.
+ * <p>
+ * Stats:
+ * attackPoints of 15,
+ * armorPoints of 10,
+ * attackBonus of 2,
+ * resistBonus of 1
+ */
+
 public class InfantryUnit extends Unit {
 
-    /**
-     * An InfantryUnit is a specialized melee unit that does not have a great defense.
-     * <p>
-     * Stats:
-     * attackPoints of 15,
-     * armorPoints of 10,
-     * attackBonus of 2,
-     * resistBonus of 1
-     */
 
     protected static final int ATTACK_POINTS = 15;
     protected static final int ARMOR_POINTS = 10;
@@ -34,10 +35,10 @@ public class InfantryUnit extends Unit {
      * Constructor designed for Unit classes that needs to
      * change the stats for the Unit.
      *
-     * @param name must not be empty
-     * @param health must be greater than 0
+     * @param name         must not be empty
+     * @param health       must be greater than 0
      * @param attackPoints must be greater than 0
-     * @param armorPoints must be greater than 0;
+     * @param armorPoints  must be greater than 0;
      */
 
     protected InfantryUnit(String name, int health, int attackPoints, int armorPoints) {
