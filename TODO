@@ -1,7 +1,1 @@
-1. Add tests on construction.
-2. git.
-3. Javadoc is structured wrong.
-4. Tests on equals.
-5. Tests on compareTo.
-6. Test copy when empty.
-7. Test resist, attack, bonus after attacking multiple times.
+1. GUI.
