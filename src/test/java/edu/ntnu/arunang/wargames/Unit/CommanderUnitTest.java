@@ -12,13 +12,7 @@ class CommanderUnitTest {
     CommanderUnit defender = new CommanderUnit("defender", 20);
 
     @Test
-    @DisplayName("Construct CommanderUnit wrong.")
-    void testConstructWrong() {
-
-    }
-
-    @Test
-    @DisplayName("Attacking once")
+    @DisplayName("Test attacking once")
     void testAttack() {
         attacker.attack(defender);
 
@@ -44,7 +38,7 @@ class CommanderUnitTest {
 
 
     @Test
-    @DisplayName("Test attackbonus after attacking twice")
+    @DisplayName("Test attack bonus after attacking twice")
     void testAttackBonusTwice() {
         int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
         int attackBonus = CavalryUnit.FIRST_ATTACK_BONUS;

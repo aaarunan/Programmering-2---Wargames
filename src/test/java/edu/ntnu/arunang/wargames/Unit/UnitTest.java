@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UnitTest {
 
-    Unit test = new Unit("test", 20, 20,20) {
+    Unit test = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
             return null;
@@ -24,7 +24,7 @@ class UnitTest {
         }
     };
 
-    Unit testWithDifferentResistBonus = new Unit("test", 20, 20,20) {
+    Unit testWithDifferentResistBonus = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
             return null;
@@ -41,7 +41,7 @@ class UnitTest {
         }
     };
 
-    Unit testWithDifferentHealthPoints = new Unit("test", 40, 20,20) {
+    Unit testWithDifferentHealthPoints = new Unit("test", 40, 20, 20) {
         @Override
         public Unit copy() {
             return null;
@@ -58,7 +58,7 @@ class UnitTest {
         }
     };
 
-    Unit testSame = new Unit("test", 20, 20,20) {
+    Unit testSame = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
             return null;

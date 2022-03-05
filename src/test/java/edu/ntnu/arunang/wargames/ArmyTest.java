@@ -35,13 +35,11 @@ public class ArmyTest {
                 IllegalArgumentException.class,
                 () -> new Army(""),
                 "Name must not be blank."
-
         );
-
     }
 
     @Test
-    @DisplayName("Checks if wrong construction with nameparameter. ")
+    @DisplayName("Checks if wrong construction with name parameter. ")
     void testWrongConstructionOnSecondaryConstructor() {
         IllegalArgumentException thrown = assertThrows(
                 IllegalArgumentException.class,
@@ -52,7 +50,8 @@ public class ArmyTest {
 
     }
 
-    @DisplayName("Checks deletion when there are similar armies in the edu.ntnu.arunang.wargames.Army")
+    @Test
+    @DisplayName("Checks deletion when there are similar armies in the Army")
     void testRemoveSimilarUnit() {
         attacker.add(cavUnit);
         defender.add(cavUnit);
@@ -79,7 +78,7 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Test that getRandom works")
+    @DisplayName("Test that getRandom() works")
     void testGetRandom() {
         int count = 100;
         int units = 0;
@@ -98,18 +97,18 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Check getRandom() on empty edu.ntnu.arunang.wargames.Army")
+    @DisplayName("Check getRandom() on empty Army")
     void getRandomEmpty() {
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
                 () -> attacker.getRandom(),
-                "edu.ntnu.arunang.wargames.Army has no units."
+                "Army has no units."
 
         );
     }
 
     @Test
-    @DisplayName("Check sorting if it matches a pre sorted edu.ntnu.arunang.wargames.Army.")
+    @DisplayName("Check sorting if it matches a pre sorted Army.")
     void testSortOnPreSortedArmy() {
         Army unitsUnsorted = new Army("unsorted");
         ArrayList<Unit> unitsSorted = new ArrayList();
@@ -133,7 +132,7 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Check sorting if it matches a pre sorted with different attackBonuses edu.ntnu.arunang.wargames.Army.")
+    @DisplayName("Check sorting if it matches a pre sorted with different attack bonuses in an Army.")
     void testSortOnPreSortedArmyWithUniqueAttackBonus() {
         Army unitsUnsorted = new Army("unsorted");
         ArrayList<Unit> unitsSorted = new ArrayList<>();
@@ -158,6 +157,7 @@ public class ArmyTest {
         assertEquals(unitsSorted, unitsUnsorted.sort());
 
     }
+
     @Test
     @DisplayName("Testing sort on empty army")
     void testSortOnEmpty() {

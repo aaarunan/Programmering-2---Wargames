@@ -11,12 +11,6 @@ class InfantryUnitTest {
     InfantryUnit defender = new InfantryUnit("defender", 15);
 
     @Test
-    @DisplayName("Constructing InfantryUnit wrong")
-    void testWrongConstruction() {
-
-    }
-
-    @Test
     @DisplayName("Test attacking once")
     void testAttack() {
         attacker.attack(defender);
@@ -26,7 +20,7 @@ class InfantryUnitTest {
     }
 
     @Test
-    @DisplayName("Testing death functionality")
+    @DisplayName("Test death of Unit")
     void testDeath() {
         attacker.attack(defender);
 

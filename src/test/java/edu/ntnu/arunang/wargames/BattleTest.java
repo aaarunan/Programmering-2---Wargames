@@ -19,7 +19,7 @@ class BattleTest {
     Battle battle = new Battle(attacker, defender);
 
     @Test
-    @DisplayName("Test for empty on both armies ")
+    @DisplayName("Test empty on when both armies are empty")
     void testBattleOnFullEmpty() {
         IllegalStateException thrown = assertThrows(
                 IllegalStateException.class,
@@ -32,7 +32,7 @@ class BattleTest {
     }
 
     @Test
-    @DisplayName("Test for empty on one army ")
+    @DisplayName("Test simulation on one empty army ")
     void testBattleOnOneEmptyArmy() {
         attacker.add(infUnit);
         battle = new Battle(attacker, defender);
@@ -58,7 +58,7 @@ class BattleTest {
     }
 
     @Test
-    @DisplayName("Tests two similar armies")
+    @DisplayName("Tests simulation on two similar armies")
     void testSimilarArmies() {
         int count = 1000;
 

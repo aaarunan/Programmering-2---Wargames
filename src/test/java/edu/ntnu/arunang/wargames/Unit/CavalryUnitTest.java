@@ -12,13 +12,12 @@ class CavalryUnitTest {
     CavalryUnit defender = new CavalryUnit("defender", 15);
 
     @Test
-    @DisplayName("Attacking once")
-    void testAttack() {
+    @DisplayName("Test attacking once")
+    void testAttackOnce() {
         attacker.attack(defender);
 
         assertEquals(20, attacker.getHealthPoints());
         assertEquals(2, defender.getHealthPoints());
-
     }
 
     @Test
@@ -34,7 +33,7 @@ class CavalryUnitTest {
     }
 
     @Test
-    @DisplayName("Test attackbonus after attacking twice")
+    @DisplayName("Test attack bonus after attacking twice")
     void testAttackBonusTwice() {
         int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
         int attackBonus = CavalryUnit.FIRST_ATTACK_BONUS;
@@ -47,7 +46,7 @@ class CavalryUnitTest {
     }
 
     @Test
-    @DisplayName("Death of CavalryUnit (attacking twice)")
+    @DisplayName("Test death of CavalryUnit (attacking twice)")
     void testDeath() {
         attacker.attack(defender);
 
@@ -65,7 +64,7 @@ class CavalryUnitTest {
     }
 
     @Test
-    @DisplayName("Test all fields on copying are equal when unit has attacked")
+    @DisplayName("Test all fields are equal when copying when the Unit has been Attacked")
     void testCopy() {
         attacker.attack(defender);
         CavalryUnit copy = attacker.copy();

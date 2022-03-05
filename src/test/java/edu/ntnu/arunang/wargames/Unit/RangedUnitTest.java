@@ -21,7 +21,7 @@ class RangedUnitTest {
     }
 
     @Test
-    @DisplayName("ResistBonus")
+    @DisplayName("Test resist bonus when Unit has been hit")
     void testResistBonus() {
         int increment = RangedUnit.RESIST_INTERVAL;
         int resistBonus = 3 * RangedUnit.BASE_RESIST_BONUS;
@@ -34,7 +34,7 @@ class RangedUnitTest {
     }
 
     @Test
-    @DisplayName("Death of the edu.ntnu.arunang.wargames.Unit")
+    @DisplayName("Test death of the Unit")
     void testDeath() {
         attacker.attack(defender);
 
