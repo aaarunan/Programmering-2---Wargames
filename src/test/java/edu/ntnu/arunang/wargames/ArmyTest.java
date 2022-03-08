@@ -112,8 +112,10 @@ public class ArmyTest {
     @DisplayName("Check  getting a specific type of Unit")
     void getUnit() {
         attacker.add(infUnit);
+        attacker.add(infUnit);
+        attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
-        List<Unit> t = attacker.getUnitsByType(InfantryUnit.class);
+        List<Unit> t = attacker.getUnitsByType(CommanderUnit.class);
         System.out.println(t.toString());
 
     }

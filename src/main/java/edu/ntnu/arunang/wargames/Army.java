@@ -65,8 +65,17 @@ public class Army {
         return units.get(index);
     }
 
+    /**
+     * Get the all specific types of Unit.
+     * The method uses generics so that each Unit does not
+     * need their own method.
+     *
+     * @param type The class of the object
+     * @param <T>  Type of Unit
+     * @return List of matching Units.
+     */
 
-    public <T extends Unit> List<Unit> getUnitsByType( Class<T> type) {
+    public <T extends Unit> List<Unit> getUnitsByType(Class<T> type) {
         return units.stream().filter(e -> e.getClass() == type).toList();
     }
 
