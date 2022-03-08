@@ -76,7 +76,7 @@ public class Army {
      */
 
     public <T extends Unit> List<Unit> getUnitsByType(Class<T> type) {
-        return units.stream().filter(e -> e.getClass() == type).toList();
+        return units.stream().filter(e -> e.getClass().equals(type)).toList();
     }
 
     /**

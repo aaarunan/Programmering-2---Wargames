@@ -115,8 +115,9 @@ public class ArmyTest {
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
-        List<Unit> t = attacker.getUnitsByType(CommanderUnit.class);
-        System.out.println(t.toString());
+        List<Unit> temp = attacker.getUnitsByType(CommanderUnit.class);
+        assertEquals(temp.get(0), overPoweredUnit);
+        assertEquals(1, temp.size());
 
     }
 
