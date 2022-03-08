@@ -65,6 +65,11 @@ public class Army {
         return units.get(index);
     }
 
+
+    public <T extends Unit> List<Unit> getUnitsByType( Class<T> type) {
+        return units.stream().filter(e -> e.getClass() == type).toList();
+    }
+
     /**
      * Add a Unit to the Army.
      *

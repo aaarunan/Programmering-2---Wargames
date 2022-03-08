@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +106,16 @@ public class ArmyTest {
                 "Army has no units."
 
         );
+    }
+
+    @Test
+    @DisplayName("Check  getting a specific type of Unit")
+    void getUnit() {
+        attacker.add(infUnit);
+        attacker.add(cavUnit);
+        List<Unit> t = attacker.getUnitsByType(InfantryUnit.class);
+        System.out.println(t.toString());
+
     }
 
     @Test
