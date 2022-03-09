@@ -170,6 +170,10 @@ public class Army {
         return copy;
     }
 
+    public ArrayList<Unit> getUnits() {
+        return this.deepCopy();
+    }
+
     /**
      * Sorts the Army given by the Unit's compareTo method.
      * It copies the Army and puts all the Units in an Arraylist.
@@ -202,6 +206,12 @@ public class Army {
 
     public int size() {
         return units.size();
+    }
+
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        this.getUnits().forEach(e -> sb.append(e.toCsv()));
+        return sb.toString();
     }
 
     @Override
