@@ -2,21 +2,23 @@ package edu.ntnu.arunang.wargames;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 public class ArmyTest {
 
     Army attacker = new Army("Attacker");
     Army defender = new Army("Defender");
 
-    CavalryUnit cavUnit = new CavalryUnit("unit", 20);
-    InfantryUnit infUnit = new InfantryUnit("unit1", 40);
+    CavalryUnit cavUnit = new CavalryUnit("cavUnit", 20);
+    InfantryUnit infUnit = new InfantryUnit("infUnit", 40);
     CommanderUnit overPoweredUnit = new CommanderUnit("opUnit", 10000);
 
 
@@ -48,6 +50,7 @@ public class ArmyTest {
                 "Name must not be blank."
 
         );
+
 
     }
 
@@ -109,15 +112,31 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Check  getting a specific type of Unit")
-    void getUnit() {
+    @DisplayName("Check getting a specific type of Unit")
+    void getUnitByType() {
         attacker.add(infUnit);
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
+
         List<Unit> temp = attacker.getUnitsByType(CommanderUnit.class);
+
         assertEquals(temp.get(0), overPoweredUnit);
         assertEquals(1, temp.size());
+
+    }
+
+    @Test
+    @DisplayName("Check getting a specific type of Unit")
+    void getUnitByUnitClass() {
+        attacker.add(infUnit);
+        attacker.add(infUnit);
+        attacker.add(overPoweredUnit);
+        attacker.add(cavUnit);
+
+        List<Unit> temp = attacker.getUnitsByType(Unit.class);
+
+        assertEquals(0, temp.size());
 
     }
 
@@ -171,6 +190,8 @@ public class ArmyTest {
         assertEquals(unitsSorted, unitsUnsorted.sort());
 
     }
+
+
 
     @Test
     @DisplayName("Testing sort on empty army")

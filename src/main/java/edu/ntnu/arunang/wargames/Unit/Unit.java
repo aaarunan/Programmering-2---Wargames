@@ -1,5 +1,7 @@
 package edu.ntnu.arunang.wargames.Unit;
 
+import edu.ntnu.arunang.wargames.Army;
+
 import java.util.Objects;
 
 /**
@@ -153,6 +155,13 @@ public abstract class Unit implements Comparable<Unit> {
      */
 
     public abstract int getResistBonus();
+
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n").append(this.getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
+
+        return sb.toString();
+    }
 
     @Override
     public String toString() {

@@ -96,7 +96,7 @@ public class Army {
      * @param unit  Unit that is added
      * @param count Amount of Units that should be added.
      */
-    protected void add(Unit unit, int count) {
+    public void add(Unit unit, int count) {
         for (int i = 0; i < count; i++) {
             units.add(unit.copy());
         }
@@ -154,7 +154,7 @@ public class Army {
     }
 
     /**
-     * Used for creating antoher instance of the same Army.
+     * Used for creating another instance of the same Army.
      * Copies all units and put them in an ArrayList.
      * Usually done before sorting, and for testing purposes.
      *
@@ -211,6 +211,7 @@ public class Army {
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
         this.getUnits().forEach(e -> sb.append(e.toCsv()));
+
         return sb.toString();
     }
 
