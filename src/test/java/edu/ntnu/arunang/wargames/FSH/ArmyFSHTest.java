@@ -2,6 +2,7 @@ package edu.ntnu.arunang.wargames.FSH;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.ntnu.arunang.wargames.Army;
@@ -25,7 +26,7 @@ public class ArmyFSHTest {
         army.add(cavUnit, 50);
         army.add(infUnit, 23);
 
-        ArmyFSH armyFSH = new ArmyFSH(army);
+        ArmyFSH armyFSH = new ArmyFSH();
         armyFSH.write(army);
 
         //not finished
@@ -41,11 +42,10 @@ public class ArmyFSHTest {
         army.add(infUnit, 2);
         army.add(comUnit, 2);
 
-        ArmyFSH armyFSH = new ArmyFSH(army);
+        ArmyFSH armyFSH = new ArmyFSH();
 
         armyFSH.write(army);
-
-        Army armyFromFile = ArmyFSH.toArmy(armyFSH.getFile());
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPath(army)));
 
         assertEquals(army, armyFromFile);
     }
@@ -56,10 +56,10 @@ public class ArmyFSHTest {
     void testFileReadingOnOnlyArmyName() {
         Army army = new Army("TestReading");
 
-        ArmyFSH armyFSH = new ArmyFSH(army);
+        ArmyFSH armyFSH = new ArmyFSH();
 
         armyFSH.write(army);
-        Army armyFromFile = ArmyFSH.toArmy(armyFSH.getFile());
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPath(army)));
 
         assertEquals(army, armyFromFile);
     }
@@ -67,11 +67,9 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test file reading, on empty file")
     void testFileReadingOnEmpty() {
-
-        File file = new File(FileSystems.getDefault().getPath("src", "main", "resources", "tests", "blank.csv").toString());
-
-        try{
-            ArmyFSH.toArmy(file);
+        ArmyFSH armyFSH = new ArmyFSH();
+        try {
+            armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("blank.csv")));
         } catch (Exception e) {
             assertEquals(IllegalStateException.class, e.getClass());
         }
@@ -81,12 +79,39 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test on reading non-supported Unit type")
     void testOnReadingNonSupportedType() {
-        File file = new File(FileSystems.getDefault().getPath("src", "main", "resources", "tests", "army", "NotaUnit.csv").toString());
+        ArmyFSH armyFSH = new ArmyFSH();
 
-        try{
-            ArmyFSH.toArmy(file);
+        try {
+            armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("NotAUnit.csv")));
         } catch (Exception e) {
-           assertEquals(IllegalArgumentException.class, e.getClass());
+            assertEquals(IllegalArgumentException.class, e.getClass());
         }
     }
+
+    @Test
+    @DisplayName("Test on reading file that has spaces")
+    void testOnReadingFileWithSpaces() {
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
+
+        System.out.println(armyFromFile.toString());
+    }
+
+    @Test
+    @DisplayName("Test on reading file that is wrongly formatted")
+    void testWithWrongFormattedFile() {
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
+    }
+
+    @Test
+    @DisplayName("Test on reading file that has blank fields")
+    void testOnFileWithBlankFields() {
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
+    }
 }
+

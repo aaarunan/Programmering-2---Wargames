@@ -14,6 +14,11 @@ class UnitTest {
         }
 
         @Override
+        public Unit getResetCopy() {
+            return null;
+        }
+
+        @Override
         public int getAttackBonus() {
             return 2;
         }
@@ -27,6 +32,11 @@ class UnitTest {
     Unit testWithDifferentResistBonus = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
+            return null;
+        }
+
+        @Override
+        public Unit getResetCopy() {
             return null;
         }
 
@@ -48,6 +58,11 @@ class UnitTest {
         }
 
         @Override
+        public Unit getResetCopy() {
+            return null;
+        }
+
+        @Override
         public int getAttackBonus() {
             return 2;
         }
@@ -61,6 +76,11 @@ class UnitTest {
     Unit testSame = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
+            return null;
+        }
+
+        @Override
+        public Unit getResetCopy() {
             return null;
         }
 
@@ -82,6 +102,11 @@ class UnitTest {
             Unit unit = new Unit("", -21, -20, -20) {
                 @Override
                 public Unit copy() {
+                    return null;
+                }
+
+                @Override
+                public Unit getResetCopy() {
                     return null;
                 }
 

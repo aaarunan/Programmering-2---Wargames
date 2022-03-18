@@ -55,6 +55,11 @@ public class CavalryUnit extends Unit {
     }
 
     @Override
+    public CavalryUnit getResetCopy() {
+       return new CavalryUnit(this.getName(), this.getHealthPoints());
+    }
+
+    @Override
     public int getAttackBonus() {
         return hasAttacked ? BASE_ATTACK_BONUS : FIRST_ATTACK_BONUS;
     }

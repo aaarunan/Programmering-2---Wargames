@@ -48,4 +48,9 @@ public class CommanderUnit extends CavalryUnit {
         return copy;
     }
 
+    @Override
+    public CommanderUnit getResetCopy() {
+        return new CommanderUnit(this.getName(), this.getHealthPoints());
+    }
+
 }

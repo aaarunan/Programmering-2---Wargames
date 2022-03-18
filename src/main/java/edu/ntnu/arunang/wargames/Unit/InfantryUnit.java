@@ -51,6 +51,11 @@ public class InfantryUnit extends Unit {
     }
 
     @Override
+    public InfantryUnit getResetCopy() {
+        return new InfantryUnit(this.getName(), this.getHealthPoints());
+    }
+
+    @Override
     public int getAttackBonus() {
         return ATTACK_BONUS;
     }

@@ -59,6 +59,13 @@ public abstract class Unit implements Comparable<Unit> {
     public abstract Unit copy();
 
     /**
+     * Makes a copy of the unit and resets its stats. Essencially making it a new unit.
+     * Used to generalize Units.
+     */
+
+    public abstract Unit getResetCopy();
+
+    /**
      * Attacking deals damage to a given opponent.
      * The damage is measured by:
      * opponent.healthPoints - this.attackPoints - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
@@ -176,7 +183,7 @@ public abstract class Unit implements Comparable<Unit> {
 
     /**
      * Compares to units together. In this sequence:
-     * name->healthPoints->armorPoints->attackBonus->defenceBonus
+     * name->healthPoints->armorPoints->attackBonus->defenceBonus.
      *
      * @param other Unit that is being compared to
      * @return integer that represents the difference

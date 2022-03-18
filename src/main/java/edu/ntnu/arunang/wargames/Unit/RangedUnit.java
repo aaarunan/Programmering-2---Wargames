@@ -56,6 +56,11 @@ public class RangedUnit extends Unit {
     }
 
     @Override
+    public RangedUnit getResetCopy() {
+       return new RangedUnit(this.getName(), this.getHealthPoints());
+    }
+
+    @Override
     public int getAttackBonus() {
         return ATTACK_BONUS;
     }

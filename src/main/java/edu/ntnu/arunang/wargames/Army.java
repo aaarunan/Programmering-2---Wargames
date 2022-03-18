@@ -210,9 +210,29 @@ public class Army {
 
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
-        this.getUnits().forEach(e -> sb.append(e.toCsv()));
+        this.getMap().forEach((k, v) -> sb.append(k.toCsv()).append(",").append(v));
 
         return sb.toString();
+    }
+
+    public Map<Unit, Integer> getMap() {
+         Map<Unit, Integer> army = new HashMap<>();
+         this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+
+         return army;
+    }
+
+    public static Army parseMap(String name, Map<Unit, Integer> template) {
+        Army army = new Army(name);
+
+        for (Map.Entry<Unit, Integer> entry: template.entrySet()) {
+            Unit unit = entry.getKey();
+            int count = entry.getValue();
+
+            army.add(unit, count);
+        }
+
+        return army;
     }
 
     @Override
@@ -226,6 +246,7 @@ public class Army {
 
         return sb.toString();
     }
+
 
     /**
      * The Army is sorted when checkings equals because the order
