@@ -27,6 +27,12 @@ public class ArmyFSH implements FSH {
 
     private int lineNr;
 
+    //Types of units which are parsable
+    private final String CAVALRY_UNIT = "CavalryUnit";
+    private final String INFANTRY_UNIT = "InfantryUnit";
+    private final String RANGED_UNIT = "RangedUnit";
+    private final String COMMANDER_UNIT = "CommanderUnit";
+
     /**
      * Constructs the FSH with no parameters.
      */
@@ -163,10 +169,10 @@ public class ArmyFSH implements FSH {
 
     private Unit constructUnitFromString(String type, String name, int health) throws IllegalStateException {
         return switch (type) {
-            case "CavalryUnit" -> new CavalryUnit(name, health);
-            case "CommanderUnit" -> new CommanderUnit(name, health);
-            case "InfantryUnit" -> new InfantryUnit(name, health);
-            case "RangedUnit" -> new RangedUnit(name, health);
+            case CAVALRY_UNIT -> new CavalryUnit(name, health);
+            case COMMANDER_UNIT -> new CommanderUnit(name, health);
+            case INFANTRY_UNIT -> new InfantryUnit(name, health);
+            case RANGED_UNIT -> new RangedUnit(name, health);
             default -> throw new IllegalStateException(String.format("The object %s on line %d, is not a Unit", type, lineNr));
         };
     }

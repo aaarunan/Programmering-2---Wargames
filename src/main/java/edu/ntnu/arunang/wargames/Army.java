@@ -170,6 +170,12 @@ public class Army {
         return copy;
     }
 
+    /**
+     * Get a List of the Units. The army is converted to an ArrayList.
+     * The units are copied.
+     *
+     * @return List of units.
+     */
     public ArrayList<Unit> getUnits() {
         return this.deepCopy();
     }
@@ -208,6 +214,14 @@ public class Army {
         return units.size();
     }
 
+    /**
+     * Converts the Unit to a string that represents how
+     * Units are stored in a file:
+     * unitType,unitName,health,count
+     *
+     * @return string that represents the unit
+     */
+
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
         this.getMap().forEach((k, v) -> sb.append(k.toCsv()).append(",").append(v));
@@ -215,22 +229,33 @@ public class Army {
         return sb.toString();
     }
 
-    public Map<Unit, Integer> getMap() {
-         Map<Unit, Integer> army = new HashMap<>();
-         this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+    /**
+     * Converts an Army into a map. This allows to get armies
+     * in a compact form with an Integer value that represents count.
+     * Used to save armies efficiently in csv files. The units are copied and reset
+     * before converting.
+     *
+     * @return a hashmap of the army.
+     */
 
-         return army;
+    public Map<Unit, Integer> getMap() {
+        Map<Unit, Integer> army = new HashMap<>();
+        this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+
+        return army;
     }
 
-    public static Army parseMap(String name, Map<Unit, Integer> template) {
+    /**
+     * Parse a map into an Army.
+     *
+     * @param name name of the army
+     * @param map  map of Units
+     * @return an Army parsed from map
+     */
+
+    public static Army parseMap(String name, Map<Unit, Integer> map) {
         Army army = new Army(name);
-
-        for (Map.Entry<Unit, Integer> entry: template.entrySet()) {
-            Unit unit = entry.getKey();
-            int count = entry.getValue();
-
-            army.add(unit, count);
-        }
+        map.forEach(army::add);
 
         return army;
     }
@@ -249,10 +274,10 @@ public class Army {
 
 
     /**
-     * The Army is sorted when checkings equals because the order
+     * The Army is sorted when checking equals because the order
      * does not matter when checking if two armies are equal.
      *
-     * @param o
+     * @param o object that is being compared
      * @return true if equal, false if unequal
      */
 
