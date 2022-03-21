@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames.FSH;
 
+import edu.ntnu.arunang.wargames.Exceptions.FileFormatException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test file reading")
-    void testFileReading() {
+    void testFileReading() throws FileFormatException {
         Army army = new Army("TestReading");
 
         army.add(cavUnit, 2);
@@ -55,7 +56,7 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test file reading, when no units are specified")
-    void testFileReadingOnOnlyArmyName() {
+    void testFileReadingOnOnlyArmyName() throws FileFormatException {
         Army army = new Army("TestReading");
 
         ArmyFSH armyFSH = new ArmyFSH();
@@ -92,14 +93,12 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test on reading file that has spaces")
-    void testOnReadingFileWithSpaces() {
+    void testOnReadingFileWithSpaces() throws FileFormatException {
         ArmyFSH armyFSH = new ArmyFSH();
         Army army = new Army("Test With Spaces");
         army.add(new InfantryUnit("test with spaces", 101), 13);
 
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Test With Spaces")));
-        System.out.println(armyFromFile.toCsv());
-        System.out.println(army.toCsv());
 
         assertEquals(army, armyFromFile);
 

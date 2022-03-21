@@ -1,6 +1,7 @@
 package edu.ntnu.arunang.wargames.FSH;
 
 import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.Exceptions.FileFormatException;
 import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.io.*;
@@ -25,7 +26,7 @@ import java.util.Objects;
 
 public class ArmyFSH implements FSH {
 
-    private int lineNr =1;
+    private int lineNr = 1;
 
     /**
      * Constructs the FSH with no parameters.
@@ -93,10 +94,10 @@ public class ArmyFSH implements FSH {
      *
      * @param file file that is parsed
      * @return The army parsed from the file
-     * @throws IllegalStateException if the file is wrongly formatted or empty.
+     * @throws FileFormatException if the file is wrongly formatted or empty.
      */
 
-    public Army loadFromFile(File file) throws IllegalStateException {
+    public Army loadFromFile(File file) throws FileFormatException {
         Army army = null;
         String line;
 
@@ -105,7 +106,7 @@ public class ArmyFSH implements FSH {
 
             if (armyName == null) {
                 //kankjse lage egen exception
-                throw new IllegalStateException("File is empty or wrongly formatted");
+                throw new FileFormatException("File is empty or wrongly formatted");
             }
 
             army = new Army(armyName);
@@ -119,7 +120,7 @@ public class ArmyFSH implements FSH {
                 try {
                     army.add(unitFactory.constructUnitFromString(values[0], values[1], Integer.parseInt(values[2])), Integer.parseInt(values[3]));
                 } catch (Exception e) {
-                    throw new IllegalStateException(String.format("Unit on line %d is wrongly formatted or does no exist", lineNr));
+                    throw new FileFormatException(String.format("Unit on line %d is wrongly formatted or does no exist", lineNr));
                 }
                 lineNr++;
             }
@@ -138,10 +139,10 @@ public class ArmyFSH implements FSH {
      *
      * @param line
      * @return pares values
-     * @throws IllegalStateException if the line is wrongly formatted.
+     * @throws FileFormatException if the line is wrongly formatted.
      */
 
-    private String[] parseLine(String line) throws IllegalStateException {
+    private String[] parseLine(String line) throws FileFormatException {
         String[] values;
         String type, name;
         int health, count;
@@ -155,7 +156,7 @@ public class ArmyFSH implements FSH {
             count = Integer.parseInt(values[3].replaceAll("\\s+", ""));
 
         } catch (Exception e) {
-            throw new IllegalStateException("File is wrongly formatted on line:" + lineNr);
+            throw new FileFormatException("File is wrongly formatted on line:" + lineNr);
         }
         return new String[]{type, name, Integer.toString(health), Integer.toString(count)};
     }
