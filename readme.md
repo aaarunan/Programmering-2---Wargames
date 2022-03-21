@@ -10,8 +10,8 @@ The project was created as an obligatory submission in the subject IDATT2001 on 
 
 ### FSH - FileHandlingSystem
 
-Classes with "FSH" in the name shows that the class is a "filehandling system class". This means that it is
-responsible for reading and writing to files, and managing files.
+Classes with "FSH" in the name shows that the class is a "filehandling system class". This means that it is responsible
+for reading and writing to files, and managing files.
 
 #### ArmyFSH
 
@@ -31,10 +31,13 @@ Where:
 The count is there for saving space. Rather than having multiples of lines representing the same Unit, the count will
 save unnecessary data duplication.
 
-If new types of Units are added, they should also be added in ArmyFSH, if the army is wished to be saved.
+### UnitFactory
+Unit Factory creates units from strings. This is usually done hand in hand when parsing files.
+If new types of Units are added, they should also be added in the factory, if the Unit is wished to be used by the Factory.
 
 ### JavaFX
 
+Todo
 
 ## System requirements
 
