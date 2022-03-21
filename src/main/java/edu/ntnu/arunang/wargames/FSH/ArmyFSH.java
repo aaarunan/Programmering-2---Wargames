@@ -25,13 +25,7 @@ import java.util.Objects;
 
 public class ArmyFSH implements FSH {
 
-    private int lineNr;
-
-    //Types of units which are parsable
-    private final String CAVALRY_UNIT = "CavalryUnit";
-    private final String INFANTRY_UNIT = "InfantryUnit";
-    private final String RANGED_UNIT = "RangedUnit";
-    private final String COMMANDER_UNIT = "CommanderUnit";
+    private int lineNr =1;
 
     /**
      * Constructs the FSH with no parameters.
@@ -41,17 +35,20 @@ public class ArmyFSH implements FSH {
 
     }
 
-
     /**
-     * Helper method to get the path of the army file. This is by default stored in:
+     * Helper method to get the path of the army file. This is by default:
      * /src/main/resources/army
      *
-     * @param army armyName is the filename
+     * @param armyName armyName is the filename
      * @return the full system path
      */
 
-    private static String getPath(Army army) {
-        return FileSystems.getDefault().getPath("src", "main", "resources", "army", army.getName() + ".csv").toString();
+    public static String getPath(String armyName) {
+        return FileSystems.getDefault().getPath("src", "main", "resources", "army", armyName + ".csv").toString();
+    }
+
+    protected static String getTestPath(String armyName) {
+        return FileSystems.getDefault().getPath("src", "main", "resources", "tests", "army", armyName + ".csv").toString();
     }
 
     /**
@@ -62,7 +59,7 @@ public class ArmyFSH implements FSH {
      */
 
     public void write(Army army) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(getPath(army)))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(getPath(army.getName())))) {
             writer.write(army.getName());
             writer.write(army.toCsv());
             writer.flush();
@@ -115,9 +112,15 @@ public class ArmyFSH implements FSH {
 
             lineNr = 1;
 
+            UnitFactory unitFactory = new UnitFactory();
+
             while ((line = reader.readLine()) != null) {
                 String[] values = parseLine(line);
-                army.add(this.constructUnitFromString(values[0], values[1], Integer.parseInt(values[2])), Integer.parseInt(values[3]));
+                try {
+                    army.add(unitFactory.constructUnitFromString(values[0], values[1], Integer.parseInt(values[2])), Integer.parseInt(values[3]));
+                } catch (Exception e) {
+                    throw new IllegalStateException(String.format("Unit on line %d is wrongly formatted or does no exist", lineNr));
+                }
                 lineNr++;
             }
 
@@ -147,7 +150,7 @@ public class ArmyFSH implements FSH {
 
         try {
             type = values[0].replaceAll("\\s+", "");
-            name = values[1].replaceAll("\\s+", "");
+            name = values[1];
             health = Integer.parseInt(values[2].replaceAll("\\s+", ""));
             count = Integer.parseInt(values[3].replaceAll("\\s+", ""));
 
@@ -155,25 +158,5 @@ public class ArmyFSH implements FSH {
             throw new IllegalStateException("File is wrongly formatted on line:" + lineNr);
         }
         return new String[]{type, name, Integer.toString(health), Integer.toString(count)};
-    }
-
-    /**
-     * Constructs a unit from a parsed line. The army is created reset.
-     *
-     * @param type   unit type
-     * @param name   unit name
-     * @param health unit health
-     * @return A constructed Unit.
-     * @throws IllegalStateException if the Unit type is not defined or wrong.
-     */
-
-    private Unit constructUnitFromString(String type, String name, int health) throws IllegalStateException {
-        return switch (type) {
-            case CAVALRY_UNIT -> new CavalryUnit(name, health);
-            case COMMANDER_UNIT -> new CommanderUnit(name, health);
-            case INFANTRY_UNIT -> new InfantryUnit(name, health);
-            case RANGED_UNIT -> new RangedUnit(name, health);
-            default -> throw new IllegalStateException(String.format("The object %s on line %d, is not a Unit", type, lineNr));
-        };
     }
 }

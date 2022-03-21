@@ -27,9 +27,11 @@ public class ArmyFSHTest {
         army.add(infUnit, 23);
 
         ArmyFSH armyFSH = new ArmyFSH();
-        armyFSH.write(army);
+        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
 
-        //not finished
+        assertTrue(armyFSH.fileExists(new File(ArmyFSH.getTestPath(army.getName()))));
+
+
     }
 
 
@@ -44,8 +46,8 @@ public class ArmyFSHTest {
 
         ArmyFSH armyFSH = new ArmyFSH();
 
-        armyFSH.write(army);
-        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPath(army)));
+        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
 
         assertEquals(army, armyFromFile);
     }
@@ -58,8 +60,8 @@ public class ArmyFSHTest {
 
         ArmyFSH armyFSH = new ArmyFSH();
 
-        armyFSH.write(army);
-        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPath(army)));
+        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
 
         assertEquals(army, armyFromFile);
     }
@@ -69,7 +71,7 @@ public class ArmyFSHTest {
     void testFileReadingOnEmpty() {
         ArmyFSH armyFSH = new ArmyFSH();
         try {
-            armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("blank.csv")));
+            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Blank")));
         } catch (Exception e) {
             assertEquals(IllegalStateException.class, e.getClass());
         }
@@ -82,7 +84,7 @@ public class ArmyFSHTest {
         ArmyFSH armyFSH = new ArmyFSH();
 
         try {
-            armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("NotAUnit.csv")));
+            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("NotAUnit")));
         } catch (Exception e) {
             assertEquals(IllegalArgumentException.class, e.getClass());
         }
@@ -92,18 +94,15 @@ public class ArmyFSHTest {
     @DisplayName("Test on reading file that has spaces")
     void testOnReadingFileWithSpaces() {
         ArmyFSH armyFSH = new ArmyFSH();
+        Army army = new Army("Test With Spaces");
+        army.add(new InfantryUnit("test with spaces", 101), 13);
 
-        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
+        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Test With Spaces")));
+        System.out.println(armyFromFile.toCsv());
+        System.out.println(army.toCsv());
 
-        System.out.println(armyFromFile.toString());
-    }
+        assertEquals(army, armyFromFile);
 
-    @Test
-    @DisplayName("Test on reading file that is wrongly formatted")
-    void testWithWrongFormattedFile() {
-        ArmyFSH armyFSH = new ArmyFSH();
-
-        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
     }
 
     @Test
@@ -111,7 +110,12 @@ public class ArmyFSHTest {
     void testOnFileWithBlankFields() {
         ArmyFSH armyFSH = new ArmyFSH();
 
-        Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getPathFromFileName("Test With Spaces.csv")));
+        try {
+            Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("BlankFields")));
+        } catch (Exception e) {
+            assertEquals(IllegalStateException.class, e.getClass());
+        }
+
     }
 }
 
