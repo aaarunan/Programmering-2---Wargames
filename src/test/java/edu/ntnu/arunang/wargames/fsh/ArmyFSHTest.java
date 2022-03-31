@@ -1,17 +1,19 @@
-package edu.ntnu.arunang.wargames.FSH;
+package edu.ntnu.arunang.wargames.fsh;
 
-import edu.ntnu.arunang.wargames.Exceptions.FileFormatException;
+import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.exception.FileFormatException;
+import edu.ntnu.arunang.wargames.unit.CavalryUnit;
+import edu.ntnu.arunang.wargames.unit.CommanderUnit;
+import edu.ntnu.arunang.wargames.unit.InfantryUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.Unit.*;
-
 import java.io.File;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ArmyFSHTest {
@@ -21,18 +23,25 @@ public class ArmyFSHTest {
     CommanderUnit comUnit = new CommanderUnit("opUnit", 10000);
 
     @Test
-    @DisplayName("Test file writing")
-    void testFileWriting() {
+    @DisplayName("Test file is created")
+    void testFileCreation() {
+        ArmyFSH armyFSH = new ArmyFSH();
+        File file = new File(ArmyFSH.getTestPath("fileCreation"));
+        armyFSH.writeTo(file, new Army("fileCreation"));
+
+        assertTrue(armyFSH.fileExists(file));
+    }
+
+    @Test
+    @DisplayName("Test file writing, by checking that the bytes are the same for a pre-made Army.")
+    void testFileWriting() throws IOException {
         Army army = new Army("Test");
         army.add(cavUnit, 50);
         army.add(infUnit, 23);
 
         ArmyFSH armyFSH = new ArmyFSH();
         armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
-
-        assertTrue(armyFSH.fileExists(new File(ArmyFSH.getTestPath(army.getName()))));
-
-
+        assertEquals(-1, Files.mismatch(Paths.get(ArmyFSH.getTestPath("TestFasit")), Paths.get(ArmyFSH.getTestPath("Test"))));
     }
 
 
@@ -70,25 +79,27 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test file reading, on empty file")
     void testFileReadingOnEmpty() {
-        ArmyFSH armyFSH = new ArmyFSH();
-        try {
-            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Blank")));
-        } catch (Exception e) {
-            assertEquals(IllegalStateException.class, e.getClass());
-        }
+        Throwable exception = assertThrows(
+                FileFormatException.class, () -> {
+                    ArmyFSH armyFSH = new ArmyFSH();
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Blank")));
+                }
+        );
 
+        assertEquals("File is empty", exception.getMessage());
     }
 
     @Test
     @DisplayName("Test on reading non-supported Unit type")
     void testOnReadingNonSupportedType() {
-        ArmyFSH armyFSH = new ArmyFSH();
+        Throwable exception = assertThrows(
+                FileFormatException.class, () -> {
+                    ArmyFSH armyFSH = new ArmyFSH();
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("NotAUnit")));
+                }
+        );
 
-        try {
-            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("NotAUnit")));
-        } catch (Exception e) {
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
+        assertEquals("Unittype NotaUnit does not exist on Line: 1", exception.getMessage());
     }
 
     @Test
@@ -101,20 +112,19 @@ public class ArmyFSHTest {
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Test With Spaces")));
 
         assertEquals(army, armyFromFile);
-
     }
 
     @Test
     @DisplayName("Test on reading file that has blank fields")
     void testOnFileWithBlankFields() {
-        ArmyFSH armyFSH = new ArmyFSH();
+        Throwable exception = assertThrows(
+                FileFormatException.class, () -> {
+                    ArmyFSH armyFSH = new ArmyFSH();
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("BlankFields")));
+                }
+        );
 
-        try {
-            Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("BlankFields")));
-        } catch (Exception e) {
-            assertEquals(IllegalStateException.class, e.getClass());
-        }
-
+        assertEquals("Too few fields on line: 1", exception.getMessage());
     }
 }
 

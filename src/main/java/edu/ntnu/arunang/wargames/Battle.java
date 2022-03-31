@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.Unit.*;
+import edu.ntnu.arunang.wargames.unit.Unit;
 
 /**
  * A Battle is a battlefield where two armies can fight.
@@ -12,7 +12,6 @@ public class Battle {
     private Army attacker;
     private Army defender;
 
-    //num of attacks done, can be used for testing.
     private int numOfAttacks = 0;
 
     /**
@@ -64,7 +63,7 @@ public class Battle {
         return attacker.hasUnits() ? attacker : defender;
     }
 
-    protected int getNumOfAttacks() {
+    public int getNumOfAttacks() {
         return numOfAttacks;
     }
 

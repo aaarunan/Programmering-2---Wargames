@@ -1,14 +1,13 @@
-package edu.ntnu.arunang.wargames.FSH;
+package edu.ntnu.arunang.wargames.fsh;
 
 import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.Exceptions.FileFormatException;
-import edu.ntnu.arunang.wargames.Unit.*;
+import edu.ntnu.arunang.wargames.exception.FileFormatException;
+import edu.ntnu.arunang.wargames.unit.Unit;
+import edu.ntnu.arunang.wargames.unit.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.ArrayList;
 
 /**
  * ArmyFSH is a fileSystemHandling class for Army. This class saves armies in
@@ -19,7 +18,7 @@ import java.util.Objects;
  * <p>
  * More information about how the units are stored is written in the readme.
  * <p>
- * ArmyFSH implements FSH which is the basic FileSystemHandling interface for every FSH in wargames.
+ * ArmyFSH implements FSH which is the basic FileSystemHandling interface for every FSH in Wargames.
  * <p>
  * ArmyFSH uses Buffered- Reader and Writer, for easily reading and writing to lines.
  */
@@ -29,7 +28,8 @@ public class ArmyFSH implements FSH {
     private int lineNr = 1;
 
     /**
-     * Constructs the FSH with no parameters.
+     * Constructs the FSH with no parameters. The class can be instantiated
+     * and the constructor is therefore public.
      */
 
     public ArmyFSH() {
@@ -49,7 +49,7 @@ public class ArmyFSH implements FSH {
     }
 
     protected static String getTestPath(String armyName) {
-        return FileSystems.getDefault().getPath("src", "main", "resources", "tests", "army", armyName + ".csv").toString();
+        return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
     }
 
     /**
@@ -94,7 +94,6 @@ public class ArmyFSH implements FSH {
      *
      * @param file file that is parsed
      * @return The army parsed from the file
-     * @throws FileFormatException if the file is wrongly formatted or empty.
      */
 
     public Army loadFromFile(File file) throws FileFormatException {
@@ -105,28 +104,21 @@ public class ArmyFSH implements FSH {
             String armyName = reader.readLine();
 
             if (armyName == null) {
-                //kankjse lage egen exception
-                throw new FileFormatException("File is empty or wrongly formatted");
+                throw new FileFormatException("File is empty");
             }
 
             army = new Army(armyName);
 
             lineNr = 1;
 
-            UnitFactory unitFactory = new UnitFactory();
-
             while ((line = reader.readLine()) != null) {
-                String[] values = parseLine(line);
-                try {
-                    army.add(unitFactory.constructUnitFromString(values[0], values[1], Integer.parseInt(values[2])), Integer.parseInt(values[3]));
-                } catch (Exception e) {
-                    throw new FileFormatException(String.format("Unit on line %d is wrongly formatted or does no exist", lineNr));
-                }
+                army.add(parseLine(line));
+                parseLine(line);
                 lineNr++;
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            error.printStackTrace();
         }
 
         return army;
@@ -142,7 +134,7 @@ public class ArmyFSH implements FSH {
      * @throws FileFormatException if the line is wrongly formatted.
      */
 
-    private String[] parseLine(String line) throws FileFormatException {
+    private ArrayList<Unit> parseLine(String line) throws FileFormatException {
         String[] values;
         String type, name;
         int health, count;
@@ -155,9 +147,22 @@ public class ArmyFSH implements FSH {
             health = Integer.parseInt(values[2].replaceAll("\\s+", ""));
             count = Integer.parseInt(values[3].replaceAll("\\s+", ""));
 
-        } catch (Exception e) {
-            throw new FileFormatException("File is wrongly formatted on line:" + lineNr);
+        } catch (NumberFormatException e) {
+            throw new FileFormatException("Could not parse integers on line :" + lineNr);
+        } catch (IndexOutOfBoundsException e) {
+            throw new FileFormatException("Too few fields on line: " + lineNr);
         }
-        return new String[]{type, name, Integer.toString(health), Integer.toString(count)};
+
+        ArrayList<Unit> units = new ArrayList<>();
+
+
+        for (int i = 0; i < count; i++) {
+            try {
+                units.add(UnitFactory.constructUnitFromString(type, name, health));
+            } catch (IllegalArgumentException e) {
+                throw new FileFormatException(String.format("%s on Line: %d", e.getMessage(), lineNr));
+            }
+        }
+        return units;
     }
 }

@@ -1,16 +1,13 @@
 package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.unit.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ArmyTest {
 
@@ -21,7 +18,6 @@ public class ArmyTest {
     InfantryUnit infUnit = new InfantryUnit("infUnit", 40);
     CommanderUnit overPoweredUnit = new CommanderUnit("opUnit", 10000);
 
-
     CavalryUnit P1 = new CavalryUnit("A", 30);
     CavalryUnit P2 = new CavalryUnit("C", 20);
     InfantryUnit P4 = new InfantryUnit("C", 25);
@@ -30,29 +26,6 @@ public class ArmyTest {
     CommanderUnit P6 = new CommanderUnit("C", 40);
     RangedUnit P8 = new RangedUnit("D", 40);
     RangedUnit P7 = new RangedUnit("D", 40);
-
-    @Test
-    @DisplayName("Checks if wrong construction with name and units parameter. ")
-    void testWrongConstructionOnMainConstruction() {
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Army(""),
-                "Name must not be blank."
-        );
-    }
-
-    @Test
-    @DisplayName("Checks if wrong construction with name parameter. ")
-    void testWrongConstructionOnSecondaryConstructor() {
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Army("", new ArrayList<Unit>()),
-                "Name must not be blank."
-
-        );
-
-
-    }
 
     @Test
     @DisplayName("Checks deletion when there are similar armies in the Army")
@@ -134,17 +107,16 @@ public class ArmyTest {
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
 
-        List<Unit> temp = attacker.getUnitsByType(Unit.class);
+        List<Unit> temp = attacker.getUnitsByType(RangedUnit.class);
 
         assertEquals(0, temp.size());
-
     }
 
     @Test
     @DisplayName("Check sorting if it matches a pre sorted Army.")
     void testSortOnPreSortedArmy() {
         Army unitsUnsorted = new Army("unsorted");
-        ArrayList<Unit> unitsSorted = new ArrayList();
+        ArrayList<Unit> unitsSorted = new ArrayList<>();
 
         unitsSorted.add(P1);
         unitsSorted.add(P2);
@@ -188,10 +160,7 @@ public class ArmyTest {
         unitsUnsorted.add(P7);
 
         assertEquals(unitsSorted, unitsUnsorted.sort());
-
     }
-
-
 
     @Test
     @DisplayName("Testing sort on empty army")
@@ -199,5 +168,35 @@ public class ArmyTest {
         Army army = new Army("test");
 
         assertEquals(new ArrayList<Unit>(), army.sort());
+    }
+
+    @Test
+    @DisplayName("Testing average attack")
+    void testAverageAttackBonus() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(20, army.getAverageAttackPoints());
+    }
+
+    @Test
+    @DisplayName("Testing average armor")
+    void testAverageArmorPoints() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(12, army.getAverageArmorPoints());
+    }
+
+    @Test
+    @DisplayName("Testing average health points")
+    void testAverageHealthPoints() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(10, army.getAverageHealthPoints());
     }
 }

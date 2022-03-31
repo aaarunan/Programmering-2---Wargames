@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.Unit.*;
+import edu.ntnu.arunang.wargames.unit.Unit;
 
 import java.util.*;
 
@@ -55,6 +55,21 @@ public class Army {
     }
 
     /**
+     * Parse a map into an Army.
+     *
+     * @param name name of the army
+     * @param map  map of Units
+     * @return an Army parsed from map
+     */
+
+    public static Army parseMap(String name, Map<Unit, Integer> map) {
+        Army army = new Army(name);
+        map.forEach(army::add);
+
+        return army;
+    }
+
+    /**
      * Get a specific Unit in the Army by a given index.
      *
      * @param index in the collection.
@@ -70,12 +85,11 @@ public class Army {
      * The method uses generics so that each Unit does not
      * need their own method.
      *
-     * @param type The class of the object
-     * @param <T>  Type of Unit
+     * @param type   The class of the object
+     * @param <Type> Type of Unit
      * @return List of matching Units.
      */
-
-    public <T extends Unit> List<Unit> getUnitsByType(Class<T> type) {
+    public <Type extends Unit> List<Unit> getUnitsByType(Class<Type> type) {
         return units.stream().filter(e -> e.getClass().equals(type)).toList();
     }
 
@@ -151,6 +165,36 @@ public class Army {
         Unit random = units.get(rand.nextInt(units.size()));
 
         return random;
+    }
+
+    /**
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageHealthPoints() {
+        return this.units.stream().mapToDouble(Unit::getHealthPoints).sum() / units.size();
+    }
+
+    /**
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageAttackPoints() {
+        return this.units.stream().mapToDouble(Unit::getAttackPoints).sum() / units.size();
+    }
+
+    /**
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageArmorPoints() {
+        return this.units.stream().mapToDouble(Unit::getArmorPoints).sum() / units.size();
     }
 
     /**
@@ -241,21 +285,6 @@ public class Army {
     public Map<Unit, Integer> getMap() {
         Map<Unit, Integer> army = new HashMap<>();
         this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
-
-        return army;
-    }
-
-    /**
-     * Parse a map into an Army.
-     *
-     * @param name name of the army
-     * @param map  map of Units
-     * @return an Army parsed from map
-     */
-
-    public static Army parseMap(String name, Map<Unit, Integer> map) {
-        Army army = new Army(name);
-        map.forEach(army::add);
 
         return army;
     }

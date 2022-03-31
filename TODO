@@ -1,15 +1,8 @@
 1. GUI.
-2. Spørre om det er lov å ha globale variabler i tester ,go spørre om testene er greie
-3. Snakke om bruk av generics.
-4. when to use "throws <exception>"
-5. kankjse bruke java nio
-6. burde Unit var enum eller bedre løsning.
-7. Bedre løsning for å lese fra filer?
-8. Filehandling tests
-9. Tests on filewriting
-10. Blank fields test
-12 Test with wrong formatted lines.
-13. burde read være statisk?
-14. add count.
-15. implement resetStats()
-16. parse line bedre? ikke konvertere frem og tilnbake fra int
+2. Globale variabler i jUnit tester?
+3. Bruk av generics?
+6. burde UnitType være enum?
+7. Get average stats and add tests
+8. Use root instead to switch scene.
+9. maybe use url from fxml loader?
+10. assert message on exception thrown.

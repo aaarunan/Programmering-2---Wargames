@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 /**
  * An InfantryUnit is a specialized melee unit that does not have a great defense.

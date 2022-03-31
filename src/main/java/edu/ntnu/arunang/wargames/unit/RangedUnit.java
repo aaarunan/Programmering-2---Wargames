@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 /**
  * A RangedUnit is a Unit that has a ranged speciality.
@@ -57,7 +57,7 @@ public class RangedUnit extends Unit {
 
     @Override
     public RangedUnit getResetCopy() {
-       return new RangedUnit(this.getName(), this.getHealthPoints());
+        return new RangedUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override

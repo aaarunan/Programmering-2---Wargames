@@ -1,16 +1,18 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.Unit.*;
+import edu.ntnu.arunang.wargames.unit.CavalryUnit;
+import edu.ntnu.arunang.wargames.unit.CommanderUnit;
+import edu.ntnu.arunang.wargames.unit.InfantryUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BattleTest {
 
     CavalryUnit opUnit = new CavalryUnit("opUnit", 10000);
     CommanderUnit comUnit = new CommanderUnit("comUnit", 40);
-    RangedUnit ranUnit = new RangedUnit("ranUnit", 50);
     InfantryUnit infUnit = new InfantryUnit("infUnit", 60);
 
     Army attacker = new Army("Attacker");
@@ -28,7 +30,7 @@ class BattleTest {
 
         );
 
-        assertTrue(thrown.getMessage().contains("All armies must have atleast one unit."));
+        assertEquals("All armies must have atleast one unit.", thrown.getMessage());
     }
 
     @Test
@@ -43,7 +45,7 @@ class BattleTest {
 
         );
 
-        assertTrue(thrown.getMessage().contains("All armies must have atleast one unit."));
+        assertEquals("All armies must have atleast one unit.", thrown.getMessage());
     }
 
     @Test

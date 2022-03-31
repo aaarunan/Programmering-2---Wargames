@@ -1,6 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
-
-import edu.ntnu.arunang.wargames.Army;
+package edu.ntnu.arunang.wargames.unit;
 
 import java.util.Objects;
 
@@ -38,10 +36,6 @@ public abstract class Unit implements Comparable<Unit> {
     public Unit(String name, int healthPoints, int attackPoints, int armorPoints) throws IllegalStateException {
         if (healthPoints <= 0 || attackPoints < 0 || armorPoints < 0) {
             throw new IllegalArgumentException("All fields must be greater than or equal to 0 (HP must be greater)");
-        }
-
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("Name must be given");
         }
 
         this.name = name;

@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 /**
  * A CavalryUnit is a specialized melee unit, that does not have great defense.
@@ -16,11 +16,9 @@ public class CavalryUnit extends Unit {
     protected final static int BASE_ATTACK_BONUS = 2;
     protected final static int FIRST_ATTACK_BONUS = 6;
     protected final static int RESIST_BONUS = 1;
-
-    protected boolean hasAttacked = false;
-
     protected final static int ATTACK_POINTS = 20;
     protected final static int ARMOR_POINTS = 12;
+    protected boolean hasAttacked = false;
 
     /**
      * Constructs the CavalryUnit with the given stats
@@ -56,7 +54,7 @@ public class CavalryUnit extends Unit {
 
     @Override
     public CavalryUnit getResetCopy() {
-       return new CavalryUnit(this.getName(), this.getHealthPoints());
+        return new CavalryUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override

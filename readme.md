@@ -32,8 +32,9 @@ The count is there for saving space. Rather than having multiples of lines repre
 save unnecessary data duplication.
 
 ### UnitFactory
-Unit Factory creates units from strings. This is usually done hand in hand when parsing files.
-If new types of Units are added, they should also be added in the factory, if the Unit is wished to be used by the Factory.
+
+Unit Factory creates units from strings. This is usually done hand in hand when parsing files. If new types of Units are
+added, they should also be added in the factory, if the Unit is wished to be used by the Factory.
 
 ### JavaFX
 
