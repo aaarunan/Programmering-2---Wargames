@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,11 @@ class UnitTest {
     Unit test = new Unit("test", 20, 20, 20) {
         @Override
         public Unit copy() {
+            return null;
+        }
+
+        @Override
+        public Unit getResetCopy() {
             return null;
         }
 
@@ -31,6 +36,11 @@ class UnitTest {
         }
 
         @Override
+        public Unit getResetCopy() {
+            return null;
+        }
+
+        @Override
         public int getAttackBonus() {
             return 6;
         }
@@ -44,6 +54,11 @@ class UnitTest {
     Unit testWithDifferentHealthPoints = new Unit("test", 40, 20, 20) {
         @Override
         public Unit copy() {
+            return null;
+        }
+
+        @Override
+        public Unit getResetCopy() {
             return null;
         }
 
@@ -65,6 +80,11 @@ class UnitTest {
         }
 
         @Override
+        public Unit getResetCopy() {
+            return null;
+        }
+
+        @Override
         public int getAttackBonus() {
             return 2;
         }
@@ -76,12 +96,17 @@ class UnitTest {
     };
 
     @Test
-    @DisplayName("Constructing edu.ntnu.arunang.wargames.Unit wrong should throw exception")
-    void testConstructWrong() {
-        try {
-            Unit unit = new Unit("", -21, -20, -20) {
+    @DisplayName("Constructing Unit wrong should throw exception when healthPoints are less than or equals to 0")
+    void testConstructWrongOnHealth() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+            Unit unit = new Unit("", 0, 1, 1) {
                 @Override
                 public Unit copy() {
+                    return null;
+                }
+
+                @Override
+                public Unit getResetCopy() {
                     return null;
                 }
 
@@ -95,10 +120,71 @@ class UnitTest {
                     return -1;
                 }
             };
+        });
 
-        } catch (Exception err) {
-            assertEquals(IllegalArgumentException.class, err.getClass());
-        }
+        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
+    }
+
+
+    @Test
+    @DisplayName("Constructing Unit wrong should throw exception when attackPoints are less than 0")
+    void testConstructWrongOnAttackPoints() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+            Unit unit = new Unit("", 1, -1, 1) {
+                @Override
+                public Unit copy() {
+                    return null;
+                }
+
+                @Override
+                public Unit getResetCopy() {
+                    return null;
+                }
+
+                @Override
+                public int getAttackBonus() {
+                    return -1;
+                }
+
+                @Override
+                public int getResistBonus() {
+                    return -1;
+                }
+            };
+        });
+
+        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
+    }
+
+
+    @Test
+    @DisplayName("Constructing Unit wrong should throw exception when armorPoints are less than 0")
+    void testConstructWrongOnArmorPoints() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+            Unit unit = new Unit("", 1, 1, -1) {
+                @Override
+                public Unit copy() {
+                    return null;
+                }
+
+                @Override
+                public Unit getResetCopy() {
+                    return null;
+                }
+
+                @Override
+                public int getAttackBonus() {
+                    return -1;
+                }
+
+                @Override
+                public int getResistBonus() {
+                    return -1;
+                }
+            };
+        });
+
+        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
     }
 
     @Test

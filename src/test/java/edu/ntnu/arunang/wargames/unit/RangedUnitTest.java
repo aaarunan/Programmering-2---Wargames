@@ -1,8 +1,7 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.ranges.Range;
 
 import static org.junit.jupiter.api.Assertions.*;
 

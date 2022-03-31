@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 /**
  * The CommanderUnit is a more capable CavalryUnit.
@@ -46,6 +46,11 @@ public class CommanderUnit extends CavalryUnit {
         CommanderUnit copy = new CommanderUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
         copy.hasAttacked = this.hasAttacked;
         return copy;
+    }
+
+    @Override
+    public CommanderUnit getResetCopy() {
+        return new CommanderUnit(this.getName(), this.getHealthPoints());
     }
 
 }

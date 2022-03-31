@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.Unit.*;
+import edu.ntnu.arunang.wargames.unit.Unit;
 
 import java.util.*;
 
@@ -55,6 +55,21 @@ public class Army {
     }
 
     /**
+     * Parse a map into an Army.
+     *
+     * @param name name of the army
+     * @param map  map of Units
+     * @return an Army parsed from map
+     */
+
+    public static Army parseMap(String name, Map<Unit, Integer> map) {
+        Army army = new Army(name);
+        map.forEach(army::add);
+
+        return army;
+    }
+
+    /**
      * Get a specific Unit in the Army by a given index.
      *
      * @param index in the collection.
@@ -63,6 +78,19 @@ public class Army {
 
     public Unit get(int index) {
         return units.get(index);
+    }
+
+    /**
+     * Get the all specific types of Unit.
+     * The method uses generics so that each Unit does not
+     * need their own method.
+     *
+     * @param type   The class of the object
+     * @param <Type> Type of Unit
+     * @return List of matching Units.
+     */
+    public <Type extends Unit> List<Unit> getUnitsByType(Class<Type> type) {
+        return units.stream().filter(e -> e.getClass().equals(type)).toList();
     }
 
     /**
@@ -82,7 +110,7 @@ public class Army {
      * @param unit  Unit that is added
      * @param count Amount of Units that should be added.
      */
-    protected void add(Unit unit, int count) {
+    public void add(Unit unit, int count) {
         for (int i = 0; i < count; i++) {
             units.add(unit.copy());
         }
@@ -140,7 +168,37 @@ public class Army {
     }
 
     /**
-     * Used for creating antoher instance of the same Army.
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageHealthPoints() {
+        return this.units.stream().mapToDouble(Unit::getHealthPoints).sum() / units.size();
+    }
+
+    /**
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageAttackPoints() {
+        return this.units.stream().mapToDouble(Unit::getAttackPoints).sum() / units.size();
+    }
+
+    /**
+     * Get the average healthpoints of the units.
+     *
+     * @return double containing the average healthpoints
+     */
+
+    public double getAverageArmorPoints() {
+        return this.units.stream().mapToDouble(Unit::getArmorPoints).sum() / units.size();
+    }
+
+    /**
+     * Used for creating another instance of the same Army.
      * Copies all units and put them in an ArrayList.
      * Usually done before sorting, and for testing purposes.
      *
@@ -154,6 +212,16 @@ public class Army {
             copy.add(unit.copy());
         }
         return copy;
+    }
+
+    /**
+     * Get a List of the Units. The army is converted to an ArrayList.
+     * The units are copied.
+     *
+     * @return List of units.
+     */
+    public ArrayList<Unit> getUnits() {
+        return this.deepCopy();
     }
 
     /**
@@ -190,6 +258,37 @@ public class Army {
         return units.size();
     }
 
+    /**
+     * Converts the Unit to a string that represents how
+     * Units are stored in a file:
+     * unitType,unitName,health,count
+     *
+     * @return string that represents the unit
+     */
+
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        this.getMap().forEach((k, v) -> sb.append(k.toCsv()).append(",").append(v));
+
+        return sb.toString();
+    }
+
+    /**
+     * Converts an Army into a map. This allows to get armies
+     * in a compact form with an Integer value that represents count.
+     * Used to save armies efficiently in csv files. The units are copied and reset
+     * before converting.
+     *
+     * @return a hashmap of the army.
+     */
+
+    public Map<Unit, Integer> getMap() {
+        Map<Unit, Integer> army = new HashMap<>();
+        this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+
+        return army;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -202,11 +301,12 @@ public class Army {
         return sb.toString();
     }
 
+
     /**
-     * The Army is sorted when checkings equals because the order
+     * The Army is sorted when checking equals because the order
      * does not matter when checking if two armies are equal.
      *
-     * @param o
+     * @param o object that is being compared
      * @return true if equal, false if unequal
      */
 

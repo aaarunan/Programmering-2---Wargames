@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 /**
  * An InfantryUnit is a specialized melee unit that does not have a great defense.
@@ -48,6 +48,11 @@ public class InfantryUnit extends Unit {
     @Override
     public InfantryUnit copy() {
         return new InfantryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+    }
+
+    @Override
+    public InfantryUnit getResetCopy() {
+        return new InfantryUnit(this.getName(), this.getHealthPoints());
     }
 
     @Override

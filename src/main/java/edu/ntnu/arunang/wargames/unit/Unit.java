@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.Unit;
+package edu.ntnu.arunang.wargames.unit;
 
 import java.util.Objects;
 
@@ -38,10 +38,6 @@ public abstract class Unit implements Comparable<Unit> {
             throw new IllegalArgumentException("All fields must be greater than or equal to 0 (HP must be greater)");
         }
 
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("Name must be given");
-        }
-
         this.name = name;
         this.healthPoints = healthPoints;
         this.attackPoints = attackPoints;
@@ -55,6 +51,13 @@ public abstract class Unit implements Comparable<Unit> {
      */
 
     public abstract Unit copy();
+
+    /**
+     * Makes a copy of the unit and resets its stats. Essencially making it a new unit.
+     * Used to generalize Units.
+     */
+
+    public abstract Unit getResetCopy();
 
     /**
      * Attacking deals damage to a given opponent.
@@ -154,6 +157,13 @@ public abstract class Unit implements Comparable<Unit> {
 
     public abstract int getResistBonus();
 
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n").append(this.getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
+
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return
@@ -167,7 +177,7 @@ public abstract class Unit implements Comparable<Unit> {
 
     /**
      * Compares to units together. In this sequence:
-     * name->healthPoints->armorPoints->attackBonus->defenceBonus
+     * name->healthPoints->armorPoints->attackBonus->defenceBonus.
      *
      * @param other Unit that is being compared to
      * @return integer that represents the difference

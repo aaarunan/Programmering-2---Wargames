@@ -1,11 +1,11 @@
 package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.unit.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import edu.ntnu.arunang.wargames.Unit.*;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,10 +14,9 @@ public class ArmyTest {
     Army attacker = new Army("Attacker");
     Army defender = new Army("Defender");
 
-    CavalryUnit cavUnit = new CavalryUnit("unit", 20);
-    InfantryUnit infUnit = new InfantryUnit("unit1", 40);
+    CavalryUnit cavUnit = new CavalryUnit("cavUnit", 20);
+    InfantryUnit infUnit = new InfantryUnit("infUnit", 40);
     CommanderUnit overPoweredUnit = new CommanderUnit("opUnit", 10000);
-
 
     CavalryUnit P1 = new CavalryUnit("A", 30);
     CavalryUnit P2 = new CavalryUnit("C", 20);
@@ -27,28 +26,6 @@ public class ArmyTest {
     CommanderUnit P6 = new CommanderUnit("C", 40);
     RangedUnit P8 = new RangedUnit("D", 40);
     RangedUnit P7 = new RangedUnit("D", 40);
-
-    @Test
-    @DisplayName("Checks if wrong construction with name and units parameter. ")
-    void testWrongConstructionOnMainConstruction() {
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Army(""),
-                "Name must not be blank."
-        );
-    }
-
-    @Test
-    @DisplayName("Checks if wrong construction with name parameter. ")
-    void testWrongConstructionOnSecondaryConstructor() {
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Army("", new ArrayList<Unit>()),
-                "Name must not be blank."
-
-        );
-
-    }
 
     @Test
     @DisplayName("Checks deletion when there are similar armies in the Army")
@@ -108,10 +85,38 @@ public class ArmyTest {
     }
 
     @Test
+    @DisplayName("Check getting a specific type of Unit")
+    void getUnitByType() {
+        attacker.add(infUnit);
+        attacker.add(infUnit);
+        attacker.add(overPoweredUnit);
+        attacker.add(cavUnit);
+
+        List<Unit> temp = attacker.getUnitsByType(CommanderUnit.class);
+
+        assertEquals(temp.get(0), overPoweredUnit);
+        assertEquals(1, temp.size());
+
+    }
+
+    @Test
+    @DisplayName("Check getting a specific type of Unit")
+    void getUnitByUnitClass() {
+        attacker.add(infUnit);
+        attacker.add(infUnit);
+        attacker.add(overPoweredUnit);
+        attacker.add(cavUnit);
+
+        List<Unit> temp = attacker.getUnitsByType(RangedUnit.class);
+
+        assertEquals(0, temp.size());
+    }
+
+    @Test
     @DisplayName("Check sorting if it matches a pre sorted Army.")
     void testSortOnPreSortedArmy() {
         Army unitsUnsorted = new Army("unsorted");
-        ArrayList<Unit> unitsSorted = new ArrayList();
+        ArrayList<Unit> unitsSorted = new ArrayList<>();
 
         unitsSorted.add(P1);
         unitsSorted.add(P2);
@@ -155,7 +160,6 @@ public class ArmyTest {
         unitsUnsorted.add(P7);
 
         assertEquals(unitsSorted, unitsUnsorted.sort());
-
     }
 
     @Test
@@ -164,5 +168,35 @@ public class ArmyTest {
         Army army = new Army("test");
 
         assertEquals(new ArrayList<Unit>(), army.sort());
+    }
+
+    @Test
+    @DisplayName("Testing average attack")
+    void testAverageAttackBonus() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(20, army.getAverageAttackPoints());
+    }
+
+    @Test
+    @DisplayName("Testing average armor")
+    void testAverageArmorPoints() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(12, army.getAverageArmorPoints());
+    }
+
+    @Test
+    @DisplayName("Testing average health points")
+    void testAverageHealthPoints() {
+        Army army = new Army("test");
+
+        army.add(new CavalryUnit("yo", 10), 10);
+
+        assertEquals(10, army.getAverageHealthPoints());
     }
 }
