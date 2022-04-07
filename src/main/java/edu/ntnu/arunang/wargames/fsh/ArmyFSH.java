@@ -7,7 +7,10 @@ import edu.ntnu.arunang.wargames.unit.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ArmyFSH is a fileSystemHandling class for Army. This class saves armies in
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 
 public class ArmyFSH implements FSH {
 
+    private final String FILETYPE = "csv";
     private int lineNr = 1;
 
     /**
@@ -64,7 +68,8 @@ public class ArmyFSH implements FSH {
             writer.write(army.getName());
             writer.write(army.toCsv());
             writer.flush();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.out.println("An unexpected error occured");
             e.printStackTrace();
         }
     }
@@ -76,12 +81,16 @@ public class ArmyFSH implements FSH {
      * @param army army that is written.
      */
 
-    public void writeTo(File file, Army army) {
+    public void writeTo(File file, Army army) throws IllegalArgumentException {
+        if (!isCsv(file.toString())) {
+            throw new IllegalArgumentException("File is not supported");
+        }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(army.getName());
             writer.write(army.toCsv());
             writer.flush();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.out.println("Could not write to file...");
             e.printStackTrace();
         }
     }
@@ -117,11 +126,26 @@ public class ArmyFSH implements FSH {
                 lineNr++;
             }
 
-        } catch (IOException error) {
-            error.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Could not load file...");
+            e.printStackTrace();
         }
 
         return army;
+    }
+
+    public List<Army> loadAllFiles(File[] filesArray) throws FileFormatException {
+        List<Army> armies = new ArrayList<>();
+
+        List<File> files = Arrays.stream(filesArray).toList();
+        files.stream().filter(file -> isCsv(file.toString())).forEach(file -> {
+            try {
+                armies.add(loadFromFile(file));
+            } catch (FileFormatException e) {
+                e.printStackTrace();
+            }
+        });
+        return armies;
     }
 
     /**
@@ -153,16 +177,24 @@ public class ArmyFSH implements FSH {
             throw new FileFormatException("Too few fields on line: " + lineNr);
         }
 
-        ArrayList<Unit> units = new ArrayList<>();
+        List<Unit> units;
 
 
-        for (int i = 0; i < count; i++) {
             try {
-                units.add(UnitFactory.constructUnitFromString(type, name, health));
+                units = UnitFactory.constructUnitsFromString(type, name, health, count);
             } catch (IllegalArgumentException e) {
                 throw new FileFormatException(String.format("%s on Line: %d", e.getMessage(), lineNr));
             }
+        return (ArrayList<Unit>) units;
+    }
+
+    private boolean isCsv(String fileName) {
+        int index = fileName.lastIndexOf('.');
+
+        if (index > 0) {
+            String extension = fileName.substring(index + 1);
+            return extension.equals(FILETYPE);
         }
-        return units;
+        return false;
     }
 }

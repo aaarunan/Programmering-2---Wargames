@@ -48,7 +48,7 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test file reading")
     void testFileReading() throws FileFormatException {
-        Army army = new Army("TestReading");
+        Army army = new Army("testReading");
 
         army.add(cavUnit, 2);
         army.add(infUnit, 2);
@@ -66,7 +66,7 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test file reading, when no units are specified")
     void testFileReadingOnOnlyArmyName() throws FileFormatException {
-        Army army = new Army("TestReading");
+        Army army = new Army("testReading");
 
         ArmyFSH armyFSH = new ArmyFSH();
 
@@ -82,7 +82,7 @@ public class ArmyFSHTest {
         Throwable exception = assertThrows(
                 FileFormatException.class, () -> {
                     ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("Blank")));
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blank")));
                 }
         );
 
@@ -95,7 +95,7 @@ public class ArmyFSHTest {
         Throwable exception = assertThrows(
                 FileFormatException.class, () -> {
                     ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("NotAUnit")));
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("notUnit")));
                 }
         );
 
@@ -120,7 +120,7 @@ public class ArmyFSHTest {
         Throwable exception = assertThrows(
                 FileFormatException.class, () -> {
                     ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("BlankFields")));
+                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blankFields")));
                 }
         );
 

@@ -18,6 +18,7 @@ public class Army {
     private final String name;
     private final ArrayList<Unit> units;
 
+
     private final Random rand = new Random(); //Used to get a random Unit
 
     /**

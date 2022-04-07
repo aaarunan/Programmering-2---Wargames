@@ -2,6 +2,8 @@ package edu.ntnu.arunang.wargames.unit;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a Factory class that creates Units from strings. This is usually done
@@ -12,12 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class UnitFactory {
 
-    //Types of units which are parsable
-    private static final String CAVALRY_UNIT = "CavalryUnit";
-    private static final String INFANTRY_UNIT = "InfantryUnit";
-    private static final String RANGED_UNIT = "RangedUnit";
-    private static final String COMMANDER_UNIT = "CommanderUnit";
-
     /**
      * Private constructor because the class should not be instantiated.
      */
@@ -26,62 +22,76 @@ public class UnitFactory {
     }
 
     /**
-     * Constructs a unit from a parsed line. The army is created with stats reset.
+     * Constructs a unit from a parsed line. The units is created with stats reset.
      *
      * @param type   unit type
      * @param name   unit name
      * @param health unit health
-     * @return A constructed Unit.
-     * @throws IllegalStateException if the Unit type is not defined or wrong.
+     * @return A constructed Unit
+     * @throws IllegalArgumentException if the Unit type is not defined or wrong.
      */
 
-    public static Unit constructUnitFromString(String type, String name, int health) throws IllegalStateException {
-        return switch (type) {
-            case CAVALRY_UNIT -> new CavalryUnit(name, health);
-            case COMMANDER_UNIT -> new CommanderUnit(name, health);
-            case INFANTRY_UNIT -> new InfantryUnit(name, health);
-            case RANGED_UNIT -> new RangedUnit(name, health);
-            default -> throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
-        };
-    }
+    public static Unit constructUnitFromString(String type, String name, int health) throws IllegalArgumentException {
 
-    public static boolean typeExists(String type) {
-        try {
-            UnitFactory.constructUnitFromString(type, "name", 10);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
+        return constructUnit(checkType(type), name, health);
     }
 
     /**
-     * Constructs a unit from a parsed line. The army is created with stats reset.
-     * This is a prototype, and is in testing phase. Might be a better solution.
+     * Constructs a unit by a give UnitType
      *
      * @param type   unit type
      * @param name   unit name
      * @param health unit health
-     * @return A constructed Unit.
-     * @throws IllegalStateException if the Unit type is not defined or wrong.
+     * @return A constructed Unit
+     * @throws IllegalArgumentException if the Unit type is not constructable
      */
 
-    public static Unit constructUnitFromStringv2(String type, String name, int health) {
-        Unit instance;
-        try {
-            Class<?> clazz = Class.forName("edu.ntnu.arunang.wargames.unit." + type);
-            Constructor<?> constructor = clazz.getConstructor(String.class, int.class);
-            instance = (Unit) constructor.newInstance(name, health);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("The given unit type does not exist");
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("A constructor for the given Unit does not exist");
-        } catch (InvocationTargetException e) {
-            throw new IllegalArgumentException("Could not construct the Unit");
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException("Could not instantiate the Unit");
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Could not access the constructor of the Unit");
+    public static Unit constructUnit(UnitType type, String name, int health) throws IllegalArgumentException {
+        return switch (type) {
+            case CavalryUnit -> new CavalryUnit(name, health);
+            case CommanderUnit -> new CommanderUnit(name, health);
+            case InfantryUnit -> new InfantryUnit(name, health);
+            case RangedUnit -> new RangedUnit(name, health);
+            default -> throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
+        };
+
+    }
+
+    /**
+     * Constructs units from a parsed line. The units is created with stats reset.
+     *
+     * @param type   unit type
+     * @param name   unit name
+     * @param health unit health
+     * @param count  sum of units
+     * @return A constructed Unit.
+     * @throws IllegalArgumentException if the Unit type is not defined or wrong.
+     */
+
+    public static List<Unit> constructUnitsFromString(String type, String name, int health, int count) {
+        List<Unit> units = new ArrayList<>();
+        UnitType unitType = checkType(type);
+
+        for (int i = 0; i < count; i++) {
+            units.add(constructUnit(unitType, name, health));
         }
-        return instance;
+        return units;
+    }
+
+    /**
+     * Helper method to check if the specified unit is an UnitType.
+     *
+     * @param type type in string form
+     * @return UnitType
+     * @throws IllegalArgumentException if the UnitType does not exist.
+     */
+    private static UnitType checkType(String type) throws IllegalArgumentException {
+        UnitType unitType;
+        try {
+            unitType = UnitType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
+        }
+        return unitType;
     }
 }

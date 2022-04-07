@@ -159,7 +159,7 @@ public abstract class Unit implements Comparable<Unit> {
 
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n").append(this.getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
+        sb.append("\n").append(getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
 
         return sb.toString();
     }
