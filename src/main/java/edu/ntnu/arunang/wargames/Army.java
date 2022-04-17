@@ -15,11 +15,10 @@ import java.util.*;
 
 public class Army {
 
-    private final String name;
+
     private final ArrayList<Unit> units;
-
-
     private final Random rand = new Random(); //Used to get a random Unit
+    private String name;
 
     /**
      * Constructs the Army with an empty ArrayList.
@@ -30,12 +29,10 @@ public class Army {
 
     public Army(String name) throws IllegalArgumentException {
         if (name.isBlank()) {
-            throw new IllegalArgumentException(("Name must not be blank."));
+            throw new IllegalArgumentException("Name can not be empty");
         }
-
         this.name = name;
         this.units = new ArrayList<>();
-
     }
 
     /**
@@ -48,9 +45,8 @@ public class Army {
 
     public Army(String name, ArrayList<Unit> units) throws IllegalArgumentException {
         if (name.isBlank()) {
-            throw new IllegalArgumentException("Name must not be blank.");
+            throw new IllegalArgumentException("Name can not be empty");
         }
-
         this.name = name;
         this.units = units;
     }
@@ -134,11 +130,10 @@ public class Army {
      * Usually done if the Unit is dead.
      *
      * @param unit the Unit that is being removed.
-     * @return true if successful, false if unsuccessful.
      */
 
-    public boolean remove(Unit unit) {
-        return units.remove(unit);
+    public void remove(Unit unit) {
+        units.remove(unit);
     }
 
     /**
@@ -163,9 +158,7 @@ public class Army {
             throw new IllegalStateException("Army has no units");
         }
 
-        Unit random = units.get(rand.nextInt(units.size()));
-
-        return random;
+        return units.get(rand.nextInt(units.size()));
     }
 
     /**
@@ -216,6 +209,18 @@ public class Army {
     }
 
     /**
+     * Used for creating another instance of the same Army.
+     * Copies all units and put them in an ArrayList.
+     * Usually done before sorting, and for testing purposes.
+     *
+     * @return Arraylist of all the units in the Army.
+     */
+
+    public Army copy() {
+        return new Army(this.getName(), this.deepCopy());
+    }
+
+    /**
      * Get a List of the Units. The army is converted to an ArrayList.
      * The units are copied.
      *
@@ -247,6 +252,17 @@ public class Army {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Set the name of the army
+     */
+
+    public void setName(String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Name can not be blank.");
+        }
+        this.name = name;
     }
 
     /**
@@ -314,8 +330,7 @@ public class Army {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Army)) return false;
-        Army army = (Army) o;
+        if (!(o instanceof Army army)) return false;
         return name.equals(army.name) && Objects.equals(this.sort(), army.sort());
     }
 

@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.observer.Subject;
 import edu.ntnu.arunang.wargames.unit.Unit;
 
 /**
@@ -7,10 +8,13 @@ import edu.ntnu.arunang.wargames.unit.Unit;
  * A battle has an attacking Army and a defending Army.
  */
 
-public class Battle {
+public class Battle extends Subject {
 
     private Army attacker;
     private Army defender;
+
+    private Army winner = new Army("Winner");
+    private Army loser = new Army("Loser");
 
     private int numOfAttacks = 0;
 
@@ -41,30 +45,72 @@ public class Battle {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
+        while (attacker.hasUnits() && defender.hasUnits()) {
+            attack();
+        }
+
+        return getConclusion();
+    }
+
+    public Army simulate(int delay) {
+        if (!attacker.hasUnits() || !defender.hasUnits()) {
+            throw new IllegalStateException("All armies must have atleast one unit.");
+        }
+        System.out.println("Thread simulate: " + Thread.currentThread());
+        while (attacker.hasUnits() && defender.hasUnits()) {
+
+            attack();
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return getConclusion();
+    }
+
+    private void attack() {
+        notifyObservers();
 
         Army temp;
+        Unit attackerUnit = attacker.getRandom();
+        Unit defenderUnit = defender.getRandom();
 
-        while (attacker.hasUnits() && defender.hasUnits()) {
-            Unit attackerUnit = attacker.getRandom();
-            Unit defenderUnit = defender.getRandom();
+        attackerUnit.attack(defenderUnit);
 
-            attackerUnit.attack(defenderUnit);
-
-            if (defenderUnit.isDead()) {
-                defender.remove(defenderUnit);
-            }
-
-            temp = attacker;
-            attacker = defender;
-            defender = temp;
-
-            numOfAttacks++;
+        if (defenderUnit.isDead()) {
+            defender.remove(defenderUnit);
         }
-        return attacker.hasUnits() ? attacker : defender;
+
+        temp = attacker;
+        attacker = defender;
+        defender = temp;
+
+        numOfAttacks++;
     }
 
     public int getNumOfAttacks() {
         return numOfAttacks;
+    }
+
+    public Army getLoser() {
+        return loser;
+    }
+
+    public Army getWinner() {
+        return winner;
+    }
+
+    private Army getConclusion() {
+        if (attacker.hasUnits()) {
+            winner = attacker;
+            loser = defender;
+        } else {
+            winner = defender;
+            loser = attacker;
+        }
+
+        return winner;
     }
 
     @Override
