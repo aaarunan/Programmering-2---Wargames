@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.MainCON">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Wargames">
+               <VBox.margin>
+                  <Insets bottom="75.0" />
+               </VBox.margin>
+            </Text>
+            <Button fx:id="btnSimulate" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBtnSimulate" styleClass="button-big" text="Simulate">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnArmies" alignment="CENTER" mnemonicParsing="false" onAction="#onBtnArmies" styleClass="button-big" text="Armies">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnQuit" alignment="CENTER" mnemonicParsing="false" onAction="#onBtnQuit" styleClass="button-big" text="Quit" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-small" text="Made by: Arunan Gnanasekaran" textAlignment="RIGHT" wrappingWidth="600.0045368671417" BorderPane.alignment="BOTTOM_RIGHT">
+         <BorderPane.margin>
+            <Insets right="4.0" />
+         </BorderPane.margin>
+      </Text>
+   </bottom>
+</BorderPane>

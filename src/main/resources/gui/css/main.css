@@ -1,0 +1,111 @@
+.root {
+    -fx-background-color: #111111;
+    -fx-font-family: Arial;
+}
+
+.title {
+    -fx-font-size: 45px;
+    -fx-fill: purple;
+}
+
+.title-small {
+    -fx-font-size: 30px;
+    -fx-fill: purple;
+}
+
+.text-small {
+    -fx-fill: purple;
+    -fx-font-size: 17px;
+}
+
+.button-big {
+    -fx-pref-width: 150px;
+    -fx-padding: 5px;
+    -fx-background-color: purple;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}
+
+.button:hover {
+    -fx-background-color: green;
+    -fx-cursor: hand;
+}
+
+.button {
+    -fx-padding: 10px;
+    -fx-background-color: purple;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5px;
+    -fx-border-insets: 5px;
+}
+
+.scroll-pane {
+    -fx-background-color: #111111;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
+}
+
+.listElement {
+    -fx-pref-width: Infinity;
+    -fx-padding: 20px;
+    -fx-background-color: purple;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5 0 0 0;
+    -fx-border-insets: 5 0 5 0 ;
+}
+
+.scroll-bar:vertical .track-background {
+    visibility: hidden;
+}
+
+
+.menu-button {
+    -fx-pref-width: -Infinity;
+}
+
+.menu-item {
+    -fx-pref-width: -Infinity;
+}
+
+.list-card {
+    -fx-background-color: #1c1c1c;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5px;
+    -fx-border-insets: 5px;
+    -fx-padding: 10px;
+    -fx-border-radius: 2.0em;
+}
+
+.text-field {
+    -fx-padding: 10px;
+    -fx-background-insets: 5 0 0 0;
+    -fx-border-insets: 5px;
+    -fx-font-size: 16px;
+}
+
+.menu-button {
+    -fx-padding: 1px;
+    -fx-font-size: 16px;
+    -fx-background-color: lightseagreen;
+    -fx-pref-width: Infinity;
+}
+
+.grid-pane {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+
+}
+

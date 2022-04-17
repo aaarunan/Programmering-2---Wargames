@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.ListArmyCON">
+   <center>
+      <HBox>
+         <children>
+            <VBox prefHeight="291.0" prefWidth="132.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <MenuButton fx:id="menuSort" mnemonicParsing="false" prefHeight="23.0" prefWidth="939.0" text="Sort by">
+                    <items>
+                      <MenuItem fx:id="sortByName" mnemonicParsing="false" onAction="#onSortByName" text="Sort by name" />
+                      <MenuItem fx:id="sortByCount" mnemonicParsing="false" onAction="#onSortByCount" text="Sort by count" />
+                    </items>
+                  </MenuButton>
+                  <VBox>
+                     <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="537.0" prefWidth="168.0">
+                          <content>
+                              <VBox fx:id="armyContainer" prefHeight="287.0" prefWidth="236.0" />
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="356.0" HBox.hgrow="ALWAYS">
+               <content>
+                  <VBox fx:id="detailsWindow" prefHeight="192.0" prefWidth="295.0">
+                     <children>
+                        <Text fx:id="txtArmyName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-small" />
+                        <HBox fx:id="armyDetails" />
+                        <TableView fx:id="tableUnits" prefHeight="481.0" prefWidth="345.0" VBox.vgrow="ALWAYS">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox alignment="TOP_RIGHT" prefHeight="0.0" prefWidth="345.0" VBox.vgrow="NEVER">
+                           <children>
+                              <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="40.0" right="40.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </BorderPane.margin>
+      </HBox>
+   </center>
+   <top>
+      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Armies" BorderPane.alignment="TOP_LEFT">
+         <BorderPane.margin>
+            <Insets left="20.0" top="6.0" />
+         </BorderPane.margin></Text>
+   </top>
+   <stylesheets>
+      <URL value="@css/main.css" />
+      <URL value="@css/tableview.css" />
+   </stylesheets>
+   <bottom>
+      <HBox fx:id="bottomBar" alignment="BOTTOM_RIGHT" prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
