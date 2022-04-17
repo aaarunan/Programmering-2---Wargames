@@ -122,7 +122,7 @@ class UnitTest {
             };
         });
 
-        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
+        assertEquals("Health-points must be greater than or equal to 0", exception.getMessage());
     }
 
 
@@ -153,7 +153,7 @@ class UnitTest {
             };
         });
 
-        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
+        assertEquals("Attack-points and armor-points must be greater than 0", exception.getMessage());
     }
 
 
@@ -184,7 +184,7 @@ class UnitTest {
             };
         });
 
-        assertEquals("All fields must be greater than or equal to 0 (HP must be greater)", exception.getMessage());
+        assertEquals("Attack-points and armor-points must be greater than 0", exception.getMessage());
     }
 
     @Test

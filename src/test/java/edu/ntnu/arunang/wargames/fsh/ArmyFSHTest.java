@@ -24,10 +24,10 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test file is created")
-    void testFileCreation() {
+    void testFileCreation() throws IOException {
         ArmyFSH armyFSH = new ArmyFSH();
         File file = new File(ArmyFSH.getTestPath("fileCreation"));
-        armyFSH.writeTo(file, new Army("fileCreation"));
+        armyFSH.writeArmyTo(file, new Army("fileCreation"));
 
         assertTrue(armyFSH.fileExists(file));
     }
@@ -40,14 +40,14 @@ public class ArmyFSHTest {
         army.add(infUnit, 23);
 
         ArmyFSH armyFSH = new ArmyFSH();
-        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
+        armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
         assertEquals(-1, Files.mismatch(Paths.get(ArmyFSH.getTestPath("TestFasit")), Paths.get(ArmyFSH.getTestPath("Test"))));
     }
 
 
     @Test
     @DisplayName("Test file reading")
-    void testFileReading() throws FileFormatException {
+    void testFileReading() throws FileFormatException, IOException {
         Army army = new Army("testReading");
 
         army.add(cavUnit, 2);
@@ -56,7 +56,7 @@ public class ArmyFSHTest {
 
         ArmyFSH armyFSH = new ArmyFSH();
 
-        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
+        armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
 
         assertEquals(army, armyFromFile);
@@ -65,12 +65,12 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test file reading, when no units are specified")
-    void testFileReadingOnOnlyArmyName() throws FileFormatException {
+    void testFileReadingOnOnlyArmyName() throws FileFormatException, IOException {
         Army army = new Army("testReading");
 
         ArmyFSH armyFSH = new ArmyFSH();
 
-        armyFSH.writeTo(new File(ArmyFSH.getTestPath(army.getName())), army);
+        armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
 
         assertEquals(army, armyFromFile);
@@ -86,7 +86,7 @@ public class ArmyFSHTest {
                 }
         );
 
-        assertEquals("File is empty", exception.getMessage());
+        assertEquals("File '" + ArmyFSH.getTestPath("blank") +"' is empty", exception.getMessage());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ArmyFSHTest {
 
     @Test
     @DisplayName("Test on reading file that has spaces")
-    void testOnReadingFileWithSpaces() throws FileFormatException {
+    void testOnReadingFileWithSpaces() throws FileFormatException, IOException {
         ArmyFSH armyFSH = new ArmyFSH();
         Army army = new Army("Test With Spaces");
         army.add(new InfantryUnit("test with spaces", 101), 13);

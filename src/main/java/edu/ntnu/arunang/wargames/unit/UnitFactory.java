@@ -1,7 +1,5 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +83,7 @@ public class UnitFactory {
      * @return UnitType
      * @throws IllegalArgumentException if the UnitType does not exist.
      */
+
     private static UnitType checkType(String type) throws IllegalArgumentException {
         UnitType unitType;
         try {

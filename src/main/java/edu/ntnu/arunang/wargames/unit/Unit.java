@@ -17,11 +17,10 @@ import java.util.Objects;
 
 public abstract class Unit implements Comparable<Unit> {
 
-
     private final String name;
     private int healthPoints;
-    private int attackPoints;
-    private int armorPoints;
+    private final int attackPoints;
+    private final int armorPoints;
 
     /**
      * Constructs the Unit with a given name, healthPoints and attackPoints and armorPoints
@@ -34,8 +33,12 @@ public abstract class Unit implements Comparable<Unit> {
      */
 
     public Unit(String name, int healthPoints, int attackPoints, int armorPoints) throws IllegalStateException {
-        if (healthPoints <= 0 || attackPoints < 0 || armorPoints < 0) {
-            throw new IllegalArgumentException("All fields must be greater than or equal to 0 (HP must be greater)");
+        if (healthPoints <= 0) {
+            throw new IllegalArgumentException("Health-points must be greater than or equal to 0");
+        }
+
+        if (attackPoints < 0 || armorPoints < 0) {
+            throw new IllegalArgumentException("Attack-points and armor-points must be greater than 0");
         }
 
         this.name = name;
@@ -53,7 +56,7 @@ public abstract class Unit implements Comparable<Unit> {
     public abstract Unit copy();
 
     /**
-     * Makes a copy of the unit and resets its stats. Essencially making it a new unit.
+     * Makes a copy of the unit and resets its stats. Essentially making it a new unit.
      * Used to generalize Units.
      */
 
@@ -157,6 +160,12 @@ public abstract class Unit implements Comparable<Unit> {
 
     public abstract int getResistBonus();
 
+    /**
+     * Converts the unit to csv. Used to save the unit to a file.
+     *
+     * @return string containing the unit
+     */
+
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append(getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
@@ -214,8 +223,7 @@ public abstract class Unit implements Comparable<Unit> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Unit)) return false;
-        Unit unit = (Unit) o;
+        if (!(o instanceof Unit unit)) return false;
         return healthPoints == unit.healthPoints && attackPoints == unit.attackPoints && armorPoints == unit.armorPoints && name.equals(unit.name) && this.getAttackBonus() == unit.getAttackBonus() && this.getResistBonus() == unit.getResistBonus();
     }
 

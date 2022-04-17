@@ -7,9 +7,7 @@ import edu.ntnu.arunang.wargames.unit.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,7 +39,7 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Helper method to get the path of the army file. This is by default:
+     * Helper method to get the path of the army. This is by default:
      * /src/main/resources/army
      *
      * @param armyName armyName is the filename
@@ -52,6 +50,13 @@ public class ArmyFSH implements FSH {
         return FileSystems.getDefault().getPath("src", "main", "resources", "army", armyName + ".csv").toString();
     }
 
+    /**
+     * Get the test path of the army this is by default /src/test/resources/army
+     *
+     * @param armyName armyname is the filename.
+     * @return full path
+     */
+
     protected static String getTestPath(String armyName) {
         return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
     }
@@ -59,19 +64,17 @@ public class ArmyFSH implements FSH {
     /**
      * Writes to a file that is given by the armyName. The file is stored in:
      * /src/main/resources/army
+     * <p>
+     * If the file is not found or not accessible, an IOException will be thrown.
      *
      * @param army
      */
 
-    public void write(Army army) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(getPath(army.getName())))) {
-            writer.write(army.getName());
-            writer.write(army.toCsv());
-            writer.flush();
-        } catch (IOException e) {
-            System.out.println("An unexpected error occured");
-            e.printStackTrace();
-        }
+    public void writeArmy(Army army) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(getPath(army.getName())));
+        write(new File(getPath(army.getName())), army);
+        writer.flush();
+        writer.close();
     }
 
     /**
@@ -81,18 +84,12 @@ public class ArmyFSH implements FSH {
      * @param army army that is written.
      */
 
-    public void writeTo(File file, Army army) throws IllegalArgumentException {
+    public void writeArmyTo(File file, Army army) throws IllegalArgumentException, IOException {
         if (!isCsv(file.toString())) {
-            throw new IllegalArgumentException("File is not supported");
+            throw new IllegalArgumentException("Filetype is not supported");
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(army.getName());
-            writer.write(army.toCsv());
-            writer.flush();
-        } catch (IOException e) {
-            System.out.println("Could not write to file...");
-            e.printStackTrace();
-        }
+
+        write(file, army);
     }
 
     /**
@@ -100,52 +97,54 @@ public class ArmyFSH implements FSH {
      * fully reset army. The method will throw an IllegalStateException if
      * the file was wrongly formatted. it will also throw an IOException if the file
      * was not found or does not exist.
+     * <p>
+     * Throws IOException if file cannot be found or is not accessible, which must be handled.
      *
      * @param file file that is parsed
      * @return The army parsed from the file
+     * @throws FileFormatException If the file is wrongly formatted
+     * @throws IOException         If the file can not be found or is not accessible
      */
 
-    public Army loadFromFile(File file) throws FileFormatException {
-        Army army = null;
+    public Army loadFromFile(File file) throws FileFormatException, IOException {
+        if (!isCsv(file.toString())) {
+            throw new FileFormatException(String.format("File '%s' is not csv.", file));
+        }
+
+        Army army;
         String line;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String armyName = reader.readLine();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String armyName = reader.readLine();
 
-            if (armyName == null) {
-                throw new FileFormatException("File is empty");
-            }
-
-            army = new Army(armyName);
-
-            lineNr = 1;
-
-            while ((line = reader.readLine()) != null) {
-                army.add(parseLine(line));
-                parseLine(line);
-                lineNr++;
-            }
-
-        } catch (IOException e) {
-            System.out.println("Could not load file...");
-            e.printStackTrace();
+        if (armyName == null) {
+            throw new FileFormatException(String.format("File '%s' is empty", file));
         }
+
+        army = new Army(armyName);
+
+        lineNr = 1;
+
+        while ((line = reader.readLine()) != null) {
+            army.add(parseLine(line));
+            parseLine(line);
+            lineNr++;
+        }
+        reader.close();
 
         return army;
     }
 
-    public List<Army> loadAllFiles(File[] filesArray) throws FileFormatException {
-        List<Army> armies = new ArrayList<>();
+    /**
+     * Deletes an army from /resources/army.
+     *
+     * @param army army that is being deleted
+     * @return true if successful
+     */
 
-        List<File> files = Arrays.stream(filesArray).toList();
-        files.stream().filter(file -> isCsv(file.toString())).forEach(file -> {
-            try {
-                armies.add(loadFromFile(file));
-            } catch (FileFormatException e) {
-                e.printStackTrace();
-            }
-        });
-        return armies;
+    public boolean deleteArmy(Army army) {
+        File file = new File(ArmyFSH.getPath(army.getName()));
+        return file.delete();
     }
 
     /**
@@ -153,7 +152,7 @@ public class ArmyFSH implements FSH {
      * It uses regex to clean the values and checks if the
      * health and count values can be parsed to int.
      *
-     * @param line
+     * @param line line that is being parsed
      * @return pares values
      * @throws FileFormatException if the line is wrongly formatted.
      */
@@ -179,14 +178,20 @@ public class ArmyFSH implements FSH {
 
         List<Unit> units;
 
-
-            try {
-                units = UnitFactory.constructUnitsFromString(type, name, health, count);
-            } catch (IllegalArgumentException e) {
-                throw new FileFormatException(String.format("%s on Line: %d", e.getMessage(), lineNr));
-            }
+        try {
+            units = UnitFactory.constructUnitsFromString(type, name, health, count);
+        } catch (IllegalArgumentException e) {
+            throw new FileFormatException(String.format("%s on Line: %d", e.getMessage(), lineNr));
+        }
         return (ArrayList<Unit>) units;
     }
+
+    /**
+     * Helper method for checking if file is the correct filetype.
+     *
+     * @param fileName file that is checked
+     * @return true if csv
+     */
 
     private boolean isCsv(String fileName) {
         int index = fileName.lastIndexOf('.');
@@ -196,5 +201,23 @@ public class ArmyFSH implements FSH {
             return extension.equals(FILETYPE);
         }
         return false;
+    }
+
+    /**
+     * Helper method for writing armies to increase cohesion.
+     * <p>
+     * throws IOException if the file can not be written to.
+     *
+     * @param file file that is being written
+     * @param army army that is being written to the file
+     * @throws IOException if the file can not be written to
+     */
+
+    private void write(File file, Army army) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(army.getName());
+        writer.write(army.toCsv());
+        writer.flush();
+        writer.close();
     }
 }
