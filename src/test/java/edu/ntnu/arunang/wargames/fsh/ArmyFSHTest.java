@@ -1,7 +1,6 @@
 package edu.ntnu.arunang.wargames.fsh;
 
 import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.exception.FileFormatException;
 import edu.ntnu.arunang.wargames.unit.CavalryUnit;
 import edu.ntnu.arunang.wargames.unit.CommanderUnit;
 import edu.ntnu.arunang.wargames.unit.InfantryUnit;

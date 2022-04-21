@@ -43,14 +43,14 @@ public class MainCON {
 
     @FXML
     void onBtnSimulate(ActionEvent event) {
+        /*
         armySingleton.setSimulate(true);
         GUI.setSceneFromActionEvent(event, "listArmy");
-        /*
+        */
         armySingleton.setSimulate(true);
         armySingleton.setAttacker(armySingleton.getArmies().get(0));
         armySingleton.setDefender(armySingleton.getArmies().get(0));
         GUI.setSceneFromActionEvent(event, "simulate");
-         */
     }
 
     /**

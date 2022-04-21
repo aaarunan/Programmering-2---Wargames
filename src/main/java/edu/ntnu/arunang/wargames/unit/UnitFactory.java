@@ -20,7 +20,7 @@ public class UnitFactory {
     }
 
     /**
-     * Constructs a unit from a parsed line. The units is created with stats reset.
+     * Constructs a unit from a parsed line. The units are created with stats reset.
      *
      * @param type   unit type
      * @param name   unit name
@@ -31,7 +31,7 @@ public class UnitFactory {
 
     public static Unit constructUnitFromString(String type, String name, int health) throws IllegalArgumentException {
 
-        return constructUnit(checkType(type), name, health);
+        return constructUnit(UnitType.getUnitType(type), name, health);
     }
 
     /**
@@ -50,6 +50,7 @@ public class UnitFactory {
             case CommanderUnit -> new CommanderUnit(name, health);
             case InfantryUnit -> new InfantryUnit(name, health);
             case RangedUnit -> new RangedUnit(name, health);
+            //not necessary but just in case if an unittype has not been add here
             default -> throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
         };
 
@@ -68,29 +69,11 @@ public class UnitFactory {
 
     public static List<Unit> constructUnitsFromString(String type, String name, int health, int count) {
         List<Unit> units = new ArrayList<>();
-        UnitType unitType = checkType(type);
+        UnitType unitType = UnitType.getUnitType(type);
 
         for (int i = 0; i < count; i++) {
             units.add(constructUnit(unitType, name, health));
         }
         return units;
-    }
-
-    /**
-     * Helper method to check if the specified unit is an UnitType.
-     *
-     * @param type type in string form
-     * @return UnitType
-     * @throws IllegalArgumentException if the UnitType does not exist.
-     */
-
-    private static UnitType checkType(String type) throws IllegalArgumentException {
-        UnitType unitType;
-        try {
-            unitType = UnitType.valueOf(type);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
-        }
-        return unitType;
     }
 }

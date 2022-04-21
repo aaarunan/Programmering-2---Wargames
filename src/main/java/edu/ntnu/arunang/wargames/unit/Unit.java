@@ -1,5 +1,7 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
+
 import java.util.Objects;
 
 /**
@@ -83,6 +85,18 @@ public abstract class Unit implements Comparable<Unit> {
         }
         opponent.hit(newHealthPoints);
     }
+    public void attack(Unit opponent, Terrain terrain) throws IllegalStateException {
+        int newHealthPoints = opponent.getHealthPoints() -
+                this.getAttackPoints() -
+                this.getAttackBonus(terrain) +
+                opponent.getArmorPoints() +
+                opponent.getResistBonus(terrain);
+
+        if (newHealthPoints > opponent.getHealthPoints()) {
+            throw new IllegalStateException("Attacking can not give healthPoints");
+        }
+        opponent.hit(newHealthPoints);
+    }
 
     /**
      * Checks if the unit is dead. A Unit is dead if it has less than or equal to 0 healthPoints.
@@ -159,6 +173,22 @@ public abstract class Unit implements Comparable<Unit> {
      */
 
     public abstract int getResistBonus();
+
+    /**
+     * An abstract method that is used to specialize the attack of an Unit.
+     *
+     * @return this.attackBonus
+     */
+
+    public abstract int getAttackBonus(Terrain terrain);
+
+    /**
+     * An abstract method that is used to specialize the defence of a specific Unit
+     *
+     * @return this.resistBonus
+     */
+
+    public abstract int getResistBonus(Terrain terrain);
 
     /**
      * Converts the unit to csv. Used to save the unit to a file.

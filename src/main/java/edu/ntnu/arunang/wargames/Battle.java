@@ -13,8 +13,8 @@ public class Battle extends Subject {
     private Army attacker;
     private Army defender;
 
-    private Army winner = new Army("Winner");
-    private Army loser = new Army("Loser");
+    private Army winner;
+    private Army loser;
 
     private int numOfAttacks = 0;
 
@@ -52,14 +52,26 @@ public class Battle extends Subject {
         return getConclusion();
     }
 
-    public Army simulate(int delay) {
+    /**
+     * This simulates a fight.
+     * A random Unit from each army will attack a random Unit
+     * of the opposing Army. This happens in a loop unit there is an army
+     * that has no units left to attack with. The simulation happens on a terrain
+     * Each attack is backed up by a delay that sleeps the thread.
+     *
+     * @param delay the delay on each attack
+     * @return winning Army.
+     * @throws IllegalStateException if the armies has no Units.
+     */
+
+    public Army simulate(int delay, Terrain terrain) {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
         System.out.println("Thread simulate: " + Thread.currentThread());
         while (attacker.hasUnits() && defender.hasUnits()) {
 
-            attack();
+            attack(terrain);
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
@@ -89,17 +101,69 @@ public class Battle extends Subject {
         numOfAttacks++;
     }
 
+    /**
+     * Attack once. Random unit from attacker army
+     * attacks a random defender unit. The armies get swapped.
+     *
+     * @param terrain the terrain the battle is happening in
+     */
+    private void attack(Terrain terrain) {
+        notifyObservers();
+
+        Army temp;
+        Unit attackerUnit = attacker.getRandom();
+        Unit defenderUnit = defender.getRandom();
+
+        attackerUnit.attack(defenderUnit, terrain);
+
+        if (defenderUnit.isDead()) {
+            defender.remove(defenderUnit);
+        }
+
+        temp = attacker;
+        attacker = defender;
+        defender = temp;
+
+        numOfAttacks++;
+    }
+
+    /**
+     * Get the number of attacks in the battle.
+     * If noe simulations have been run numOfAttacks will be 0
+     *
+     * @return number of attacks
+     */
+
     public int getNumOfAttacks() {
         return numOfAttacks;
     }
+
+    /**
+     * Get the losing army. Army is null if the simulation has not been run.
+     *
+     * @return losing army
+     */
 
     public Army getLoser() {
         return loser;
     }
 
+
+    /**
+     * Get the winning army. Army is null if the simulation has not been run.
+     *
+     * @return winning army
+     */
+
     public Army getWinner() {
         return winner;
     }
+
+    /**
+     * Get which army won. Checks which army has no units.
+     *
+     * @return winning amry
+     */
 
     private Army getConclusion() {
         if (attacker.hasUnits()) {

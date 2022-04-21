@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

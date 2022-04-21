@@ -70,13 +70,7 @@
     visibility: hidden;
 }
 
-
-.menu-button {
-    -fx-pref-width: -Infinity;
-}
-
 .menu-item {
-    -fx-pref-width: -Infinity;
 }
 
 .list-card {

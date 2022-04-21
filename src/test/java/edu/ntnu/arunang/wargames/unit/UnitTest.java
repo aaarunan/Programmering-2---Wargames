@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,16 @@ class UnitTest {
         public int getResistBonus() {
             return 8;
         }
+
+        @Override
+        public int getAttackBonus(Terrain terrain) {
+            return 0;
+        }
+
+        @Override
+        public int getResistBonus(Terrain terrain) {
+            return 0;
+        }
     };
 
     Unit testWithDifferentResistBonus = new Unit("test", 20, 20, 20) {
@@ -48,6 +59,16 @@ class UnitTest {
         @Override
         public int getResistBonus() {
             return 8;
+        }
+
+        @Override
+        public int getAttackBonus(Terrain terrain) {
+            return 0;
+        }
+
+        @Override
+        public int getResistBonus(Terrain terrain) {
+            return 0;
         }
     };
 
@@ -71,6 +92,16 @@ class UnitTest {
         public int getResistBonus() {
             return 8;
         }
+
+        @Override
+        public int getAttackBonus(Terrain terrain) {
+            return 0;
+        }
+
+        @Override
+        public int getResistBonus(Terrain terrain) {
+            return 0;
+        }
     };
 
     Unit testSame = new Unit("test", 20, 20, 20) {
@@ -92,6 +123,16 @@ class UnitTest {
         @Override
         public int getResistBonus() {
             return 8;
+        }
+
+        @Override
+        public int getAttackBonus(Terrain terrain) {
+            return 0;
+        }
+
+        @Override
+        public int getResistBonus(Terrain terrain) {
+            return 0;
         }
     };
 
@@ -118,6 +159,16 @@ class UnitTest {
                 @Override
                 public int getResistBonus() {
                     return -1;
+                }
+
+                @Override
+                public int getAttackBonus(Terrain terrain) {
+                    return 0;
+                }
+
+                @Override
+                public int getResistBonus(Terrain terrain) {
+                    return 0;
                 }
             };
         });
@@ -150,6 +201,16 @@ class UnitTest {
                 public int getResistBonus() {
                     return -1;
                 }
+
+                @Override
+                public int getAttackBonus(Terrain terrain) {
+                    return 0;
+                }
+
+                @Override
+                public int getResistBonus(Terrain terrain) {
+                    return 0;
+                }
             };
         });
 
@@ -180,6 +241,16 @@ class UnitTest {
                 @Override
                 public int getResistBonus() {
                     return -1;
+                }
+
+                @Override
+                public int getAttackBonus(Terrain terrain) {
+                    return 0;
+                }
+
+                @Override
+                public int getResistBonus(Terrain terrain) {
+                    return 0;
                 }
             };
         });

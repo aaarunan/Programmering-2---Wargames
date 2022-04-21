@@ -1,5 +1,7 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
+
 /**
  * A CavalryUnit is a specialized melee unit, that does not have great defense.
  * CavalryUnit has a special ability where its first hit deals more damage.
@@ -9,12 +11,17 @@ package edu.ntnu.arunang.wargames.unit;
  * armorPoints of 12,
  * attackBonus of 4+2,
  * resistBonus of 1
+ * <p>
+ * Terrain:
+ * +2 attackbonus on PLAINS
+ * 0 resistbonus on FOREST
  */
 
 public class CavalryUnit extends Unit {
 
     protected final static int BASE_ATTACK_BONUS = 2;
     protected final static int FIRST_ATTACK_BONUS = 6;
+    protected final static int PLAINS_ATTACK_BONUS = 2;
     protected final static int RESIST_BONUS = 1;
     protected final static int ATTACK_POINTS = 20;
     protected final static int ARMOR_POINTS = 12;
@@ -58,15 +65,33 @@ public class CavalryUnit extends Unit {
     }
 
     @Override
+    public int getAttackBonus(Terrain terrain) {
+        int bonus = BASE_ATTACK_BONUS;
+
+        if (hasAttacked) {
+            bonus += FIRST_ATTACK_BONUS;
+        }
+        if (terrain.equals(Terrain.PLAINS)) {
+            bonus += PLAINS_ATTACK_BONUS;
+        }
+
+        return bonus;
+    }
+
+    @Override
     public int getAttackBonus() {
         return hasAttacked ? BASE_ATTACK_BONUS : FIRST_ATTACK_BONUS;
+    }
+
+    @Override
+    public int getResistBonus(Terrain terrain) {
+        return terrain.equals(Terrain.FOREST) ? 0 : RESIST_BONUS;
     }
 
     @Override
     public int getResistBonus() {
         return RESIST_BONUS;
     }
-
 
     /**
      * Attacking once will demote to from FIRST_ATTACK_BONUS to BASE_ATTACK_BONUS.
@@ -79,6 +104,4 @@ public class CavalryUnit extends Unit {
         super.attack(opponent);
         hasAttacked = true;
     }
-
-
 }

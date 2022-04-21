@@ -2,50 +2,36 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.SimulateCON">
-    <bottom>
-        <HBox BorderPane.alignment="BOTTOM_RIGHT">
-            <children>
-                <Pane prefHeight="28.0" prefWidth="369.0" HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnFinish" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onFinish" text="Finish">
-                    <HBox.margin>
-                        <Insets right="10.0" />
-                    </HBox.margin>
-                </Button>
-                <Button fx:id="btnStart" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onStart" text="Start">
-                    <HBox.margin>
-                        <Insets right="6.0" />
-                    </HBox.margin></Button>
-            </children>
-            <padding>
-                <Insets bottom="10.0" right="4.0" />
-            </padding>
-        </HBox>
-    </bottom>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.SimulateCON">
     <center>
-        <HBox fx:id="mainContainer" alignment="CENTER">
-            <BorderPane.margin>
-                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-            </BorderPane.margin>
+      <VBox>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </BorderPane.margin>
          <children>
-            <VBox fx:id="armyContainer" prefHeight="283.0" prefWidth="212.0" />
-            <VBox fx:id="vBoxDetails" alignment="CENTER" prefHeight="283.0" prefWidth="274.0" />
+            <HBox>
+               <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Simulate">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+              <HBox fx:id="mainContainer" alignment="CENTER" VBox.vgrow="ALWAYS">
+                  <children>
+                      <VBox fx:id="armyContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0" />
+                      <VBox fx:id="vBoxDetails" alignment="CENTER" prefHeight="323.0" prefWidth="196.0" />
+                  </children>
+              </HBox>
          </children>
-        </HBox>
+      </VBox>
     </center>
-    <top>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Simulate" BorderPane.alignment="TOP_LEFT">
-            <BorderPane.margin>
-                <Insets left="20.0" top="6.0" />
-            </BorderPane.margin></Text>
-    </top>
     <stylesheets>
         <URL value="@css/main.css" />
         <URL value="@css/tableview.css" />

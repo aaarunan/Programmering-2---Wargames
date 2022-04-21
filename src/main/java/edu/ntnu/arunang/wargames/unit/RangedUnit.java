@@ -1,5 +1,7 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
+
 /**
  * A RangedUnit is a Unit that has a ranged speciality.
  * It has a special ability where it receives less damage with increased range.
@@ -10,6 +12,10 @@ package edu.ntnu.arunang.wargames.unit;
  * armorPoints: 8
  * attackBonus: 3
  * resistBonus: 6 4 2
+ * <p>
+ * Terrain:
+ * +2 attackbonus on HILL
+ * -2 attackbonus on FOREST
  */
 
 public class RangedUnit extends Unit {
@@ -19,6 +25,8 @@ public class RangedUnit extends Unit {
 
     protected final static int ATTACK_BONUS = 3;
     protected final static int BASE_RESIST_BONUS = 2;
+    protected static final int HILL_ATTACK_BONUS = 2;
+    protected static final int FOREST_ATTACK_BONUS = -2;
     protected final static int RESIST_INTERVAL = 2;
 
     private int resistBonus = 3 * BASE_RESIST_BONUS;
@@ -68,6 +76,22 @@ public class RangedUnit extends Unit {
     @Override
     public int getResistBonus() {
         return resistBonus;
+    }
+
+    @Override
+    public int getAttackBonus(Terrain terrain) {
+        int bonus = ATTACK_BONUS;
+        if (terrain.equals(Terrain.HILL)) {
+            bonus += HILL_ATTACK_BONUS;
+        } else if (terrain.equals(Terrain.FOREST)) {
+            bonus += FOREST_ATTACK_BONUS;
+        }
+        return bonus;
+    }
+
+    @Override
+    public int getResistBonus(Terrain terrain) {
+        return getResistBonus();
     }
 
     /**

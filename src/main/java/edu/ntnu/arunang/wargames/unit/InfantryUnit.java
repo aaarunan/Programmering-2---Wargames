@@ -1,5 +1,7 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
+
 /**
  * An InfantryUnit is a specialized melee unit that does not have a great defense.
  * <p>
@@ -8,6 +10,9 @@ package edu.ntnu.arunang.wargames.unit;
  * armorPoints of 10,
  * attackBonus of 2,
  * resistBonus of 1
+ *
+ * Terrain:
+ * +2 attack - and resistbonus on FOREST
  */
 
 public class InfantryUnit extends Unit {
@@ -18,7 +23,7 @@ public class InfantryUnit extends Unit {
 
     protected static final int ATTACK_BONUS = 2;
     protected static final int RESIST_BONUS = 1;
-
+    protected static final int FOREST_BONUS = 2;
 
     /**
      * Constructs the InfantryUnit with the given stats
@@ -65,5 +70,13 @@ public class InfantryUnit extends Unit {
         return RESIST_BONUS;
     }
 
+    @Override
+    public int getAttackBonus(Terrain terrain) {
+        return terrain.equals(Terrain.FOREST) ? ATTACK_BONUS : ATTACK_BONUS + FOREST_BONUS;
+    }
 
+    @Override
+    public int getResistBonus(Terrain terrain) {
+        return terrain.equals(Terrain.FOREST) ? RESIST_BONUS : RESIST_BONUS + FOREST_BONUS;
+    }
 }

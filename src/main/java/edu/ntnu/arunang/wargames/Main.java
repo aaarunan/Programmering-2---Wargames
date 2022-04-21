@@ -1,12 +1,12 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.exception.FileFormatException;
+import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import javafx.application.Application;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;

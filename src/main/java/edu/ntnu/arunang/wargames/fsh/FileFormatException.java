@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.exception;
+package edu.ntnu.arunang.wargames.fsh;
 
 /**
  * Exception to be thrown when the file is wrongly formatted or is empty.

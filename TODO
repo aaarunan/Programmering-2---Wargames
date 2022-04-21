@@ -1,8 +1,6 @@
 1. GUI.
 2. Globale variabler i jUnit tester?
-3. Bruk av generics?
-6. burde UnitType være enum?
-7. Get average stats and add tests
-8. Use root instead to switch scene.
-9. maybe use url from fxml loader?
-10. assert message on exception thrown.
+11. Tests on filetype
+12. tests on Unittype
+13. readme on GUIFactory builder and javafx controller.
+14. make guifactory not init

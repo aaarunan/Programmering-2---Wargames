@@ -20,8 +20,8 @@ import java.nio.file.FileSystems;
 
 public class GUI extends Application {
 
-    private static final int STAGE_MIN_HEIGHT = 400;
-    private static final int STAGE_MIN_WIDTH = 600;
+    private static final int STAGE_MIN_HEIGHT = 475;
+    private static final int STAGE_MIN_WIDTH = 625;
 
     /**
      * Sets a scene by getting the current stage from a given node
@@ -121,10 +121,15 @@ public class GUI extends Application {
             System.out.println("Stack Trace:");
             e.printStackTrace();
         }
+
+        //throw new exceptions to not get NullPointerException down the line
+        if(root == null) {
+            throw new IllegalStateException("Root is null");
+        }
         return root;
     }
 
-    public static URL getPath(String page) {
+    protected static URL getPath(String page) {
         try {
             return FileSystems.getDefault().getPath("src", "main", "resources", "gui", page + ".fxml").toUri().toURL();
         } catch (MalformedURLException e) {

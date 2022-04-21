@@ -3,8 +3,7 @@ package edu.ntnu.arunang.wargames.unit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UnitFactoryTest {
     @Test
@@ -25,6 +24,18 @@ class UnitFactoryTest {
         });
 
         assertEquals("Unittype NotAType does not exist", thrown.getMessage());
+    }
+
+    @Test
+    @DisplayName("All unittypes should is able to be created")
+    void testAllUnitTypes() {
+        for (UnitType type : UnitType.values()) {
+            try {
+                UnitFactory.constructUnit(type, "name", 10);
+            } catch (IllegalArgumentException e) {
+                fail(e.getMessage());
+            }
+        }
     }
 
 }

@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class responsible for creating objects in the GUI.
@@ -170,7 +170,7 @@ public class GUIFactory {
     public static HBox createBottomBar() {
         HBox hBox = new HBox();
         //sets the alignment
-        hBox.setAlignment(Pos.BOTTOM_RIGHT);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
 
         return hBox;
     }
@@ -190,8 +190,8 @@ public class GUIFactory {
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Armyname");
 
-        xAxis.setCategories(FXCollections.observableArrayList(Arrays.asList("Units")));
-        xAxis.setLabel("category");
+        xAxis.setCategories(FXCollections.observableArrayList(List.of("Units")));
+        xAxis.setLabel("Category");
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units");
@@ -287,6 +287,18 @@ public class GUIFactory {
         text.getStyleClass().add("title-small");
 
         return text;
+    }
+
+    public static Text createTitle(String string) {
+        Text text = new Text(string);
+        text.getStyleClass().add("title");
+        return text;
+    }
+
+    public static MenuButton createMenuButton(String string) {
+        MenuButton menuButton = new MenuButton(string);
+        menuButton.getStyleClass().add("menu-button");
+        return menuButton;
     }
 
     /**
