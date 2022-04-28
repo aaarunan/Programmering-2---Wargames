@@ -30,6 +30,4 @@ public interface FSH {
     default boolean fileExists(File file) {
         return file.exists() && !file.isDirectory();
     }
-
-
 }

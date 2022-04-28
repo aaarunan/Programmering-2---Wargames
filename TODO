@@ -4,3 +4,5 @@
 12. tests on Unittype
 13. readme on GUIFactory builder and javafx controller.
 14. make guifactory not init
+15. feedback when choosing army
+16. stop threads after pressing finish

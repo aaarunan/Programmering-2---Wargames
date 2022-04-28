@@ -1,7 +1,12 @@
 package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.gui.controller.SimulateCON;
+import edu.ntnu.arunang.wargames.observer.HitObserver;
 import edu.ntnu.arunang.wargames.observer.Subject;
 import edu.ntnu.arunang.wargames.unit.Unit;
+import javafx.application.Platform;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A Battle is a battlefield where two armies can fight.
@@ -64,20 +69,40 @@ public class Battle extends Subject {
      * @throws IllegalStateException if the armies has no Units.
      */
 
-    public Army simulate(int delay, Terrain terrain) {
+    public Army simulate(int delay, Terrain terrain, SimulateCON simulateCON) {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
-        System.out.println("Thread simulate: " + Thread.currentThread());
-        while (attacker.hasUnits() && defender.hasUnits()) {
+        int updateRate = 25;
+        new Thread(() -> {
+            AtomicInteger i = new AtomicInteger(updateRate);
+            AtomicInteger j = new AtomicInteger(updateRate/3);
 
-            attack(terrain);
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+            while (attacker.hasUnits() && defender.hasUnits()) {
+                attack(terrain);
+
+                if (i.decrementAndGet() <= 0) {
+                    Platform.runLater(() -> simulateCON.updateBarChart(numOfAttacks));
+                    i.set(updateRate);
+                }
+
+                if (j.decrementAndGet() <= 0) {
+                    Platform.runLater(simulateCON::updateArmies);
+                    j.set(updateRate/2);
+                }
+
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            Platform.runLater(()-> {
+                simulateCON.updateArmies(winner, loser);
+                simulateCON.updateBarChart(numOfAttacks);
+            });
+        }).start();
         return getConclusion();
     }
 

@@ -22,7 +22,7 @@ public class HitObserver implements Observer {
 
     @Override
     public void update() {
-        simulateCON.updateBarChart();
+        simulateCON.updateBarChart(0);
         System.out.println("hit");
     }
 }

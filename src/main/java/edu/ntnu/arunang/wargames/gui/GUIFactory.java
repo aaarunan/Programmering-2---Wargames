@@ -5,10 +5,7 @@ import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -16,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -184,33 +182,43 @@ public class GUIFactory {
      * @return barchart element
      */
 
-    public static BarChart<String, Number> createBarChart(Army attacker, Army defender) {
+    public static LineChart<Number, Number> createBarChart(Army attacker, Army defender) {
 
         //create the axes of the barchart
-        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Armyname");
 
-        xAxis.setCategories(FXCollections.observableArrayList(List.of("Units")));
-        xAxis.setLabel("Category");
+        xAxis.setLabel("Army");
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units");
+        yAxis.autoRangingProperty().setValue(false);
 
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        int size = defender.size();
+        if (attacker.size() > defender.size()) {
+           size = attacker.size();
+        }
+        yAxis.setUpperBound(size+5);
+
+        LineChart<Number, Number> barChart = new LineChart<Number, Number>(xAxis, yAxis);
         barChart.setTitle("Compare");
 
         //Create the data elements
-        XYChart.Series<String, Number> attackerData = new XYChart.Series<>();
+        XYChart.Series<Number, Number> attackerData = new XYChart.Series<>();
         attackerData.setName(attacker.getName());
-        XYChart.Series<String, Number> defenderData = new XYChart.Series<>();
+        XYChart.Series<Number, Number> defenderData = new XYChart.Series<>();
         defenderData.setName(defender.getName());
 
         //Add the data to the barchart
-        attackerData.getData().add(new XYChart.Data<>("Units", attacker.size()));
-        defenderData.getData().add(new XYChart.Data<>("Units", defender.size()));
+        attackerData.getData().add(new XYChart.Data<>(0, attacker.size()));
+        defenderData.getData().add(new XYChart.Data<>(0, defender.size()));
 
         barChart.getData().addAll(attackerData, defenderData);
+
+        barChart.setCreateSymbols(false);
         barChart.setAnimated(false);
+        barChart.setHorizontalGridLinesVisible(false);
+        barChart.setVerticalGridLinesVisible(false);
 
         return barChart;
     }
@@ -246,11 +254,13 @@ public class GUIFactory {
         gridPane.add(createSmallText("Average armor:"), 0, 2, 1, 1);
         gridPane.add(createSmallText("Average attack:"), 0, 3, 1, 1);
 
+        Formatter formatter = new Formatter();
+
         //Add the data
         gridPane.add(createSmallText(Integer.toString(army.size())), 1, 0, 1, 1);
-        gridPane.add(createSmallText(Double.toString(army.getAverageHealthPoints())), 1, 1, 1, 1);
-        gridPane.add(createSmallText(Double.toString(army.getAverageArmorPoints())), 1, 2, 1, 1);
-        gridPane.add(createSmallText(Double.toString(army.getAverageAttackPoints())), 1, 3, 1, 1);
+        gridPane.add(createSmallText(String.format("%.2f", army.getAverageHealthPoints())), 1, 1, 1, 1);
+        gridPane.add(createSmallText(String.format("%.2f", army.getAverageArmorPoints())), 1, 2, 1, 1);
+        gridPane.add(createSmallText(String.format("%.2f", army.getAverageAttackPoints())), 1, 3, 1, 1);
 
         //add the css
         gridPane.getStyleClass().add("grid-pane");

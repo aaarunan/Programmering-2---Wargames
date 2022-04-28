@@ -9,7 +9,7 @@ import edu.ntnu.arunang.wargames.gui.GUIFactory;
 import edu.ntnu.arunang.wargames.observer.HitObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
@@ -49,7 +49,10 @@ public class SimulateCON {
 
     private HitObserver observer;
 
-    BarChart<String, Number> barChart = GUIFactory.createBarChart(attacker, defender);
+    LineChart<Number, Number> barChart = GUIFactory.createBarChart(attacker, defender);
+
+    XYChart.Series<Number, Number> attackerData = barChart.getData().get(0);
+    XYChart.Series<Number, Number> defenderData = barChart.getData().get(1);
 
     /**
      * Finishes the simulation. Redirects to the mainpage and clears the singleton.
@@ -83,12 +86,9 @@ public class SimulateCON {
             return;
         }
 
-        battle.simulate(0, terrain);
-
         observer = new HitObserver(attacker, defender, battle, this);
 
-        updateArmies(battle.getWinner(), battle.getLoser());
-        updateBarChart();
+        battle.simulate(4, terrain, this);
     }
 
     /**
@@ -126,21 +126,10 @@ public class SimulateCON {
      * Updates the barchart by getting the data from the armies.
      */
 
-    public void updateBarChart() {
-        //clears the barchart
-        barChart.getData().clear();
-
-        //creates the data again
-        XYChart.Series<String, Number> attackerData = new XYChart.Series<>();
-        attackerData.setName(attacker.getName());
-        XYChart.Series<String, Number> defenderData = new XYChart.Series<>();
-        defenderData.setName(defender.getName());
-
+    public void updateBarChart(int i) {
         //add the data to the barchart
-        attackerData.getData().add(new XYChart.Data<>("Units", attacker.size()));
-        defenderData.getData().add(new XYChart.Data<>("Units", defender.size()));
-
-        barChart.getData().addAll(attackerData, defenderData);
+        attackerData.getData().add(new XYChart.Data<>(i, attacker.size()));
+        defenderData.getData().add(new XYChart.Data<>(i, defender.size()));
     }
 
     /**
@@ -150,7 +139,7 @@ public class SimulateCON {
      * @param loser  losing army
      */
 
-    void updateArmies(Army winner, Army loser) {
+    public void updateArmies(Army winner, Army loser) {
         //clear the container beforea adding
         armyContainer.getChildren().clear();
         armyContainer.getChildren().add(GUIFactory.createTitle("Terrain: " + terrain));
@@ -165,7 +154,7 @@ public class SimulateCON {
      * Update the army under simulation.
      */
 
-    void updateArmies() {
+    public void updateArmies() {
         //clear the container before adding
         armyContainer.getChildren().clear();
 
@@ -186,6 +175,6 @@ public class SimulateCON {
         defender = armySingleton.getDefender().copy();
         battle = new Battle(attacker, defender);
         updateArmies();
-        updateBarChart();
+        updateBarChart(0);
     }
 }
