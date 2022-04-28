@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames.unit;
 
+import edu.ntnu.arunang.wargames.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -74,6 +75,35 @@ class CommanderUnitTest {
         attacker.attack(defender);
         CommanderUnit copy = attacker.copy();
         assertEquals(attacker, copy);
+    }
+
+    @Test
+    @DisplayName("Test attack bonus on all available terrains")
+    void testAttackBonusOnTerrain() {
+        for (Terrain terrain : Terrain.values()) {
+            int attackBonus = 0;
+            try {
+                attackBonus = attacker.getAttackBonus(terrain);
+                attacker.attack(defender, terrain);
+            } catch (Exception e) {
+                fail(String.format("Attack bonus: %d is not valid for terrain '%s'.", attackBonus, terrain));
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("Test resist bonus on all available terrains")
+    void testDefenceBonusOnTerrain() {
+        for (Terrain terrain : Terrain.values()) {
+            int resistBonus = 0;
+            try {
+                resistBonus = attacker.getAttackBonus(terrain);
+                defender.attack(attacker, terrain);
+            } catch (Exception e) {
+                fail(String.format("Resist bonus %d is not valid for terrain '%s'.", resistBonus, terrain));
+            }
+        }
     }
 }
 
