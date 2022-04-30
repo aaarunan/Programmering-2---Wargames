@@ -5,10 +5,12 @@ import edu.ntnu.arunang.wargames.Battle;
 import edu.ntnu.arunang.wargames.Terrain;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
 import edu.ntnu.arunang.wargames.observer.HitObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -44,6 +46,8 @@ public class SimulateCON {
     private Army attacker = armySingleton.getAttacker().copy();
     private Army defender = armySingleton.getDefender().copy();
 
+    private Text errorMsg;
+
     private Terrain terrain;
     private MenuButton menuTerrain;
 
@@ -74,9 +78,10 @@ public class SimulateCON {
     void onStart(ActionEvent event) {
         //quit if terrain is not choosen
         if (this.terrain == null) {
-            AlertFactory.createWarning("Choose a terrain").show();
+            errorMsg.setText("Choose a terrain.");
             return;
         }
+        errorMsg.setText("");
 
         //logic for whether or not the button is restart or start
         if (btnStart.getText().equals("Start")) {
@@ -182,9 +187,12 @@ public class SimulateCON {
             });
             menuTerrain.getItems().add(menuItem);
         }
-        VBox vbox = new VBox(menuTerrain);
-        vbox.setPrefWidth(300);
-        hBox.getChildren().addAll(vbox, btnFinish, btnStart);
+
+        errorMsg = TextFactory.createSmallText("");
+        TextDecorator.makeErrorText(errorMsg);
+        VBox vbox = ContainerFactory.createVBoxElement(300);
+        vbox.getChildren().add(menuTerrain);
+        hBox.getChildren().addAll(errorMsg, vbox, btnFinish, btnStart);
 
     }
 

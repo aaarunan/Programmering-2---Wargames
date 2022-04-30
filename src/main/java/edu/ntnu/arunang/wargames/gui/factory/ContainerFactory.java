@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -103,9 +104,17 @@ public class ContainerFactory {
         HBox hBox = new HBox();
         //sets the alignment
         hBox.setAlignment(Pos.CENTER_RIGHT);
-
+        hBox.setPrefHeight(50);
         return hBox;
     }
+
+    public static VBox createVBoxElement(int width) {
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER_RIGHT);
+        vbox.setPrefWidth(width);
+        return vbox;
+    }
+
 
     /**
      * Crate a gridpane to show stats about an army. Used to show details about an army.
@@ -171,6 +180,13 @@ public class ContainerFactory {
         public VBox build() {
             return vBox;
         }
+    }
+
+    public Pane makeSpacerPane() {
+        Pane pane = new Pane();
+        pane.setPrefWidth(0);
+        pane.setPrefHeight(0);
+        return pane;
     }
 }
 

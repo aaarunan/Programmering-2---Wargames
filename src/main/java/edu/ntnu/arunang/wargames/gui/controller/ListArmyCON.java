@@ -5,15 +5,18 @@ import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
+import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -39,14 +42,16 @@ public class ListArmyCON {
     @FXML
     private MenuButton menuSort;
     @FXML
-    private HBox bottomBar;
-    @FXML
     private Text title;
     @FXML
     private HBox armyDetails;
+    @FXML
+    private BorderPane borderPane;
 
     private Army army;
 
+    private Text errorMsg;
+    private HBox bottomBar;
     private Button btnPressedArmy;
 
 
@@ -185,8 +190,8 @@ public class ListArmyCON {
      */
 
     void initBottomBar() {
+        HBox bottomBar = ContainerFactory.createBottomBar();
         Button btnAction;
-        bottomBar.getChildren().clear();
 
         //Change the buttons to the circumstances
         if (!armySingleton.isSimulate()) {
@@ -196,6 +201,8 @@ public class ListArmyCON {
             btnAction = ButtonFactory.createDefaultButton("Continue");
             btnAction.setOnAction(event -> {
                 if (army == null) {
+                    TextDecorator.makeErrorText(errorMsg);
+                    errorMsg.setText("Choose an army");
                     return;
                 }
 
@@ -214,13 +221,14 @@ public class ListArmyCON {
             });
         }
 
+        errorMsg = TextFactory.createSmallText("Info: army can be double-clicked");
 
         //create back button
         Button btnBack = ButtonFactory.createDefaultButton("Back");
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
 
         //add the buttons to the bottom bar
-        bottomBar.getChildren().add(btnBack);
-        bottomBar.getChildren().add(btnAction);
+        bottomBar.getChildren().addAll(errorMsg, btnBack, btnAction);
+        borderPane.setBottom(bottomBar);
     }
 }

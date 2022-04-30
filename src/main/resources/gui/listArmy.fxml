@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.ListArmyCON">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.ListArmyCON">
    <center>
       <HBox>
          <children>
@@ -77,7 +77,4 @@
       <URL value="@css/main.css" />
       <URL value="@css/tableview.css" />
    </stylesheets>
-   <bottom>
-      <HBox fx:id="bottomBar" alignment="BOTTOM_RIGHT" prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>
