@@ -44,33 +44,19 @@ public class GUI extends Application {
     }
 
     /**
-     * Create a new stage (window). The path default is /resources.
-     *
-     * @param page fxml page from /resources/gui
-     */
-
-    public static void createNewStage(String page) {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getPath(page));
-        stage.setScene(new Scene(checkFXMLLoader(loader)));
-        stage.show();
-    }
-
-    /**
      * Change the scene of a given stage. The path default is /resources.
      *
      * @param stage stage that is switching scene
      * @param page  fxml page from /recources/gui
      */
 
-    public static void setSceneFromStage(Stage stage, String page) {
+    public static void setSceneFromStage(Stage stage, String page, boolean maximized) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getPath(page));
         stage.setScene(new Scene(checkFXMLLoader(loader)));
         stage.setMinHeight(STAGE_MIN_HEIGHT);
         stage.setMinWidth(STAGE_MIN_WIDTH);
-        stage.setMaximized(true);
+        stage.setMaximized(maximized);
 
         stage.show();
     }
@@ -90,7 +76,6 @@ public class GUI extends Application {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene prev = ((Node) actionEvent.getSource()).getScene();
         stage.setScene(new Scene(root, prev.getWidth(), prev.getHeight()));
-        stage.show();
     }
 
     /**
@@ -123,7 +108,7 @@ public class GUI extends Application {
         }
 
         //throw new exceptions to not get NullPointerException down the line
-        if(root == null) {
+        if (root == null) {
             throw new IllegalStateException("Root is null");
         }
         return root;
@@ -149,6 +134,6 @@ public class GUI extends Application {
         primaryStage.getIcons().add(new Image(String.valueOf(this.getClass().getResource("/gui/media/logo.png"))));
         primaryStage.setTitle("Wargames");
 
-        setSceneFromStage(primaryStage, "main");
+        setSceneFromStage(primaryStage, "main", true);
     }
 }

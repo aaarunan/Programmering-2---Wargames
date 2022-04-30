@@ -44,6 +44,9 @@ public class ListArmyCON {
 
     private Army army;
 
+    private Button btnPressedArmy;
+
+
     /**
      * Deletes an Army from the Singleton and in the stored files in /resources/army folder.
      * The method will show a pop-up warning that the user will delete the army.
@@ -146,10 +149,19 @@ public class ListArmyCON {
             Button button = GUIFactory.listButton(army.getName());
             button.setOnAction(buttonEvent -> {
                 this.army = army;
+                updatePressed(button);
                 updateDetails();
             });
             armyContainer.getChildren().add(button);
         });
+    }
+
+    void updatePressed(Button button) {
+        if (btnPressedArmy != null) {
+            btnPressedArmy.setStyle("-fx-background-color: purple");
+        }
+        button.setStyle("-fx-background-color: red");
+        btnPressedArmy = button;
     }
 
     /**
@@ -177,23 +189,26 @@ public class ListArmyCON {
         if (!armySingleton.isSimulate()) {
             btnAction = GUIFactory.createDefaultButton("New army");
             btnAction.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
-        } else {
-            btnAction = GUIFactory.createDefaultButton("Continue");
-            btnAction.setOnAction(event -> {
-                if (army == null) {
-                    return;
-                }
-                if (armySingleton.getAttacker() == null) {
-                    armySingleton.setAttacker(army);
-                } else {
-                    armySingleton.setDefender(army);
-                    GUI.setSceneFromActionEvent(event, "simulate");
-                }
-                updateHeader();
-                detailsWindow.setVisible(false);
-                army = null;
-            });
+            return;
         }
+        btnAction = GUIFactory.createDefaultButton("Continue");
+        btnAction.setOnAction(event -> {
+            if (army == null) {
+                return;
+            }
+            if (armySingleton.getAttacker() == null) {
+                armySingleton.setAttacker(army);
+                btnPressedArmy.setStyle("-fx-background-color: green");
+                btnPressedArmy = null;
+            } else {
+                armySingleton.setDefender(army);
+                GUI.setSceneFromActionEvent(event, "simulate");
+            }
+            updateHeader();
+            detailsWindow.setVisible(false);
+            army = null;
+        });
+
 
         //create back button
         Button btnBack = GUIFactory.createDefaultButton("Back");
