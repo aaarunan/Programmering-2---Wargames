@@ -5,7 +5,7 @@ import edu.ntnu.arunang.wargames.Battle;
 import edu.ntnu.arunang.wargames.Terrain;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
-import edu.ntnu.arunang.wargames.gui.GUIFactory;
+import edu.ntnu.arunang.wargames.gui.factory.*;
 import edu.ntnu.arunang.wargames.observer.HitObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Controller for the simulation page.
@@ -49,7 +51,7 @@ public class SimulateCON {
 
     private HitObserver observer;
 
-    LineChart<Number, Number> barChart = GUIFactory.createBarChart(attacker, defender);
+    LineChart<Number, Number> barChart = ChartFactory.createBarChart(attacker, defender);
 
     XYChart.Series<Number, Number> attackerData = barChart.getData().get(0);
     XYChart.Series<Number, Number> defenderData = barChart.getData().get(1);
@@ -60,7 +62,6 @@ public class SimulateCON {
      * @param event triggering event
      */
 
-    @FXML
     void onFinish(ActionEvent event) {
         armySingleton.clear();
         GUI.setSceneFromActionEvent(event, "main");
@@ -70,10 +71,10 @@ public class SimulateCON {
      * Main process. Starts the simulation, and updates the gui accordingly.
      */
 
-    void onStart() {
+    void onStart(ActionEvent event) {
         //quit if terrain is not choosen
         if (this.terrain == null) {
-            GUIFactory.createWarning("Choose a terrain").show();
+            AlertFactory.createWarning("Choose a terrain").show();
             return;
         }
 
@@ -101,24 +102,8 @@ public class SimulateCON {
         mainContainer.getChildren().add(barChart);
 
         //create bottombar
-        HBox hBox = GUIFactory.createBottomBar();
-        btnStart = GUIFactory.createDefaultButton("Start");
-        btnStart.setOnAction(event -> onStart());
-        btnFinish = GUIFactory.createDefaultButton("Finish");
-        btnFinish.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
-        borderPane.setBottom(hBox);
-        menuTerrain = GUIFactory.createMenuButton("Choose terrain");
-        for (Terrain terrain : Terrain.values()) {
-            MenuItem menuItem = GUIFactory.createMenuItem(terrain.toString());
-            menuItem.setOnAction(event -> {
-                menuTerrain.setText(terrain.toString());
-                this.terrain = terrain;
-            });
-            menuTerrain.getItems().add(menuItem);
-        }
-        VBox vbox = new VBox(menuTerrain);
-        vbox.setPrefWidth(300);
-        hBox.getChildren().addAll(vbox, btnFinish, btnStart);
+        initBottomBar();
+
         updateArmies();
     }
 
@@ -140,14 +125,17 @@ public class SimulateCON {
      */
 
     public void updateArmies(Army winner, Army loser) {
-        //clear the container beforea adding
+        //clear the container before adding
         armyContainer.getChildren().clear();
-        armyContainer.getChildren().add(GUIFactory.createTitle("Terrain: " + terrain));
-        armyContainer.getChildren().add(GUIFactory.createSmallTitle("Winner: " + winner.getName()));
-        armyContainer.getChildren().add(GUIFactory.createArmyPane(winner));
-        armyContainer.getChildren().add(GUIFactory.createSmallTitle("Loser: " + loser.getName()));
-        armyContainer.getChildren().add(GUIFactory.createArmyPane(loser));
-        armyContainer.getChildren().add(GUIFactory.createSmallText("Number of attacks: " + battle.getNumOfAttacks()));
+
+        Text txtTerrain = TextFactory.createTitle("Terrain: " + terrain);
+        Text txtWinner = TextFactory.createSmallTitle("Winner: " + winner.getName());
+        GridPane winnerArmy = ContainerFactory.createArmyPane(winner);
+        Text txtLoser = TextFactory.createSmallTitle("Loser: " + loser.getName());
+        GridPane loserArmy = ContainerFactory.createArmyPane(loser);
+        Text numOfAttacks = TextFactory.createSmallText("Number of attacks: " + battle.getNumOfAttacks());
+
+        armyContainer.getChildren().addAll(txtTerrain, txtWinner, winnerArmy, txtLoser, loserArmy, numOfAttacks);
     }
 
     /**
@@ -158,10 +146,10 @@ public class SimulateCON {
         //clear the container before adding
         armyContainer.getChildren().clear();
 
-        armyContainer.getChildren().add(GUIFactory.createSmallTitle(attacker.getName()));
-        armyContainer.getChildren().add(GUIFactory.createArmyPane(attacker));
-        armyContainer.getChildren().add(GUIFactory.createSmallTitle(defender.getName()));
-        armyContainer.getChildren().add(GUIFactory.createArmyPane(defender));
+        armyContainer.getChildren().add(TextFactory.createSmallTitle(attacker.getName()));
+        armyContainer.getChildren().add(ContainerFactory.createArmyPane(attacker));
+        armyContainer.getChildren().add(TextFactory.createSmallTitle(defender.getName()));
+        armyContainer.getChildren().add(ContainerFactory.createArmyPane(defender));
     }
 
     /**
@@ -177,4 +165,27 @@ public class SimulateCON {
         updateArmies();
         updateBarChart(0);
     }
+
+    void initBottomBar() {
+        HBox hBox = ContainerFactory.createBottomBar();
+        btnStart = ButtonFactory.createDefaultButton("Start");
+        btnStart.setOnAction(this::onStart);
+        btnFinish = ButtonFactory.createDefaultButton("Finish");
+        btnFinish.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
+        borderPane.setBottom(hBox);
+        menuTerrain = ButtonFactory.createMenuButton("Choose terrain");
+        for (Terrain terrain : Terrain.values()) {
+            MenuItem menuItem = ButtonFactory.createMenuItem(terrain.toString());
+            menuItem.setOnAction(event -> {
+                menuTerrain.setText(terrain.toString());
+                this.terrain = terrain;
+            });
+            menuTerrain.getItems().add(menuItem);
+        }
+        VBox vbox = new VBox(menuTerrain);
+        vbox.setPrefWidth(300);
+        hBox.getChildren().addAll(vbox, btnFinish, btnStart);
+
+    }
+
 }

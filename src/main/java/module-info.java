@@ -8,4 +8,5 @@ open module edu.ntnu.arunang.wargames {
     exports edu.ntnu.arunang.wargames.gui;
     exports edu.ntnu.arunang.wargames.unit;
     exports edu.ntnu.arunang.wargames.gui.controller;
+    exports edu.ntnu.arunang.wargames.gui.factory;
 }

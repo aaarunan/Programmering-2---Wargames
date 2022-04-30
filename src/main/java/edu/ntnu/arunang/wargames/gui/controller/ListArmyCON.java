@@ -4,7 +4,10 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
-import edu.ntnu.arunang.wargames.gui.GUIFactory;
+import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
+import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
+import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
+import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -56,7 +59,7 @@ public class ListArmyCON {
     void onDelete() {
         ArmyFSH armyFSH = new ArmyFSH();
         //get the result of the popup
-        Optional<ButtonType> result = GUIFactory.createWarning("Are you sure you want to delete army?").showAndWait();
+        Optional<ButtonType> result = AlertFactory.createWarning("Are you sure you want to delete army?").showAndWait();
 
         if (result.get() == ButtonType.CANCEL) {
             return;
@@ -64,7 +67,7 @@ public class ListArmyCON {
 
         //show error if failed
         if (!armyFSH.deleteArmy(army)) {
-            GUIFactory.createWarning("Could not remove army. \n The army file might be in use or does not exist.").show();
+            AlertFactory.createWarning("Could not remove army. \n The army file might be in use or does not exist.").show();
             return;
         }
 
@@ -108,7 +111,7 @@ public class ListArmyCON {
     void initialize() {
         updateHeader();
         detailsWindow.setVisible(false);
-        GUIFactory.initUnitTable(tableUnits);
+        ContainerFactory.initUnitTable(tableUnits);
         initBottomBar();
         updateArmies(armySingleton.getArmies());
     }
@@ -126,7 +129,7 @@ public class ListArmyCON {
         //update the army fields
         txtArmyName.setText(army.getName());
         armyDetails.getChildren().clear();
-        armyDetails.getChildren().add(GUIFactory.createArmyPane(army));
+        armyDetails.getChildren().add(ContainerFactory.createArmyPane(army));
         army.getUnits().forEach(unit -> tableUnits.getItems().add(unit));
     }
 
@@ -146,7 +149,7 @@ public class ListArmyCON {
         //loop through all the armies
 
         armies.forEach(army -> {
-            Button button = GUIFactory.listButton(army.getName());
+            Button button = ButtonFactory.listButton(army.getName());
             button.setOnAction(buttonEvent -> {
                 this.army = army;
                 updatePressed(button);
@@ -158,9 +161,9 @@ public class ListArmyCON {
 
     void updatePressed(Button button) {
         if (btnPressedArmy != null) {
-            btnPressedArmy.setStyle("-fx-background-color: purple");
+            ButtonDecorator.makeListElementDefault(btnPressedArmy);
         }
-        button.setStyle("-fx-background-color: red");
+        ButtonDecorator.makeListElementSelected(button);
         btnPressedArmy = button;
     }
 
@@ -187,31 +190,33 @@ public class ListArmyCON {
 
         //Change the buttons to the circumstances
         if (!armySingleton.isSimulate()) {
-            btnAction = GUIFactory.createDefaultButton("New army");
+            btnAction = ButtonFactory.createDefaultButton("New army");
             btnAction.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
-            return;
+        } else {
+            btnAction = ButtonFactory.createDefaultButton("Continue");
+            btnAction.setOnAction(event -> {
+                if (army == null) {
+                    return;
+                }
+
+                if (armySingleton.getAttacker() == null) {
+                    armySingleton.setAttacker(army);
+                    ButtonDecorator.makeListElementActive(btnPressedArmy);
+                    btnPressedArmy.setText("Attacker: " + btnPressedArmy.getText());
+                    btnPressedArmy = null;
+                } else {
+                    armySingleton.setDefender(army);
+                    GUI.setSceneFromActionEvent(event, "simulate");
+                }
+                updateHeader();
+                detailsWindow.setVisible(false);
+                army = null;
+            });
         }
-        btnAction = GUIFactory.createDefaultButton("Continue");
-        btnAction.setOnAction(event -> {
-            if (army == null) {
-                return;
-            }
-            if (armySingleton.getAttacker() == null) {
-                armySingleton.setAttacker(army);
-                btnPressedArmy.setStyle("-fx-background-color: green");
-                btnPressedArmy = null;
-            } else {
-                armySingleton.setDefender(army);
-                GUI.setSceneFromActionEvent(event, "simulate");
-            }
-            updateHeader();
-            detailsWindow.setVisible(false);
-            army = null;
-        });
 
 
         //create back button
-        Button btnBack = GUIFactory.createDefaultButton("Back");
+        Button btnBack = ButtonFactory.createDefaultButton("Back");
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
 
         //add the buttons to the bottom bar

@@ -4,7 +4,9 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
-import edu.ntnu.arunang.wargames.gui.GUIFactory;
+import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
+import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
+import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import edu.ntnu.arunang.wargames.unit.UnitFactory;
 import edu.ntnu.arunang.wargames.unit.UnitType;
@@ -88,9 +90,13 @@ public class NewArmyCON {
     void onSave(ActionEvent event) {
         ArmyFSH armyFSH = new ArmyFSH();
 
+        if (txtArmyName.getText().isBlank()) {
+            return;
+        }
+
         //checks if file exists
         if (armyFSH.fileExists(new File(ArmyFSH.getPath(army.getName())))) {
-            Alert alert = GUIFactory.createWarning(String.format("Army '%s' already exists, do you want to override it?", army.getName()));
+            Alert alert = AlertFactory.createWarning(String.format("Army '%s' already exists, do you want to override it?", army.getName()));
             Optional<ButtonType> result = alert.showAndWait();
 
             //cancels the process if the user declines
@@ -103,9 +109,9 @@ public class NewArmyCON {
         try {
             armyFSH.writeArmy(army);
         } catch (IOException e) {
-            GUIFactory.createError("Could not overwrite file. File might be in use... \n " + e.getMessage()).show();
+            AlertFactory.createError("Could not overwrite file. File might be in use... \n " + e.getMessage()).show();
         } catch (Exception e) {
-            GUIFactory.createError("Un unexpected exception occurred... \n " + e.getMessage()).show();
+            AlertFactory.createError("Un unexpected exception occurred... \n " + e.getMessage()).show();
             return;
         }
 
@@ -138,7 +144,7 @@ public class NewArmyCON {
         } catch (IllegalArgumentException e) {
             txtErrorMsg.setText(e.getMessage());
         } catch (Exception e) {
-            GUIFactory.createError("Unexpected error occured: \n" + e.getMessage()).show();
+            AlertFactory.createError("Unexpected error occured: \n" + e.getMessage()).show();
         }
 
         Button btnDelete = new Button("Delete");
@@ -147,7 +153,7 @@ public class NewArmyCON {
         Unit target = units.get(0);
 
         //Add a card to the history container
-        GUIFactory.ListCardBuilder listCardBuilder = new GUIFactory.ListCardBuilder();
+        ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
         VBox vBox = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName()).add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
 
         btnDelete.setOnAction(event -> {
@@ -172,9 +178,9 @@ public class NewArmyCON {
     @FXML
     void initialize() {
         initMenuUnitType();
-        GUIFactory.initNumberOnlyTextField(fieldCount);
-        GUIFactory.initNumberOnlyTextField(fieldHealthPoints);
-        GUIFactory.initUnitTable(tableUnits);
+        ButtonFactory.initNumberOnlyTextField(fieldCount);
+        ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
+        ContainerFactory.initUnitTable(tableUnits);
         updateDetails();
     }
 
@@ -184,18 +190,28 @@ public class NewArmyCON {
 
     void updateDetails() {
         armyContainer.getChildren().clear();
-        armyContainer.getChildren().add(GUIFactory.createArmyPane(army));
+        armyContainer.getChildren().add(ContainerFactory.createArmyPane(army));
     }
 
 
     void initMenuUnitType() {
         for (UnitType type : UnitType.values()) {
-            MenuItem menuItem = GUIFactory.createMenuItem(type.toString());
+            MenuItem menuItem = ButtonFactory.createMenuItem(type.toString());
             menuItem.setOnAction(event -> {
                 menuUnitType.setText(type.toString());
                 menuUnitType.setId(type.toString());
             });
             menuUnitType.getItems().add(menuItem);
         }
+    }
+
+    void initBottomBar() {
+        HBox hBox = ContainerFactory.createBottomBar();
+        Button back = ButtonFactory.createDefaultButton("Cancel");
+        back.setOnAction(event -> GUI.setSceneFromActionEvent(event, "listArmy"));
+        Button save = ButtonFactory.createDefaultButton("Save");
+        save.setOnAction(this::onSave);
+        hBox.getChildren().addAll(back, save);
+
     }
 }
