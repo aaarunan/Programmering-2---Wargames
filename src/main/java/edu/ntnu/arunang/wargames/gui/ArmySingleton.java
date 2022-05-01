@@ -1,13 +1,19 @@
 package edu.ntnu.arunang.wargames.gui;
 
 import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
+import edu.ntnu.arunang.wargames.fsh.FSH;
+import edu.ntnu.arunang.wargames.fsh.FileFormatException;
+import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * Singleton for storing loaded armies. Works as a cache, so there is no need
+ * Singleton for storing settings and choosen attacker and defender.. Works as a cache, so there is no need
  * to load again. It can also sort the cached armies. It also caches an attacking -
  * and defending army for simulation purposes.
  */
@@ -41,9 +47,21 @@ public class ArmySingleton {
         return single_instance;
     }
 
+    /**
+     * Set the simulation variable
+     *
+     * @return boolean
+     */
+
     public boolean isSimulate() {
         return simulate;
     }
+
+    /**
+     * Set the simulation variable
+     *
+     * @param simulate true or false
+     */
 
     public void setSimulate(boolean simulate) {
         ArmySingleton.simulate = simulate;
@@ -57,6 +75,21 @@ public class ArmySingleton {
 
     public List<Army> getArmies() {
         return armies;
+    }
+
+    /**
+     * Set the cached armies. Usually done when the armies have been loaded from files.
+     *
+     * @param armies List of armies
+     */
+
+    public void setArmies(List<Army> armies) {
+        if (armies == null) {
+            return;
+        }
+
+        ArmySingleton.armies = new ArrayList<>();
+        ArmySingleton.armies.addAll(armies);
     }
 
     /**
@@ -77,21 +110,6 @@ public class ArmySingleton {
 
     public List<Army> getArmiesSortedByName() {
         return armies.stream().sorted(Comparator.comparing(Army::getName)).toList();
-    }
-
-    /**
-     * Set the cached armies. Usually done when the armies have been loaded from files.
-     *
-     * @param armies List of armies
-     */
-
-    public void setArmies(List<Army> armies) {
-        if (armies == null) {
-            return;
-        }
-
-        ArmySingleton.armies = new ArrayList<>();
-        ArmySingleton.armies.addAll(armies);
     }
 
     /**
@@ -149,6 +167,7 @@ public class ArmySingleton {
      *
      * @param defender defending unit
      */
+
 
     public void setDefender(Army defender) {
         ArmySingleton.defender = defender;

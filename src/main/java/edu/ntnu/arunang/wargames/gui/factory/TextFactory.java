@@ -2,6 +2,10 @@ package edu.ntnu.arunang.wargames.gui.factory;
 
 import javafx.scene.text.Text;
 
+/**
+ * Factory that creates text elements. Text elements created can be editable.
+ */
+
 public class TextFactory {
 
     /**
@@ -34,6 +38,13 @@ public class TextFactory {
 
         return text;
     }
+
+    /**
+     * Creates a title text element. The text elements inherts the 'title' css class.
+     *
+     * @param string text shown
+     * @return constructed text element.
+     */
 
     public static Text createTitle(String string) {
         Text text = new Text(string);

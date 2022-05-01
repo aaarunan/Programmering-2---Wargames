@@ -9,9 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.FileSystems;
 
 /**
  * Main GUI class of the JavaFX application. Contains helper methods and boilder plate code
@@ -115,11 +113,7 @@ public class GUI extends Application {
     }
 
     protected static URL getPath(String page) {
-        try {
-            return FileSystems.getDefault().getPath("src", "main", "resources", "gui", page + ".fxml").toUri().toURL();
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(String.format("Could not make URL from '%s'", page));
-        }
+        return GUI.class.getResource("/gui/" + page + ".fxml");
     }
 
     /**

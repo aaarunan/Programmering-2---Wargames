@@ -12,24 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.NewArmyCON">
-    <bottom>
-        <HBox alignment="BOTTOM_RIGHT" fillHeight="false" prefHeight="49.0" prefWidth="600.0" BorderPane.alignment="BOTTOM_RIGHT">
-            <children>
-                <Button fx:id="cancel" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onCancel" text="Cancel">
-                    <HBox.margin>
-                        <Insets />
-                    </HBox.margin>
-                </Button>
-                <Button fx:id="save" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onSave" text="Save">
-                    <HBox.margin>
-                        <Insets />
-                    </HBox.margin></Button>
-            </children>
-        </HBox>
-    </bottom>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.NewArmyCON">
     <center>
-        <HBox>
+        <HBox prefHeight="245.0" prefWidth="560.0">
             <children>
                 <VBox prefHeight="309.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                     <children>
@@ -44,19 +29,23 @@
                   <TextField fx:id="fieldCount" promptText="Count" />
                   <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#onAdd" styleClass="button-big" text="Add">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets />
                      </VBox.margin>
                   </Button>
                   <Text fx:id="txtErrorMsg" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-small" wrappingWidth="200.0">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets />
                      </VBox.margin>
                   </Text>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="520.0" prefWidth="355.0">
-                     <content>
-                        <VBox fx:id="vBoxAdd" prefHeight="200.0" prefWidth="100.0" />
-                     </content>
-                  </ScrollPane>
+                  <VBox VBox.vgrow="ALWAYS">
+                     <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="520.0" prefWidth="355.0" VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="vBoxAdd" prefHeight="200.0" prefWidth="100.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
                     </children>
                 </VBox>
                 <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="309.0" prefWidth="267.0" HBox.hgrow="ALWAYS">
@@ -82,12 +71,6 @@
             </BorderPane.margin>
         </HBox>
     </center>
-    <top>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Create new army" BorderPane.alignment="TOP_LEFT">
-            <BorderPane.margin>
-                <Insets left="20.0" top="6.0" />
-            </BorderPane.margin></Text>
-    </top>
    <stylesheets>
       <URL value="@css/main.css" />
       <URL value="@css/tableview.css" />

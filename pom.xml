@@ -12,6 +12,7 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mainClass>edu.ntnu.arunang.wargames.Main</mainClass>
     </properties>
 
     <build>
@@ -40,7 +41,22 @@
                     <mainClass>edu.ntnu.arunang.wargames/edu.ntnu.arunang.wargames.Main</mainClass>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.data</exclude> <!--exclude database files-->
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>src/main/java/</classpathPrefix>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
             <!-- Add configuration for the JavaDoc plugin, so that JavaDoc is automatically generated upon packaging -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -10,6 +10,7 @@ public enum UnitType {
     CommanderUnit,
     InfantryUnit,
     RangedUnit;
+
     /**
      * Helper method to check if the specified unit is an UnitType. ValueOf is a static method
      * from the enum class and can therefor not be overridden. Use this instead of valueOf.

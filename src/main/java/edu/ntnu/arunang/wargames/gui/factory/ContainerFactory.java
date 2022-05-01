@@ -4,24 +4,19 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.Formatter;
-
 import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 /**
- * Class responsible for creating objects in the GUI.
- * The class is static because it should not be instantiated,
- * since its only role is to create elements, and does not need to make a class.
+ * Factory for creating various graphical containers.
  * <p>
  * The class can either initialize an element or create it. Methods that
  * creates elements starts with create, and returns a new element. Methods
@@ -51,7 +46,7 @@ public class ContainerFactory {
      * @param tableUnits tableview element
      */
 
-    public static void initUnitTable(TableView<Unit> tableUnits) {
+    public static void initTableViewUnits(TableView<Unit> tableUnits) {
         //create the columns and add an observer on them
 
         TableColumn<Unit, String> type = new TableColumn<>("Type");
@@ -84,7 +79,7 @@ public class ContainerFactory {
      * @return VBox element
      */
 
-    public static VBox createListCard() {
+    public static VBox createInformationListCard() {
         VBox vBox = new VBox();
         //add css
         vBox.getStyleClass().add("list-card");
@@ -92,26 +87,23 @@ public class ContainerFactory {
         return vBox;
     }
 
-
     /**
-     * Create a bottom bar. All elements are positioned to the right. User to make a
-     * bottom navigation bar
-     *
-     * @return HBox
+     * Creates a VBox with alignment center. If the width is lower than 0,
+     * the widht will be set to fit width.
+     * @param width
+     * @return
      */
 
-    public static HBox createBottomBar() {
-        HBox hBox = new HBox();
-        //sets the alignment
-        hBox.setAlignment(Pos.CENTER_RIGHT);
-        hBox.setPrefHeight(50);
-        return hBox;
-    }
 
-    public static VBox createVBoxElement(int width) {
+    public static VBox createCenteredVBox(int width) {
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER_RIGHT);
-        vbox.setPrefWidth(width);
+        if (width > 0) {
+            vbox.setPrefWidth(width);
+        } else {
+            vbox.fillWidthProperty().setValue(true);
+        }
+
         return vbox;
     }
 
@@ -132,8 +124,6 @@ public class ContainerFactory {
         gridPane.add(createSmallText("Average armor:"), 0, 2, 1, 1);
         gridPane.add(createSmallText("Average attack:"), 0, 3, 1, 1);
 
-        Formatter formatter = new Formatter();
-
         //Add the data
         gridPane.add(createSmallText(Integer.toString(army.size())), 1, 0, 1, 1);
         gridPane.add(createSmallText(String.format("%.2f", army.getAverageHealthPoints())), 1, 1, 1, 1);
@@ -146,12 +136,19 @@ public class ContainerFactory {
         return gridPane;
     }
 
+    public Pane makeSpacerPane() {
+        Pane pane = new Pane();
+        pane.setPrefWidth(0);
+        pane.setPrefHeight(0);
+        return pane;
+    }
+
     /**
      * Class that builds a list card element.
      */
 
     public static class ListCardBuilder {
-        private final VBox vBox = createListCard();
+        private final VBox vBox = createInformationListCard();
 
         /**
          * Add a text element with a given string
@@ -180,13 +177,6 @@ public class ContainerFactory {
         public VBox build() {
             return vBox;
         }
-    }
-
-    public Pane makeSpacerPane() {
-        Pane pane = new Pane();
-        pane.setPrefWidth(0);
-        pane.setPrefHeight(0);
-        return pane;
     }
 }
 

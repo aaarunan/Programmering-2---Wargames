@@ -10,7 +10,7 @@ public class HitObserver implements Observer {
     private final Army defender;
 
     private final SimulateCON simulateCON;
-    private int i;
+    private int count;
 
     public HitObserver(Army attacker, Army defender, Battle battle, SimulateCON simulateCON) {
         this.battle = battle;

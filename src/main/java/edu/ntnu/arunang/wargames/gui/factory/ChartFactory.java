@@ -5,9 +5,14 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
+/**
+ * Factory for creating charts, and chart elements.
+ */
+
 public class ChartFactory {
+
     /**
-     * Creates a barchart used to represent a battle. Shows the units of the
+     * Creates a line chart used to represent a battle. Shows the units of the
      * attacking and defending army. Used when simulating a battle.
      *
      * @param attacker attacking army
@@ -19,9 +24,7 @@ public class ChartFactory {
 
         //create the axes of the barchart
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("Armyname");
-
-        xAxis.setLabel("Army");
+        xAxis.setLabel("Number of attacks");
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units");
@@ -31,28 +34,42 @@ public class ChartFactory {
         if (attacker.size() > defender.size()) {
             size = attacker.size();
         }
-        yAxis.setUpperBound(size+5);
+        yAxis.setUpperBound(size + 5);
 
         LineChart<Number, Number> barChart = new LineChart<Number, Number>(xAxis, yAxis);
-        barChart.setTitle("Compare");
-
-        //Create the data elements
-        XYChart.Series<Number, Number> attackerData = new XYChart.Series<>();
-        attackerData.setName(attacker.getName());
-        XYChart.Series<Number, Number> defenderData = new XYChart.Series<>();
-        defenderData.setName(defender.getName());
-
-        //Add the data to the barchart
-        attackerData.getData().add(new XYChart.Data<>(0, attacker.size()));
-        defenderData.getData().add(new XYChart.Data<>(0, defender.size()));
-
-        barChart.getData().addAll(attackerData, defenderData);
 
         barChart.setCreateSymbols(false);
-        barChart.setAnimated(false);
+        //can be turned off for performance
+        barChart.setAnimated(true);
         barChart.setHorizontalGridLinesVisible(false);
         barChart.setVerticalGridLinesVisible(false);
 
         return barChart;
+    }
+
+    /**
+     * Creates a new Data series, with a name.
+     *
+     * @param name name of the data series
+     * @return constructed data series
+     */
+
+    public static XYChart.Series<Number, Number> createDataSeries(String name) {
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName(name);
+        return series;
+    }
+
+    /**
+     * Creates a data element. Requires a xIndex, which is the x-coordinates of the value.
+     * values is the y-coordinate of the value.
+     *
+     * @param xIndex - x-coordinate
+     * @param value y-coordinate
+     * @return Constructed data
+     */
+
+    public static XYChart.Data<Number, Number> createData(int xIndex, int value) {
+        return new XYChart.Data<>(xIndex, value);
     }
 }

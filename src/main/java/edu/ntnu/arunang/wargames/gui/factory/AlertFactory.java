@@ -3,6 +3,12 @@ package edu.ntnu.arunang.wargames.gui.factory;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+import javax.swing.*;
+
+/**
+ * Factory that creates Alert popups.
+ */
+
 public class AlertFactory {
 
     /**
@@ -26,5 +32,9 @@ public class AlertFactory {
 
     public static Alert createError(String message) {
         return new Alert(Alert.AlertType.ERROR, message);
+    }
+
+    public static void showJOptionPaneError(String message) {
+        JOptionPane.showMessageDialog(null, message, "Hey!", JOptionPane.ERROR_MESSAGE);
     }
 }

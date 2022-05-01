@@ -1,4 +1,3 @@
-1. GUI.
 2. Globale variabler i jUnit tester?
 11. Tests on filetype
 12. tests on Unittype
@@ -6,3 +5,5 @@
 14. make guifactory not init
 15. feedback when choosing army
 16. stop threads after pressing finish
+17. fix choosen attacker when sorting
+18. bug where override message does not come up when not typing army name

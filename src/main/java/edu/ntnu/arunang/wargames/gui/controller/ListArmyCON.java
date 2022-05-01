@@ -2,15 +2,14 @@ package edu.ntnu.arunang.wargames.gui.controller;
 
 import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
+import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
-import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
-import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
-import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
+import edu.ntnu.arunang.wargames.gui.factory.*;
 import edu.ntnu.arunang.wargames.unit.Unit;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -21,26 +20,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
- * Controller that handles pages where armies are listed.
+ * Controller for pages where armies are listed.
  */
 
 public class ListArmyCON {
-
-    private final ArmySingleton armySingleton = ArmySingleton.getInstance();
-    @FXML // fx:id="armyContainer"
-    private VBox armyContainer; // Value injected by FXMLLoader
-    @FXML // fx:id="txtArmyName"
-    private Text txtArmyName; // Value injected by FXMLLoader
-    @FXML // fx:id="detailsWindow"
-    private VBox detailsWindow; // Value injected by FXMLLoader
-    @FXML // fx:id="tableUnits"
-    private TableView<Unit> tableUnits; // Value injected by FXMLLoader
     @FXML
-    private MenuButton menuSort;
+    private VBox armyContainer;
+    @FXML
+    private Text txtArmyName;
+    @FXML
+    private VBox detailsWindow;
+    @FXML
+    private TableView<Unit> tableUnits;
     @FXML
     private Text title;
     @FXML
@@ -49,15 +45,159 @@ public class ListArmyCON {
     private BorderPane borderPane;
 
     private Army army;
+    private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     private Text errorMsg;
     private HBox bottomBar;
     private Button btnPressedArmy;
+    private boolean isAttacker;
 
+    /**
+     * Updates the details container. If the window is disabled it will be set to enabled.
+     * It creates a detailed gridPane of the army stats, and a tableview of with every unit.
+     */
+
+    void repaintDetails() {
+        if (!detailsWindow.isVisible()) {
+            detailsWindow.setVisible(true);
+        }
+
+        //update the army fields
+        txtArmyName.setText(army.getName());
+        armyDetails.getChildren().clear();
+        armyDetails.getChildren().add(ContainerFactory.createArmyPane(army));
+        army.getUnits().forEach(unit -> tableUnits.getItems().add(unit));
+    }
+
+    /**
+     * Update the army list.
+     *
+     * @param armyFiles list of armies
+     */
+
+    void repaintArmies(File[] armyFiles) {
+        //clear the container before adding
+        armyContainer.getChildren().clear();
+        if (armyFiles == null) {
+            return;
+        }
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        //loop through all the armies
+        for (File file : armyFiles) {
+            Button button = ButtonFactory.listButton(file.getName().substring(0, file.getName().lastIndexOf('.')));
+            button.setOnAction(buttonEvent -> {
+                try {
+                    this.army = armyFSH.loadFromFile(file);
+                } catch (IOException e) {
+                    AlertFactory.createError("Army could not be loaded...\n" + e.getMessage());
+                } catch (FileFormatException e) {
+                    AlertFactory.createError("Army is wrongly formatted! \n" + e.getMessage());
+                }
+                updatePressed(button);
+                repaintDetails();
+            });
+            armyContainer.getChildren().add(button);
+        }
+    }
+
+    /**
+     * Changes the status when an army is pressed.
+     * When the army is selected it will be highlighted, and the previous
+     * selected army will be set to default styling.
+     *
+     * @param button army that was pressed.
+     */
+
+    void updatePressed(Button button) {
+        if (btnPressedArmy != null && !isAttacker) {
+            ButtonDecorator.makeListElementDefault(btnPressedArmy);
+        }
+
+        if (!army.equals(armySingleton.getAttacker())) {
+            ButtonDecorator.makeListElementHighlighted(button);
+        }
+
+        btnPressedArmy = button;
+        isAttacker = army.equals(armySingleton.getAttacker());
+    }
+
+    /**
+     * Update the header. This is according to whether simulation has been choosen
+     * and the attacker is not null.
+     */
+
+    void repaintHeader() {
+        if (armySingleton.isSimulate()) {
+            if (armySingleton.getAttacker() == null) {
+                title.setText("Choose attacker");
+            } else {
+                title.setText("Choose defender");
+            }
+        }
+    }
+
+    /**
+     * Initialize the bottom bar. Buttons will be added according to whether simulation has been
+     * choosen.
+     */
+
+    void initBottomBar() {
+        HBox bottomBar = NavbarFactory.createBottomBar();
+        Button btnAction;
+
+        //Change the buttons to the circumstances
+        if (!armySingleton.isSimulate()) {
+            btnAction = ButtonFactory.createDefaultButton("New army");
+            btnAction.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
+        } else {
+            btnAction = ButtonFactory.createDefaultButton("Continue");
+            btnAction.setOnAction(this::onContinue);
+        }
+
+        //initialize error message
+        errorMsg = TextFactory.createSmallText("Info: army can be double-clicked");
+
+        //create back button
+        Button btnBack = ButtonFactory.createDefaultButton("Back");
+        btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
+
+        //add the buttons to the bottom bar
+        bottomBar.getChildren().addAll(errorMsg, btnBack, btnAction);
+        borderPane.setBottom(bottomBar);
+    }
+
+    /**
+     * Method called when the user presses the continue button. It sets the attacking army
+     * and defending army.
+     *
+     * @param event triggered by continue button
+     */
+
+    void onContinue(ActionEvent event) {
+        if (army == null) {
+            TextDecorator.makeErrorText(errorMsg);
+            errorMsg.setText("Choose an army");
+            return;
+        }
+
+        if (armySingleton.getAttacker() == null) {
+            armySingleton.setAttacker(army);
+            ButtonDecorator.makeListElementActive(btnPressedArmy);
+            btnPressedArmy.setText("(Attacker) " + btnPressedArmy.getText());
+            btnPressedArmy = null;
+        } else {
+            armySingleton.setDefender(army);
+            GUI.setSceneFromActionEvent(event, "simulate");
+        }
+        repaintHeader();
+        detailsWindow.setVisible(false);
+        army = null;
+    }
 
     /**
      * Deletes an Army from the Singleton and in the stored files in /resources/army folder.
-     * The method will show a pop-up warning that the user will delete the army.
+     * The method will show a pop-up warning that the user must confirm.
      */
 
     @FXML
@@ -78,157 +218,25 @@ public class ListArmyCON {
 
         //refresh page
         armySingleton.removeArmy(army);
-        List<Army> armies = armySingleton.getArmies();
-        updateArmies(armies);
+        File[] armyFiles = armyFSH.getAllArmyFiles();
+        repaintArmies(armyFiles);
 
+        //hides the detailswindow
         detailsWindow.setVisible(false);
     }
 
     /**
-     * Sorts the list of armies by the units in the army.
+     * Initializes the page. It repaints the header and the army int the singleton.
+     * Lastly in initializes the bottom bar.
      */
 
     @FXML
-    void onSortByCount() {
-        armyContainer.getChildren().clear();
-        updateArmies(armySingleton.getArmiesSortedByCount());
-        menuSort.setText("Sort by count");
-    }
-
-    /**
-     * Sorts the list of armies by the units in the army.
-     */
-
-    @FXML
-    void onSortByName() {
-        armyContainer.getChildren().clear();
-        updateArmies(armySingleton.getArmiesSortedByName());
-        menuSort.setText("Sort by name");
-    }
-
-    /**
-     * Initializes the page by getting the armies from the singleton and updating
-     * the elements in the gui by calling the update methods in the controller.
-     */
-
-    @FXML
-    // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        updateHeader();
+        repaintHeader();
         detailsWindow.setVisible(false);
-        ContainerFactory.initUnitTable(tableUnits);
+        ContainerFactory.initTableViewUnits(tableUnits);
         initBottomBar();
-        updateArmies(armySingleton.getArmies());
-    }
-
-    /**
-     * Updates the details containers when an army has been selected.
-     * It creates a detailed gridPane of the army stats, and a tableview of with every unit.
-     */
-
-    void updateDetails() {
-        if (!detailsWindow.isVisible()) {
-            detailsWindow.setVisible(true);
-        }
-
-        //update the army fields
-        txtArmyName.setText(army.getName());
-        armyDetails.getChildren().clear();
-        armyDetails.getChildren().add(ContainerFactory.createArmyPane(army));
-        army.getUnits().forEach(unit -> tableUnits.getItems().add(unit));
-    }
-
-    /**
-     * Update the list of armies.
-     *
-     * @param armies list of armies
-     */
-
-    void updateArmies(List<Army> armies) {
-        //clear the container before adding
-        armyContainer.getChildren().clear();
-        if (armies == null) {
-            return;
-        }
-
-        //loop through all the armies
-
-        armies.forEach(army -> {
-            Button button = ButtonFactory.listButton(army.getName());
-            button.setOnAction(buttonEvent -> {
-                this.army = army;
-                updatePressed(button);
-                updateDetails();
-            });
-            armyContainer.getChildren().add(button);
-        });
-    }
-
-    void updatePressed(Button button) {
-        if (btnPressedArmy != null) {
-            ButtonDecorator.makeListElementDefault(btnPressedArmy);
-        }
-        ButtonDecorator.makeListElementSelected(button);
-        btnPressedArmy = button;
-    }
-
-    /**
-     * Update the header according to simulate in the singleton.
-     */
-    void updateHeader() {
-        if (armySingleton.isSimulate()) {
-            if (armySingleton.getAttacker() == null) {
-                title.setText("Choose attacker");
-            } else {
-                title.setText("Choose defender");
-            }
-        }
-    }
-
-    /**
-     * Initialize the bottom bar according to simulate in the singleton
-     */
-
-    void initBottomBar() {
-        HBox bottomBar = ContainerFactory.createBottomBar();
-        Button btnAction;
-
-        //Change the buttons to the circumstances
-        if (!armySingleton.isSimulate()) {
-            btnAction = ButtonFactory.createDefaultButton("New army");
-            btnAction.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
-        } else {
-            btnAction = ButtonFactory.createDefaultButton("Continue");
-            btnAction.setOnAction(event -> {
-                if (army == null) {
-                    TextDecorator.makeErrorText(errorMsg);
-                    errorMsg.setText("Choose an army");
-                    return;
-                }
-
-                if (armySingleton.getAttacker() == null) {
-                    armySingleton.setAttacker(army);
-                    ButtonDecorator.makeListElementActive(btnPressedArmy);
-                    btnPressedArmy.setText("Attacker: " + btnPressedArmy.getText());
-                    btnPressedArmy = null;
-                } else {
-                    armySingleton.setDefender(army);
-                    GUI.setSceneFromActionEvent(event, "simulate");
-                }
-                updateHeader();
-                detailsWindow.setVisible(false);
-                army = null;
-            });
-        }
-
-        errorMsg = TextFactory.createSmallText("Info: army can be double-clicked");
-
-        //create back button
-        Button btnBack = ButtonFactory.createDefaultButton("Back");
-        btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
-
-        //add the buttons to the bottom bar
-        bottomBar.getChildren().addAll(errorMsg, btnBack, btnAction);
-        borderPane.setBottom(bottomBar);
+        ArmyFSH armyFSH = new ArmyFSH();
+        repaintArmies(armyFSH.getAllArmyFiles());
     }
 }

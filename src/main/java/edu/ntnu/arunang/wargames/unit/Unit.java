@@ -20,9 +20,9 @@ import java.util.Objects;
 public abstract class Unit implements Comparable<Unit> {
 
     private final String name;
-    private int healthPoints;
     private final int attackPoints;
     private final int armorPoints;
+    private int healthPoints;
 
     /**
      * Constructs the Unit with a given name, healthPoints and attackPoints and armorPoints
@@ -85,6 +85,7 @@ public abstract class Unit implements Comparable<Unit> {
         }
         opponent.hit(newHealthPoints);
     }
+
     public void attack(Unit opponent, Terrain terrain) throws IllegalStateException {
         int newHealthPoints = opponent.getHealthPoints() -
                 this.getAttackPoints() -

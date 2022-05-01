@@ -135,6 +135,24 @@ public class ArmyFSH implements FSH {
     }
 
     /**
+     * Load multiple files to a list.
+     *
+     * @param files files that are parsed
+     * @return parsed armies
+     * @throws IOException         if the file does not exist or could not be found
+     * @throws FileFormatException if one of the file has formatting issues
+     */
+
+    public List<Army> loadFromFiles(File[] files) throws IOException, FileFormatException {
+        List<Army> armies = new ArrayList<>();
+        for (File file : files) {
+            armies.add(this.loadFromFile(file));
+        }
+
+        return armies;
+    }
+
+    /**
      * Deletes an army from /resources/army.
      *
      * @param army army that is being deleted
@@ -218,5 +236,11 @@ public class ArmyFSH implements FSH {
         writer.write(army.toCsv());
         writer.flush();
         writer.close();
+    }
+
+    public File[] getAllArmyFiles() {
+        File folder = new File(FSH.getPathFromResources("army"));
+        File[] files = folder.listFiles();
+        return files;
     }
 }

@@ -5,7 +5,7 @@ import java.nio.file.FileSystems;
 
 /**
  * An interface for FileSystemHandlers in Wargames. This interface generalizes
- * FSH methods. This is an inteface every FSH class should have.
+ * FSH methods. This is an interface every FSH class should have.
  */
 
 public interface FSH {

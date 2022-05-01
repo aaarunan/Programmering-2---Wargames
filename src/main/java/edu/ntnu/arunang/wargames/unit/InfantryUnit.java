@@ -10,7 +10,7 @@ import edu.ntnu.arunang.wargames.Terrain;
  * armorPoints of 10,
  * attackBonus of 2,
  * resistBonus of 1
- *
+ * <p>
  * Terrain:
  * +2 attack - and resistbonus on FOREST
  */

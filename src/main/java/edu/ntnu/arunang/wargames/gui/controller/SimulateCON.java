@@ -10,7 +10,6 @@ import edu.ntnu.arunang.wargames.gui.factory.*;
 import edu.ntnu.arunang.wargames.observer.HitObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -27,12 +26,9 @@ import javafx.scene.text.Text;
  */
 
 public class SimulateCON {
-
     private final ArmySingleton armySingleton = ArmySingleton.getInstance();
-    @FXML
-    private Button btnFinish;
-    @FXML
     private Button btnStart;
+
     @FXML
     private VBox vBoxDetails;
     @FXML
@@ -45,82 +41,14 @@ public class SimulateCON {
     private Thread thread;
     private Army attacker = armySingleton.getAttacker().copy();
     private Army defender = armySingleton.getDefender().copy();
-
+    private Battle battle = new Battle(attacker, defender);
+    LineChart<Number, Number> barChart = ChartFactory.createBarChart(attacker, defender);
+    XYChart.Series<Number, Number> attackerData;
+    XYChart.Series<Number, Number> defenderData;
     private Text errorMsg;
-
     private Terrain terrain;
     private MenuButton menuTerrain;
-
-    private Battle battle = new Battle(attacker, defender);
-
     private HitObserver observer;
-
-    LineChart<Number, Number> barChart = ChartFactory.createBarChart(attacker, defender);
-
-    XYChart.Series<Number, Number> attackerData = barChart.getData().get(0);
-    XYChart.Series<Number, Number> defenderData = barChart.getData().get(1);
-
-    /**
-     * Finishes the simulation. Redirects to the mainpage and clears the singleton.
-     *
-     * @param event triggering event
-     */
-
-    void onFinish(ActionEvent event) {
-        armySingleton.clear();
-        GUI.setSceneFromActionEvent(event, "main");
-    }
-
-    /**
-     * Main process. Starts the simulation, and updates the gui accordingly.
-     */
-
-    void onStart(ActionEvent event) {
-        //quit if terrain is not choosen
-        if (this.terrain == null) {
-            errorMsg.setText("Choose a terrain.");
-            return;
-        }
-        errorMsg.setText("");
-
-        //logic for whether or not the button is restart or start
-        if (btnStart.getText().equals("Start")) {
-            btnStart.setText("Rollback");
-        } else if (btnStart.getText().equals("Rollback")) {
-            restart();
-            btnStart.setText("Start");
-            return;
-        }
-
-        observer = new HitObserver(attacker, defender, battle, this);
-
-        battle.simulate(4, terrain, this);
-    }
-
-    /**
-     * Initializes the gui elements and creates a barchart
-     */
-
-    @FXML
-    void initialize() {
-        //create barchart
-        mainContainer.getChildren().add(barChart);
-
-        //create bottombar
-        initBottomBar();
-
-        updateArmies();
-    }
-
-    /**
-     * Updates the barchart by getting the data from the armies.
-     */
-
-    public void updateBarChart(int i) {
-        //add the data to the barchart
-        attackerData.getData().add(new XYChart.Data<>(i, attacker.size()));
-        defenderData.getData().add(new XYChart.Data<>(i, defender.size()));
-    }
 
     /**
      * Update the gui with a winner and a loser army. Used when simulation is done.
@@ -141,6 +69,18 @@ public class SimulateCON {
         Text numOfAttacks = TextFactory.createSmallText("Number of attacks: " + battle.getNumOfAttacks());
 
         armyContainer.getChildren().addAll(txtTerrain, txtWinner, winnerArmy, txtLoser, loserArmy, numOfAttacks);
+        btnStart.setText("Rollback");
+        btnStart.setOnAction(this::onRollBack);
+    }
+
+    /**
+     * Updates the barchart by getting the data from the armies.
+     */
+
+    public void updateBarChart(int i) {
+        //add the data to the barchart
+        attackerData.getData().add(ChartFactory.createData(i, attacker.size()));
+        defenderData.getData().add(ChartFactory.createData(i, defender.size()));
     }
 
     /**
@@ -157,43 +97,132 @@ public class SimulateCON {
         armyContainer.getChildren().add(ContainerFactory.createArmyPane(defender));
     }
 
+
+    void onCleanChart(ActionEvent event) {
+        barChart.getData().clear();
+        createNewDataSeries();
+    }
+
+    public void createNewDataSeries() {
+        attackerData = ChartFactory.createDataSeries(attacker.getName() + " " + terrain);
+        defenderData = ChartFactory.createDataSeries(defender.getName() + " " + terrain);
+        barChart.getData().add(attackerData);
+        barChart.getData().add(defenderData);
+    }
+
+    void initBottomBar() {
+        HBox hBox = NavbarFactory.createBottomBar();
+
+        btnStart = ButtonFactory.createDefaultButton("Start");
+        btnStart.setOnAction(this::onStart);
+
+        Button btnFinish = ButtonFactory.createDefaultButton("Finish");
+        btnFinish.setOnAction(this::onFinish);
+
+        Button btnCleanChart = ButtonFactory.createDefaultButton("Clean");
+        btnCleanChart.setOnAction(this::onCleanChart);
+
+        borderPane.setBottom(hBox);
+        menuTerrain = ButtonFactory.createMenuButton("Choose terrain");
+
+        for (Terrain terrain : Terrain.values()) {
+            MenuItem menuItem = ButtonFactory.createMenuItem(terrain.toString());
+            menuItem.setOnAction(event -> onChooseTerrain(event, terrain));
+            menuTerrain.getItems().add(menuItem);
+        }
+
+        errorMsg = TextFactory.createSmallText("");
+        TextDecorator.makeErrorText(errorMsg);
+        VBox vbox = ContainerFactory.createCenteredVBox(300);
+        vbox.getChildren().add(menuTerrain);
+        hBox.getChildren().addAll(btnCleanChart, errorMsg, vbox, btnFinish, btnStart);
+
+    }
+
+    void onChooseTerrain(ActionEvent event, Terrain terrain) {
+        menuTerrain.setText(terrain.toString());
+        this.terrain = terrain;
+    }
+
+    /**
+     * Finishes the simulation. Redirects to the mainpage and clears the singleton.
+     *
+     * @param event triggering event
+     */
+
+    void onFinish(ActionEvent event) {
+        armySingleton.clear();
+        battle.stopSimulation();
+        if (thread !=null) {
+            thread.interrupt();
+        }
+        GUI.setSceneFromActionEvent(event, "main");
+    }
+
+    /**
+     * Main process. Starts the simulation, and updates the gui accordingly.
+     */
+
+    void onStart(ActionEvent event) {
+        //quit if terrain is not choosen
+        if (this.terrain == null) {
+            errorMsg.setText("Choose a terrain.");
+            return;
+        }
+        errorMsg.setText("");
+
+        observer = new HitObserver(attacker, defender, battle, this);
+
+        try {
+            thread = battle.simulate(2, terrain, this);
+        } catch (IllegalStateException e) {
+            AlertFactory.createError("Something went wrong! \n" + e.getMessage()).show();
+        } catch (Exception e) {
+            AlertFactory.createError("An unexpected error occured!\n" + e.getMessage());
+        }
+        createNewDataSeries();
+        btnStart.setText("Stop");
+        btnStart.setOnAction(this::onStop);
+    }
+
+    private void onStop(ActionEvent event) {
+        battle.stopSimulation();
+        btnStart.setText("Restart");
+        btnStart.setOnAction(this::onRestart);
+    }
+
     /**
      * Helper method for restarting the simulation. Gets the armies
      * from the singleton again and creates a new battle. Updates the gui
      * accordingly.
      */
 
-    void restart() {
+    void onRestart(ActionEvent event) {
+        onStart(event);
+        updateArmies();
+    }
+
+    private void onRollBack(ActionEvent event) {
         attacker = armySingleton.getAttacker().copy();
         defender = armySingleton.getDefender().copy();
         battle = new Battle(attacker, defender);
+        btnStart.setText("Start");
         updateArmies();
-        updateBarChart(0);
-    }
-
-    void initBottomBar() {
-        HBox hBox = ContainerFactory.createBottomBar();
-        btnStart = ButtonFactory.createDefaultButton("Start");
         btnStart.setOnAction(this::onStart);
-        btnFinish = ButtonFactory.createDefaultButton("Finish");
-        btnFinish.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
-        borderPane.setBottom(hBox);
-        menuTerrain = ButtonFactory.createMenuButton("Choose terrain");
-        for (Terrain terrain : Terrain.values()) {
-            MenuItem menuItem = ButtonFactory.createMenuItem(terrain.toString());
-            menuItem.setOnAction(event -> {
-                menuTerrain.setText(terrain.toString());
-                this.terrain = terrain;
-            });
-            menuTerrain.getItems().add(menuItem);
-        }
-
-        errorMsg = TextFactory.createSmallText("");
-        TextDecorator.makeErrorText(errorMsg);
-        VBox vbox = ContainerFactory.createVBoxElement(300);
-        vbox.getChildren().add(menuTerrain);
-        hBox.getChildren().addAll(errorMsg, vbox, btnFinish, btnStart);
-
     }
 
+    /**
+     * Initializes the gui elements and creates a barchart
+     */
+
+    @FXML
+    void initialize() {
+        //create barchart
+        mainContainer.getChildren().add(barChart);
+
+        //create bottombar
+        initBottomBar();
+
+        updateArmies();
+    }
 }

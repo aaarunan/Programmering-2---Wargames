@@ -7,15 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 /**
- * Controller for the mainpage
+ * Controller for the mainpage.
  */
 
 public class MainCON {
-
     private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     /**
-     * Redirect to the listarmy page and set simulate to false in the singleton.
+     * Redirect to the list- army page and set simulate to false in the singleton.
      *
      * @param event triggering event.
      */
@@ -45,12 +44,6 @@ public class MainCON {
     void onBtnSimulate(ActionEvent event) {
         armySingleton.setSimulate(true);
         GUI.setSceneFromActionEvent(event, "listArmy");
-        armySingleton.setSimulate(true);
-        /*
-        armySingleton.setAttacker(armySingleton.getArmies().get(0));
-        armySingleton.setDefender(armySingleton.getArmies().get(0));
-        GUI.setSceneFromActionEvent(event, "simulate");
-        */
     }
 
     /**
