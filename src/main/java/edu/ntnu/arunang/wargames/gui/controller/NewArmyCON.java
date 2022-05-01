@@ -4,7 +4,6 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
@@ -80,7 +79,6 @@ public class NewArmyCON {
      * @param event triggering event from button
      */
 
-    @FXML
     void onCancel(ActionEvent event) {
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
@@ -92,13 +90,13 @@ public class NewArmyCON {
      * @param event triggering event.
      */
 
-    @FXML
     void onSave(ActionEvent event) {
         ArmyFSH armyFSH = new ArmyFSH();
 
         txtErrorMsg.setText("");
         if (txtArmyName.getText().isBlank()) {
             txtErrorMsg.setText("Choose an army name");
+            return;
         }
 
         //checks if file exists
@@ -111,14 +109,6 @@ public class NewArmyCON {
                 return;
             }
         }
-        Army prevArmy;
-        try {
-            prevArmy = armyFSH.loadFromFile(new File(ArmyFSH.getPath(army.getName())));
-        } catch (IOException e) {
-            AlertFactory.createError("An unexpected error occured!\n" + e.getMessage()).show();
-            return;
-        }
-
         //Checks if the army can be written
         try {
             armyFSH.writeArmy(army);
@@ -130,7 +120,6 @@ public class NewArmyCON {
         }
 
         //removes the army from the singleton if successful, and adds the new army
-        armySingleton.removeArmy(prevArmy);
         armySingleton.addArmy(army);
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
@@ -234,7 +223,7 @@ public class NewArmyCON {
     void initBottomBar() {
         HBox hBox = NavbarFactory.createBottomBar();
         Button back = ButtonFactory.createDefaultButton("Cancel");
-        back.setOnAction(event -> GUI.setSceneFromActionEvent(event, "listArmy"));
+        back.setOnAction(this::onCancel);
         Button save = ButtonFactory.createDefaultButton("Save");
         save.setOnAction(this::onSave);
         hBox.getChildren().addAll(back, save);
