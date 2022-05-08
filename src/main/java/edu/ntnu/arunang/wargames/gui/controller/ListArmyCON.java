@@ -11,14 +11,15 @@ import edu.ntnu.arunang.wargames.gui.factory.*;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,8 @@ public class ListArmyCON {
     private BorderPane borderPane;
 
     private Army army;
+    private Army attacker;
+    private Army defender;
     private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     private Text errorMsg;
@@ -54,6 +57,7 @@ public class ListArmyCON {
 
     /**
      * Updates the details container. If the window is disabled it will be set to enabled.
+     *
      * It creates a detailed gridPane of the army stats, and a tableview of with every unit.
      */
 
@@ -90,9 +94,11 @@ public class ListArmyCON {
                 try {
                     this.army = armyFSH.loadFromFile(file);
                 } catch (IOException e) {
-                    AlertFactory.createError("Army could not be loaded...\n" + e.getMessage());
+                    AlertFactory.createError("Army could not be loaded...\n" + e.getMessage()).show();
+                    return;
                 } catch (FileFormatException e) {
-                    AlertFactory.createError("Army is wrongly formatted! \n" + e.getMessage());
+                    AlertFactory.createError("Army is wrongly formatted! \n" + e.getMessage()).show();
+                    return;
                 }
                 updatePressed(button);
                 repaintDetails();
@@ -143,7 +149,7 @@ public class ListArmyCON {
      */
 
     void initBottomBar() {
-        HBox bottomBar = NavbarFactory.createBottomBar();
+        ButtonBar bottomBar = NavbarFactory.createBottomBar();
         Button btnAction;
 
         //Change the buttons to the circumstances
@@ -163,7 +169,7 @@ public class ListArmyCON {
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
 
         //add the buttons to the bottom bar
-        bottomBar.getChildren().addAll(errorMsg, btnBack, btnAction);
+        bottomBar.getButtons().addAll(errorMsg, btnBack, btnAction);
         borderPane.setBottom(bottomBar);
     }
 
@@ -181,14 +187,20 @@ public class ListArmyCON {
             return;
         }
 
-        if (armySingleton.getAttacker() == null) {
-            armySingleton.setAttacker(army);
+        if (attacker == null) {
+            attacker = army;
             ButtonDecorator.makeListElementActive(btnPressedArmy);
             btnPressedArmy.setText("(Attacker) " + btnPressedArmy.getText());
             btnPressedArmy = null;
         } else {
-            armySingleton.setDefender(army);
-            GUI.setSceneFromActionEvent(event, "simulate");
+            defender = army;
+            FXMLLoader loader = GUI.initLoader(GUI.getPath("simulate"));
+            SimulateCON con = loader.getController();
+            con.setAttacker(attacker);
+            con.setDefender(defender);
+            Scene scene = btnPressedArmy.getScene();
+            Stage stage = (Stage) scene.getWindow();
+            stage.setScene(new Scene(loader.getRoot(), scene.getWidth(), scene.getHeight()));
         }
         repaintHeader();
         detailsWindow.setVisible(false);

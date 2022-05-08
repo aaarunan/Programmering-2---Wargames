@@ -1,9 +1,11 @@
-2. Globale variabler i jUnit tester?
-11. Tests on filetype
-12. tests on Unittype
-13. readme on GUIFactory builder and javafx controller.
-14. make guifactory not init
-15. feedback when choosing army
-16. stop threads after pressing finish
-17. fix choosen attacker when sorting
-18. bug where override message does not come up when not typing army name
+- Globale variabler i jUnit tester?
+- Tests on filetype
+- tests on Unittype
+- readme on GUIFactory builder and javafx controller.
+- make guifactory not init
+- bug where override message does not come up when not typing army name
+- filstruktur?
+- send inn liste med noder når man lager menubar
+- getUnits by type burde bruke enum
+- switch to combobox
+- fix updating text element rather than updating the entire gridpane

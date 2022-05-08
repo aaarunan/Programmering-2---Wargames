@@ -221,12 +221,13 @@ public class NewArmyCON {
      */
 
     void initBottomBar() {
-        HBox hBox = NavbarFactory.createBottomBar();
+        ButtonBar bottomBar = NavbarFactory.createBottomBar();
         Button back = ButtonFactory.createDefaultButton("Cancel");
         back.setOnAction(this::onCancel);
         Button save = ButtonFactory.createDefaultButton("Save");
         save.setOnAction(this::onSave);
-        hBox.getChildren().addAll(back, save);
-        borderPane.setBottom(hBox);
+        Button save1 = ButtonFactory.createDefaultButton("Save");
+        bottomBar.getButtons().addAll(back, save);
+        borderPane.setBottom(bottomBar);
     }
 }
