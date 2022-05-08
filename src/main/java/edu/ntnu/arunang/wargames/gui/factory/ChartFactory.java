@@ -4,6 +4,9 @@ import edu.ntnu.arunang.wargames.Army;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 /**
  * Factory for creating charts, and chart elements.
@@ -36,15 +39,17 @@ public class ChartFactory {
         }
         yAxis.setUpperBound(size + 5);
 
-        LineChart<Number, Number> barChart = new LineChart<Number, Number>(xAxis, yAxis);
+        LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
 
-        barChart.setCreateSymbols(false);
+        lineChart.setCreateSymbols(false);
         //can be turned off for performance
-        barChart.setAnimated(true);
-        barChart.setHorizontalGridLinesVisible(false);
-        barChart.setVerticalGridLinesVisible(false);
+        lineChart.setAnimated(false);
+        lineChart.setHorizontalGridLinesVisible(false);
+        lineChart.setVerticalGridLinesVisible(false);
 
-        return barChart;
+        VBox.setVgrow(lineChart, Priority.ALWAYS);
+
+        return lineChart;
     }
 
     /**

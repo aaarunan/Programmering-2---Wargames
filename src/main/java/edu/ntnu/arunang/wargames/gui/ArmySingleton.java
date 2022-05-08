@@ -9,7 +9,6 @@ import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -90,26 +89,6 @@ public class ArmySingleton {
 
         ArmySingleton.armies = new ArrayList<>();
         ArmySingleton.armies.addAll(armies);
-    }
-
-    /**
-     * Get the armies sorted by count.
-     *
-     * @return List sorted by count
-     */
-
-    public List<Army> getArmiesSortedByCount() {
-        return armies.stream().sorted(Comparator.comparingInt(Army::size)).toList();
-    }
-
-    /**
-     * Get the armies sorted by name
-     *
-     * @return List sorted by name
-     */
-
-    public List<Army> getArmiesSortedByName() {
-        return armies.stream().sorted(Comparator.comparing(Army::getName)).toList();
     }
 
     /**

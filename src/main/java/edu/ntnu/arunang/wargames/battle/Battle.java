@@ -1,9 +1,15 @@
-package edu.ntnu.arunang.wargames;
+package edu.ntnu.arunang.wargames.battle;
 
-import edu.ntnu.arunang.wargames.gui.controller.SimulateCON;
+import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.observer.EventType;
 import edu.ntnu.arunang.wargames.observer.Subject;
 import edu.ntnu.arunang.wargames.unit.Unit;
-import javafx.application.Platform;
+
+import java.util.TimerTask;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * A Battle is a battlefield where two armies can fight.
@@ -12,11 +18,9 @@ import javafx.application.Platform;
 
 public class Battle extends Subject {
 
-    private static boolean exit = false;
+    private boolean exit = false;
     private Army attacker;
     private Army defender;
-    private Army winner;
-    private Army loser;
     private int numOfAttacks = 0;
 
     /**
@@ -29,7 +33,6 @@ public class Battle extends Subject {
     public Battle(Army attacker, Army defender) {
         this.attacker = attacker;
         this.defender = defender;
-
     }
 
     /**
@@ -47,10 +50,10 @@ public class Battle extends Subject {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
         while (attacker.hasUnits() && defender.hasUnits()) {
-            attack();
+            attack(null);
         }
 
-        return getConclusion();
+        return attacker.hasUnits() ? attacker : defender;
     }
 
     /**
@@ -66,37 +69,23 @@ public class Battle extends Subject {
      * @throws IllegalStateException if the armies has no Units.
      */
 
-    public Thread simulate(int delay, Terrain terrain, SimulateCON simulateCON) {
+    public Army simulate(int delayMilliseconds, Terrain terrain) {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
+        if (terrain == null) {
+            throw new IllegalArgumentException("Terrain is null.");
+        }
         exit = false;
-        Thread thread = new Thread(() -> {
-            while (attacker.hasUnits() && defender.hasUnits() && !exit) {
-                if (numOfAttacks % 10 == 0) {
-                    Platform.runLater(() -> {
-                        simulateCON.updateBarChart(numOfAttacks);
-                        simulateCON.updateArmies();
-                    });
-                }
-                attack(terrain);
+        while (attacker.hasUnits() && defender.hasUnits() && !exit) {
+            attack(terrain);
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(delayMilliseconds));
+        }
 
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            getConclusion();
-            if (!exit) {
-                Platform.runLater(() -> {
-                    simulateCON.updateArmies(winner, loser);
-                    simulateCON.updateBarChart(numOfAttacks);
-                });
-            }
-        });
-        thread.start();
-        return thread;
+        if (!exit) {
+            notifyObservers(EventType.FINISH);
+        }
+        return attacker.hasUnits() ? attacker : defender;
     }
 
     /**
@@ -108,17 +97,23 @@ public class Battle extends Subject {
     }
 
     /**
-     * Helper method for simulation. Simulates one step, or one attack.
+     * Attack once. Random unit from attacker army
+     * attacks a random defender unit. The armies get swapped.
+     *
+     * @param terrain the terrain the battle is happening in
      */
 
-    private void attack() {
-        notifyObservers();
-
+    private void attack(Terrain terrain) {
         Army temp;
         Unit attackerUnit = attacker.getRandom();
         Unit defenderUnit = defender.getRandom();
 
-        attackerUnit.attack(defenderUnit);
+        if (terrain == null) {
+            attackerUnit.attack(defenderUnit);
+        } else {
+            attackerUnit.attack(defenderUnit, terrain);
+        }
+        notifyObservers(EventType.UPDATE);
 
         if (defenderUnit.isDead()) {
             defender.remove(defenderUnit);
@@ -131,31 +126,8 @@ public class Battle extends Subject {
         numOfAttacks++;
     }
 
-    /**
-     * Attack once. Random unit from attacker army
-     * attacks a random defender unit. The armies get swapped.
-     *
-     * @param terrain the terrain the battle is happening in
-     */
-
-    private void attack(Terrain terrain) {
-        notifyObservers();
-
-        Army temp;
-        Unit attackerUnit = attacker.getRandom();
-        Unit defenderUnit = defender.getRandom();
-
-        attackerUnit.attack(defenderUnit, terrain);
-
-        if (defenderUnit.isDead()) {
-            defender.remove(defenderUnit);
-        }
-
-        temp = attacker;
-        attacker = defender;
-        defender = temp;
-
-        numOfAttacks++;
+    public Battle copy() {
+       return new Battle(this.attacker.copy(), this.defender.copy());
     }
 
     /**
@@ -176,7 +148,10 @@ public class Battle extends Subject {
      */
 
     public Army getLoser() {
-        return loser;
+        if (attacker.hasUnits() && defender.hasUnits()) {
+            return null;
+        }
+        return attacker.hasUnits() ? defender : attacker;
     }
 
 
@@ -187,7 +162,10 @@ public class Battle extends Subject {
      */
 
     public Army getWinner() {
-        return winner;
+        if (attacker.hasUnits() && defender.hasUnits()) {
+           return null;
+        }
+        return attacker.hasUnits() ? attacker : defender;
     }
 
     /**
@@ -195,18 +173,6 @@ public class Battle extends Subject {
      *
      * @return winning army
      */
-
-    private Army getConclusion() {
-        if (attacker.hasUnits()) {
-            winner = attacker;
-            loser = defender;
-        } else {
-            winner = defender;
-            loser = attacker;
-        }
-
-        return winner;
-    }
 
     @Override
     public String toString() {

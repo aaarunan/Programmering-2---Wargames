@@ -3,23 +3,23 @@ package edu.ntnu.arunang.wargames.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject {
-    List<Observer> observers;
+public abstract class Subject {
+    List<EventListener> observers;
 
     public Subject() {
         observers = new ArrayList<>();
     }
 
-    public void attach(Observer observer) {
+    public void attach(EventListener observer) {
         observers.add(observer);
     }
 
-    public void detach(Observer observer) {
+    public void detach(EventListener observer) {
         observers.remove(observer);
     }
 
-    public void notifyObservers() {
-        observers.forEach(Observer::update);
+    public void notifyObservers(EventType eventtype) {
+        observers.forEach(observer -> observer.update(eventtype));
     }
 
 }

@@ -6,7 +6,7 @@ package edu.ntnu.arunang.wargames.fsh;
  * formatted or empty can be given by the user, and should not break the program.
  */
 
-public class FileFormatException extends RuntimeException {
+public class FileFormatException extends Exception {
 
     /**
      * Constructs the Exception with a message

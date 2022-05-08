@@ -104,6 +104,8 @@
 }
 
 .grid-pane {
+    -fx-background-color: #007EA7 ;
+    -fx-background-radius: 6px;
     -fx-hgap: 10px;
     -fx-vgap: 10px;
     -fx-padding: 20px;

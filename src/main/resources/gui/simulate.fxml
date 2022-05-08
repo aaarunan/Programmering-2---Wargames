@@ -2,35 +2,41 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.SimulateCON">
     <center>
-      <VBox>
+      <TabPane>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </BorderPane.margin>
-         <children>
-            <HBox>
-               <children>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Simulate">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Text>
-               </children>
-            </HBox>
-              <HBox fx:id="mainContainer" alignment="CENTER" VBox.vgrow="ALWAYS">
-                  <children>
-                      <VBox fx:id="armyContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0" />
-                      <VBox fx:id="vBoxDetails" alignment="CENTER" prefHeight="323.0" prefWidth="196.0" />
-                  </children>
-              </HBox>
-         </children>
-      </VBox>
+         <tabs>
+            <Tab text="Sinulering">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox fx:id="infoContainer" prefHeight="38.0" prefWidth="560.0" />
+                        <HBox>
+                           <children>
+                                  <VBox fx:id="attackerArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                              <VBox fx:id="defenderArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Graf">
+               <content>
+                      <VBox fx:id="mainContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0" />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
     </center>
     <stylesheets>
         <URL value="@css/main.css" />

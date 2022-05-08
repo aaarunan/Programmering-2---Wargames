@@ -4,7 +4,6 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,8 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 /**
  * Factory for creating various graphical containers.
@@ -90,6 +87,7 @@ public class ContainerFactory {
     /**
      * Creates a VBox with alignment center. If the width is lower than 0,
      * the widht will be set to fit width.
+     *
      * @param width
      * @return
      */
@@ -116,24 +114,7 @@ public class ContainerFactory {
      */
 
     public static GridPane createArmyPane(Army army) {
-        GridPane gridPane = new GridPane();
-
-        //add the header texts
-        gridPane.add(createSmallText("Count:"), 0, 0, 1, 1);
-        gridPane.add(createSmallText("Average HP:"), 0, 1, 1, 1);
-        gridPane.add(createSmallText("Average armor:"), 0, 2, 1, 1);
-        gridPane.add(createSmallText("Average attack:"), 0, 3, 1, 1);
-
-        //Add the data
-        gridPane.add(createSmallText(Integer.toString(army.size())), 1, 0, 1, 1);
-        gridPane.add(createSmallText(String.format("%.2f", army.getAverageHealthPoints())), 1, 1, 1, 1);
-        gridPane.add(createSmallText(String.format("%.2f", army.getAverageArmorPoints())), 1, 2, 1, 1);
-        gridPane.add(createSmallText(String.format("%.2f", army.getAverageAttackPoints())), 1, 3, 1, 1);
-
-        //add the css
-        gridPane.getStyleClass().add("grid-pane");
-
-        return gridPane;
+        return new ArmyContainer(army);
     }
 
     public Pane makeSpacerPane() {

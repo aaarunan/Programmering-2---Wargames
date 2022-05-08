@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -31,11 +32,11 @@ public class GUI extends Application {
 
     public static void setSceneFromNode(Node node, String page) {
         Stage stage = (Stage) node.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = initLoader(getPath(page));
 
         Scene prev = node.getScene();
         loader.setLocation(getPath(page));
-        Parent root = GUI.checkFXMLLoader(loader);
+        Parent root = loader.getRoot();
         Scene scene = new Scene(root, prev.getWidth(), prev.getHeight());
 
         stage.setScene(scene);
@@ -49,9 +50,8 @@ public class GUI extends Application {
      */
 
     public static void setSceneFromStage(Stage stage, String page, boolean maximized) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getPath(page));
-        stage.setScene(new Scene(checkFXMLLoader(loader)));
+        FXMLLoader loader = initLoader(getPath(page));
+        stage.setScene(new Scene(loader.getRoot()));
         stage.setMinHeight(STAGE_MIN_HEIGHT);
         stage.setMinWidth(STAGE_MIN_WIDTH);
         stage.setMaximized(maximized);
@@ -68,9 +68,9 @@ public class GUI extends Application {
      */
 
     public static void setSceneFromActionEvent(ActionEvent actionEvent, String page) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getPath(page));
-        Parent root = checkFXMLLoader(loader);
+        FXMLLoader loader = initLoader(getPath(page));
+        Parent root = loader.getRoot();
+
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene prev = ((Node) actionEvent.getSource()).getScene();
         stage.setScene(new Scene(root, prev.getWidth(), prev.getHeight()));
@@ -80,15 +80,16 @@ public class GUI extends Application {
      * This is a helper method that checks the loader for exceptions and returns
      * the Parent if successful. This is for easy troubleshooting.
      *
-     * @param loader the FXMLloader that is being checked
+     * @param url the url that is added to the loader
      * @return the loaded Parent
      */
 
-    protected static Parent checkFXMLLoader(FXMLLoader loader) {
-        Parent root = null;
+    public static FXMLLoader initLoader(URL url)  {
+        FXMLLoader loader = null;
 
         try {
-            root = loader.load();
+            loader = new FXMLLoader(url);
+            loader.load();
         } catch (java.io.IOException e) {
             System.out.println("Could not load XML file... Check the controller class for " + e.getMessage());
             System.out.println("Stack Trace:");
@@ -106,13 +107,13 @@ public class GUI extends Application {
         }
 
         //throw new exceptions to not get NullPointerException down the line
-        if (root == null) {
+        if (loader == null) {
             throw new IllegalStateException("Root is null");
         }
-        return root;
+        return loader;
     }
 
-    protected static URL getPath(String page) {
+    public static URL getPath(String page) {
         return GUI.class.getResource("/gui/" + page + ".fxml");
     }
 

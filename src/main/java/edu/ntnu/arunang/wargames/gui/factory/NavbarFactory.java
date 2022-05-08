@@ -1,6 +1,7 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.HBox;
 
 /**
@@ -16,11 +17,10 @@ public class NavbarFactory {
      * @return HBox
      */
 
-    public static HBox createBottomBar() {
-        HBox hBox = new HBox();
+    public static ButtonBar createBottomBar() {
+        ButtonBar buttonBar = new ButtonBar();
         //sets the alignment
-        hBox.setAlignment(Pos.CENTER_RIGHT);
-        hBox.setPrefHeight(50);
-        return hBox;
+        buttonBar.setPrefHeight(50);
+        return buttonBar;
     }
 }

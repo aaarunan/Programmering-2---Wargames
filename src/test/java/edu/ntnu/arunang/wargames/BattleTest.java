@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames;
 
+import edu.ntnu.arunang.wargames.battle.Battle;
 import edu.ntnu.arunang.wargames.unit.CavalryUnit;
 import edu.ntnu.arunang.wargames.unit.CommanderUnit;
 import edu.ntnu.arunang.wargames.unit.InfantryUnit;
