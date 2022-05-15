@@ -167,8 +167,8 @@ public class Army {
      * @return double containing the average healthpoints
      */
 
-    public double getAverageHealthPoints() {
-        return this.units.stream().mapToDouble(Unit::getHealthPoints).sum() / units.size();
+    public int getTotalHealthPoints() {
+        return this.units.stream().mapToInt(Unit::getHealthPoints).sum();
     }
 
     /**
@@ -177,8 +177,8 @@ public class Army {
      * @return double containing the average healthpoints
      */
 
-    public double getAverageAttackPoints() {
-        return this.units.stream().mapToDouble(Unit::getAttackPoints).sum() / units.size();
+    public int getTotalAttackPoints() {
+        return this.units.stream().mapToInt(Unit::getAttackPoints).sum();
     }
 
     /**
@@ -187,8 +187,8 @@ public class Army {
      * @return double containing the average healthpoints
      */
 
-    public double getAverageArmorPoints() {
-        return this.units.stream().mapToDouble(Unit::getArmorPoints).sum() / units.size();
+    public int getTotalArmorPoints() {
+        return this.units.stream().mapToInt(Unit::getArmorPoints).sum();
     }
 
     /**

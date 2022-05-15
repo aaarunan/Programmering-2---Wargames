@@ -4,6 +4,7 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
+import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
@@ -54,6 +55,9 @@ public class NewArmyCON {
     private BorderPane borderPane;
 
     private final Army army = new Army("Army name");
+
+    private ArmyContainer armyGridPane = new ArmyContainer(army);
+
     private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     /**
@@ -101,7 +105,7 @@ public class NewArmyCON {
 
         //checks if file exists
         if (armyFSH.fileExists(new File(ArmyFSH.getPath(army.getName())))) {
-            Alert alert = AlertFactory.createWarning(String.format("Army '%s' already exists, do you want to override it?", army.getName()));
+            Alert alert = AlertFactory.createConfirmation(String.format("Army '%s' already exists, do you want to override it?", army.getName()));
             Optional<ButtonType> result = alert.showAndWait();
 
             //cancels the process if the user declines
@@ -189,7 +193,6 @@ public class NewArmyCON {
         ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
         ContainerFactory.initTableViewUnits(tableUnits);
         initBottomBar();
-        repaintDetails();
     }
 
     /**
@@ -197,8 +200,7 @@ public class NewArmyCON {
      */
 
     void repaintDetails() {
-        armyContainer.getChildren().clear();
-        armyContainer.getChildren().add(ContainerFactory.createArmyPane(army));
+        armyGridPane.updateData(army);
     }
 
     /**
@@ -221,13 +223,13 @@ public class NewArmyCON {
      */
 
     void initBottomBar() {
-        ButtonBar bottomBar = NavbarFactory.createBottomBar();
+        HBox bottomBar = NavbarFactory.createBottomBar();
         Button back = ButtonFactory.createDefaultButton("Cancel");
         back.setOnAction(this::onCancel);
         Button save = ButtonFactory.createDefaultButton("Save");
         save.setOnAction(this::onSave);
         Button save1 = ButtonFactory.createDefaultButton("Save");
-        bottomBar.getButtons().addAll(back, save);
+        bottomBar.getChildren().addAll(back, save);
         borderPane.setBottom(bottomBar);
     }
 }

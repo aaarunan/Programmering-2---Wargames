@@ -177,7 +177,7 @@ public class ArmyTest {
 
         army.add(new CavalryUnit("yo", 10), 10);
 
-        assertEquals(20, army.getAverageAttackPoints());
+        assertEquals(20, army.getTotalAttackPoints());
     }
 
     @Test
@@ -187,7 +187,7 @@ public class ArmyTest {
 
         army.add(new CavalryUnit("yo", 10), 10);
 
-        assertEquals(12, army.getAverageArmorPoints());
+        assertEquals(12, army.getTotalArmorPoints());
     }
 
     @Test
@@ -197,6 +197,6 @@ public class ArmyTest {
 
         army.add(new CavalryUnit("yo", 10), 10);
 
-        assertEquals(10, army.getAverageHealthPoints());
+        assertEquals(10, army.getTotalHealthPoints());
     }
 }

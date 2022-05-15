@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.observer;
+package edu.ntnu.arunang.wargames.event;
 
 public interface EventListener {
 

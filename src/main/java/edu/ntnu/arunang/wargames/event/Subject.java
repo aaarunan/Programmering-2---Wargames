@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.observer;
+package edu.ntnu.arunang.wargames.event;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,12 +2,10 @@ package edu.ntnu.arunang.wargames.battle;
 
 import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.Terrain;
-import edu.ntnu.arunang.wargames.observer.EventType;
-import edu.ntnu.arunang.wargames.observer.Subject;
+import edu.ntnu.arunang.wargames.event.EventType;
+import edu.ntnu.arunang.wargames.event.Subject;
 import edu.ntnu.arunang.wargames.unit.Unit;
 
-import java.util.TimerTask;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
@@ -19,8 +17,13 @@ import java.util.concurrent.locks.LockSupport;
 public class Battle extends Subject {
 
     private boolean exit = false;
+    private int delay;
+
     private Army attacker;
     private Army defender;
+
+    private Terrain terrain;
+
     private int numOfAttacks = 0;
 
     /**
@@ -30,9 +33,10 @@ public class Battle extends Subject {
      * @param defender defending Army.
      */
 
-    public Battle(Army attacker, Army defender) {
+    public Battle(Army attacker, Army defender, Terrain terrain) {
         this.attacker = attacker;
         this.defender = defender;
+        this.terrain = terrain;
     }
 
     /**
@@ -69,14 +73,17 @@ public class Battle extends Subject {
      * @throws IllegalStateException if the armies has no Units.
      */
 
-    public Army simulate(int delayMilliseconds, Terrain terrain) {
+    public Army simulateDelayWithTerrain(int delayMilliseconds) {
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have atleast one unit.");
         }
         if (terrain == null) {
             throw new IllegalArgumentException("Terrain is null.");
         }
+
+        this.delay = delayMilliseconds;
         exit = false;
+
         while (attacker.hasUnits() && defender.hasUnits() && !exit) {
             attack(terrain);
             LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(delayMilliseconds));
@@ -94,6 +101,13 @@ public class Battle extends Subject {
 
     public void stopSimulation() {
         exit = true;
+    }
+
+    public void continueSimulation() {
+        if (exit) {
+            exit = false;
+            this.simulateDelayWithTerrain(delay);
+        }
     }
 
     /**
@@ -127,7 +141,7 @@ public class Battle extends Subject {
     }
 
     public Battle copy() {
-       return new Battle(this.attacker.copy(), this.defender.copy());
+        return new Battle(this.attacker.copy(), this.defender.copy(), this.terrain);
     }
 
     /**
@@ -163,9 +177,17 @@ public class Battle extends Subject {
 
     public Army getWinner() {
         if (attacker.hasUnits() && defender.hasUnits()) {
-           return null;
+            return null;
         }
         return attacker.hasUnits() ? attacker : defender;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 
     /**

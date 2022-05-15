@@ -15,22 +15,32 @@
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </BorderPane.margin>
          <tabs>
-            <Tab text="Sinulering">
+            <Tab closable="false" text="Main">
                <content>
                   <VBox>
                      <children>
-                        <HBox fx:id="infoContainer" prefHeight="38.0" prefWidth="560.0" />
+                        <VBox fx:id="infoContainer" />
                         <HBox>
                            <children>
-                                  <VBox fx:id="attackerArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                              <VBox fx:id="defenderArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                  <VBox fx:id="attackerArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding></VBox>
+                              <VBox fx:id="defenderArmyContainer" prefHeight="351.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding></VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </HBox>
+                        <VBox layoutX="10.0" layoutY="10.0" />
                      </children>
                   </VBox>
                </content>
             </Tab>
-            <Tab closable="false" text="Graf">
+            <Tab closable="false" text="Graph">
                <content>
                       <VBox fx:id="mainContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0" />
                </content>

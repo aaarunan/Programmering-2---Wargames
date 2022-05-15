@@ -10,5 +10,5 @@ open module edu.ntnu.arunang.wargames {
     exports edu.ntnu.arunang.wargames.gui.controller;
     exports edu.ntnu.arunang.wargames.gui.factory;
     exports edu.ntnu.arunang.wargames.battle;
-    exports edu.ntnu.arunang.wargames.observer;
+    exports edu.ntnu.arunang.wargames.event;
 }

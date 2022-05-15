@@ -1,6 +1,7 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
 import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
@@ -105,17 +106,6 @@ public class ContainerFactory {
         return vbox;
     }
 
-
-    /**
-     * Crate a gridpane to show stats about an army. Used to show details about an army.
-     *
-     * @param army the details shown
-     * @return gridPane element
-     */
-
-    public static GridPane createArmyPane(Army army) {
-        return new ArmyContainer(army);
-    }
 
     public Pane makeSpacerPane() {
         Pane pane = new Pane();

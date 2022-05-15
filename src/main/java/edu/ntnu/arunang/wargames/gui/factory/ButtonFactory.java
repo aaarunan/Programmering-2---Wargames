@@ -1,9 +1,12 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import edu.ntnu.arunang.wargames.Terrain;
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
+import javafx.scene.control.*;
+
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 /**
  * Factory for creating clickable elements.
@@ -25,10 +28,10 @@ public class ButtonFactory {
         return button;
     }
 
-    public static MenuButton createMenuButton(String string) {
-        MenuButton menuButton = new MenuButton(string);
-        menuButton.getStyleClass().add("menu-button");
-        return menuButton;
+    public static <T> ComboBox<T> createMenuButton(T[] values) {
+        ComboBox<T> comboBox = new ComboBox(FXCollections.observableArrayList(values));
+        comboBox.getStyleClass().add("menu-button");
+        return comboBox;
     }
 
     /**

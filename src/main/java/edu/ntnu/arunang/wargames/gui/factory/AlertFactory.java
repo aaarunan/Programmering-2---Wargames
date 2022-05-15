@@ -34,6 +34,13 @@ public class AlertFactory {
         return new Alert(Alert.AlertType.ERROR, message);
     }
 
+    public static Alert createInformation(String message) {
+        return new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+    }
+
+    public static Alert createConfirmation(String message) {
+        return new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.CANCEL);
+    }
     public static void showJOptionPaneError(String message) {
         JOptionPane.showMessageDialog(null, message, "Hey!", JOptionPane.ERROR_MESSAGE);
     }

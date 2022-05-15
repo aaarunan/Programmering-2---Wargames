@@ -1,8 +1,8 @@
 package edu.ntnu.arunang.wargames.battle;
 
 import edu.ntnu.arunang.wargames.gui.controller.SimulateCON;
-import edu.ntnu.arunang.wargames.observer.EventType;
-import edu.ntnu.arunang.wargames.observer.EventListener;
+import edu.ntnu.arunang.wargames.event.EventType;
+import edu.ntnu.arunang.wargames.event.EventListener;
 import javafx.application.Platform;
 
 public class AttackObserver implements EventListener {
