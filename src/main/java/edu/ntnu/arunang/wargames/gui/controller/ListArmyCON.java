@@ -5,6 +5,7 @@ import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
+import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
@@ -12,14 +13,18 @@ import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +62,7 @@ public class ListArmyCON {
 
     /**
      * Updates the details container. If the window is disabled it will be set to enabled.
-     *
+     * <p>
      * It creates a detailed gridPane of the army stats, and a tableview of with every unit.
      */
 
@@ -69,7 +74,7 @@ public class ListArmyCON {
         //update the army fields
         txtArmyName.setText(army.getName());
         armyDetails.getChildren().clear();
-        armyDetails.getChildren().add(ContainerFactory.createArmyPane(army));
+        armyDetails.getChildren().add(new ArmyContainer(army).getGridPane());
         army.getUnits().forEach(unit -> tableUnits.getItems().add(unit));
     }
 
@@ -120,12 +125,14 @@ public class ListArmyCON {
             ButtonDecorator.makeListElementDefault(btnPressedArmy);
         }
 
-        if (!army.equals(armySingleton.getAttacker())) {
+        if (!army.equals(attacker)) {
             ButtonDecorator.makeListElementHighlighted(button);
+            isAttacker = false;
+        } else {
+            isAttacker = true;
         }
 
         btnPressedArmy = button;
-        isAttacker = army.equals(armySingleton.getAttacker());
     }
 
     /**
@@ -135,7 +142,7 @@ public class ListArmyCON {
 
     void repaintHeader() {
         if (armySingleton.isSimulate()) {
-            if (armySingleton.getAttacker() == null) {
+            if (attacker == null) {
                 title.setText("Choose attacker");
             } else {
                 title.setText("Choose defender");
@@ -149,28 +156,74 @@ public class ListArmyCON {
      */
 
     void initBottomBar() {
-        ButtonBar bottomBar = NavbarFactory.createBottomBar();
-        Button btnAction;
-
-        //Change the buttons to the circumstances
-        if (!armySingleton.isSimulate()) {
-            btnAction = ButtonFactory.createDefaultButton("New army");
-            btnAction.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
-        } else {
-            btnAction = ButtonFactory.createDefaultButton("Continue");
-            btnAction.setOnAction(this::onContinue);
-        }
-
-        //initialize error message
-        errorMsg = TextFactory.createSmallText("Info: army can be double-clicked");
-
+        HBox bottomBar = NavbarFactory.createBottomBar();
         //create back button
         Button btnBack = ButtonFactory.createDefaultButton("Back");
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
 
+        errorMsg = TextFactory.createSmallText("");
+
+        bottomBar.getChildren().addAll(errorMsg, btnBack);
+
         //add the buttons to the bottom bar
-        bottomBar.getButtons().addAll(errorMsg, btnBack, btnAction);
         borderPane.setBottom(bottomBar);
+
+        //Change the buttons to the circumstances
+        if (!armySingleton.isSimulate()) {
+
+            Button btnNewArmy = ButtonFactory.createDefaultButton("New army");
+            btnNewArmy.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
+
+            Button btnImportArmy = ButtonFactory.createDefaultButton("Import army");
+            btnImportArmy.setOnAction(this::importArmy);
+
+            bottomBar.getChildren().addAll(btnImportArmy, btnNewArmy);
+
+            return;
+        }
+
+        Button btnContinue = ButtonFactory.createDefaultButton("Continue");
+        btnContinue.setOnAction(this::onContinue);
+
+        bottomBar.getChildren().add(btnContinue);
+    }
+
+    private void importArmy(ActionEvent actionEvent) {
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(((Node) actionEvent.getSource()).getScene().getWindow());
+
+        if (file == null) {
+            return;
+        }
+
+        Army army;
+        try {
+            army = armyFSH.loadFromFile(file);
+        } catch (FileFormatException e) {
+            AlertFactory.createError("The file is wrongly formatted! \n" + e.getMessage()).show();
+            return;
+        } catch (IOException e) {
+            AlertFactory.createError("An error occured when opening the file!\n" + e.getMessage()).show();
+            return;
+        }
+
+        if (armyFSH.fileExists(file)) {
+            Optional<ButtonType> result = AlertFactory.createConfirmation("This army already exists, do you want to override it?").showAndWait();
+            if (result.get() != ButtonType.YES) {
+                return;
+            }
+        }
+        try {
+            armyFSH.writeArmy(army);
+        } catch (IOException e) {
+            AlertFactory.createError("An error occured when writing the army!\n" + e.getMessage()).show();
+            return;
+        }
+        repaintArmies(armyFSH.getAllArmyFiles());
+
+        AlertFactory.createInformation("Import successful").show();
     }
 
     /**
@@ -216,7 +269,7 @@ public class ListArmyCON {
     void onDelete() {
         ArmyFSH armyFSH = new ArmyFSH();
         //get the result of the popup
-        Optional<ButtonType> result = AlertFactory.createWarning("Are you sure you want to delete army?").showAndWait();
+        Optional<ButtonType> result = AlertFactory.createConfirmation("Are you sure you want to delete army?").showAndWait();
 
         if (result.get() == ButtonType.CANCEL) {
             return;
@@ -248,6 +301,7 @@ public class ListArmyCON {
         detailsWindow.setVisible(false);
         ContainerFactory.initTableViewUnits(tableUnits);
         initBottomBar();
+
         ArmyFSH armyFSH = new ArmyFSH();
         repaintArmies(armyFSH.getAllArmyFiles());
     }
