@@ -301,7 +301,17 @@ public class Army {
 
     public Map<Unit, Integer> getMap() {
         Map<Unit, Integer> army = new HashMap<>();
-        this.units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+        units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+        return army;
+    }
+
+    public Map<Unit, Integer> getCondensedMap() {
+        Map<Unit, Integer> army = new HashMap<>();
+        for (Unit unit : units) {
+            Unit copy = unit.getResetCopy();
+            copy.setHealthPoints(1);
+            army.merge(copy, 1, Integer::sum);
+        }
 
         return army;
     }

@@ -6,6 +6,7 @@ import edu.ntnu.arunang.wargames.battle.AttackObserver;
 import edu.ntnu.arunang.wargames.battle.Battle;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
+import edu.ntnu.arunang.wargames.gui.container.UnitInformationContainer;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
 import javafx.application.Platform;
@@ -16,12 +17,14 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Controller for the simulation page.
@@ -39,6 +42,8 @@ public class SimulateCON {
     private VBox defenderArmyContainer;
     @FXML
     private VBox infoContainer;
+    @FXML
+    private VBox attackerUnitsWindow, defenderUnitsWindow;
 
     private Thread thread;
 
@@ -70,11 +75,16 @@ public class SimulateCON {
     private ArmyContainer attackerDetails;
     private ArmyContainer defenderDetails;
 
+    private UnitInformationContainer attackerUnitsContainer;
+    private UnitInformationContainer defenderUnitsContainer;
+
     private long lastTextUpdate = new Date().getTime();
     private long lastGraphicUpdate = new Date().getTime();
 
-    private int updateGraphicsDelta = 40;
-    private int updateTextDelta = 100;
+    private int delay = 1;
+
+    private int updateGraphicsDelta = 100;
+    private int updateTextDelta = 40;
 
     /**
      * Updates the barchart by getting the data from the armies.
@@ -90,10 +100,15 @@ public class SimulateCON {
      * Update the army under simulation.
      */
 
-    private void repaintDetails() {
+    private void repaintArmyInformation() {
         //clear the container before adding
-        attackerDetails.updateData(attacker);
-        defenderDetails.updateData(defender);
+        attackerDetails.updateData();
+        defenderDetails.updateData();
+    }
+
+    private void repaintUnitInformation() {
+        attackerUnitsContainer.updateContainer();
+        defenderUnitsContainer.updateContainer();
     }
 
 
@@ -162,9 +177,10 @@ public class SimulateCON {
         }
         txtErrorMsg.setText("");
 
+
         try {
             battle.setTerrain(terrain);
-            thread = new Thread(() -> battle.simulateDelayWithTerrain(2));
+            thread = new Thread(() -> battle.simulateDelayWithTerrain(delay));
             thread.start();
         } catch (IllegalStateException | IllegalArgumentException e) {
             AlertFactory.createError("Something went wrong! \n" + e.getMessage()).show();
@@ -173,6 +189,14 @@ public class SimulateCON {
             AlertFactory.createError("An unexpected error occured!\n" + e.getMessage()).show();
             return;
         }
+        attackerUnitsContainer = new UnitInformationContainer(attacker, true);
+        defenderUnitsContainer = new UnitInformationContainer(defender, true);
+
+        attackerUnitsWindow.getChildren().clear();
+        defenderUnitsWindow.getChildren().clear();
+
+        attackerUnitsWindow.getChildren().add(attackerUnitsContainer.getFlowpane());
+        defenderUnitsWindow.getChildren().add(defenderUnitsContainer.getFlowpane());
 
         terrainComboBox.setDisable(true);
         btnCleanChart.setDisable(true);
@@ -183,7 +207,6 @@ public class SimulateCON {
 
     private void onStop(ActionEvent event) {
         battle.stopSimulation();
-
         btnStart.setText("Restart");
         btnStart.setOnAction(this::onRestart);
     }
@@ -195,7 +218,10 @@ public class SimulateCON {
      */
 
     private void onRestart(ActionEvent event) {
-        battle.continueSimulation();
+        thread = new Thread(() -> battle.simulateDelayWithTerrain(delay));
+        thread.start();
+        btnStart.setText("Stop");
+        btnStart.setOnAction(this::onStop);
     }
 
     private void onRollBack(ActionEvent event) {
@@ -209,9 +235,13 @@ public class SimulateCON {
         btnStart.setText("Start");
         btnStart.setOnAction(this::onStart);
 
-        repaintDetails();
+        attackerDetails.setArmy(attacker);
+        defenderDetails.setArmy(defender);
+
+        repaintArmyInformation();
         createNewDataSeries();
         resetArmyInformation();
+        initUnitsWindow();
     }
 
     public void onSimulationFinish() {
@@ -229,14 +259,16 @@ public class SimulateCON {
         btnCleanChart.setDisable(false);
         terrainComboBox.setDisable(false);
 
-        repaintDetails();
+        repaintArmyInformation();
+        repaintUnitInformation();
     }
 
     public void onRepaint() {
         long now = new Date().getTime();
 
         if (now - updateTextDelta >= lastTextUpdate) {
-            repaintDetails();
+            repaintArmyInformation();
+            repaintUnitInformation();
             lastTextUpdate = now;
         }
 
@@ -250,6 +282,14 @@ public class SimulateCON {
         attackerHeader.setText(attacker.getName());
         defenderHeader.setText(defender.getName());
         simulationText.setText("Simulation run: " + simulations.size());
+    }
+
+    private void initUnitsWindow() {
+        attackerUnitsContainer = new UnitInformationContainer(attacker, false);
+        defenderUnitsContainer = new UnitInformationContainer(defender, false);
+
+        attackerUnitsWindow.getChildren().add(attackerUnitsContainer.getFlowpane());
+        defenderUnitsWindow.getChildren().add(defenderUnitsContainer.getFlowpane());
     }
 
     protected void setDefender(Army defender) {
@@ -292,9 +332,14 @@ public class SimulateCON {
             //create barchart
             lineChart = ChartFactory.createBarChart(attacker, defender);
             mainContainer.getChildren().add(lineChart);
-            createNewDataSeries();
 
+            createNewDataSeries();
             resetArmyInformation();
+
+            attackerArmyContainer.getChildren().add(TextFactory.createSmallTitle("Attacker units:"));
+            defenderArmyContainer.getChildren().add(TextFactory.createSmallTitle("Defender units:"));
+
+            initUnitsWindow();
 
             //create bottombar
             initBottomBar();

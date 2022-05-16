@@ -6,6 +6,7 @@ import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
+import edu.ntnu.arunang.wargames.gui.container.UnitContainer;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
@@ -15,11 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -28,6 +28,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -42,7 +44,7 @@ public class ListArmyCON {
     @FXML
     private VBox detailsWindow;
     @FXML
-    private TableView<Unit> tableUnits;
+    private FlowPane unitContainer;
     @FXML
     private Text title;
     @FXML
@@ -73,9 +75,17 @@ public class ListArmyCON {
 
         //update the army fields
         txtArmyName.setText(army.getName());
+
         armyDetails.getChildren().clear();
         armyDetails.getChildren().add(new ArmyContainer(army).getGridPane());
-        army.getUnits().forEach(unit -> tableUnits.getItems().add(unit));
+
+        unitContainer.getChildren().clear();
+        Map<Unit, Integer> map = army.getMap();
+
+        for (Map.Entry<Unit, Integer> unit : map.entrySet()) {
+            UnitContainer container = new UnitContainer(unit.getKey(), unit.getValue(), false);
+            unitContainer.getChildren().add(container.getGridPane());
+        }
     }
 
     /**
@@ -282,7 +292,6 @@ public class ListArmyCON {
         }
 
         //refresh page
-        armySingleton.removeArmy(army);
         File[] armyFiles = armyFSH.getAllArmyFiles();
         repaintArmies(armyFiles);
 
@@ -299,7 +308,6 @@ public class ListArmyCON {
     void initialize() {
         repaintHeader();
         detailsWindow.setVisible(false);
-        ContainerFactory.initTableViewUnits(tableUnits);
         initBottomBar();
 
         ArmyFSH armyFSH = new ArmyFSH();

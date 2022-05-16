@@ -80,10 +80,7 @@ public abstract class Unit implements Comparable<Unit> {
                 opponent.getArmorPoints() +
                 opponent.getResistBonus();
 
-        if (newHealthPoints > opponent.getHealthPoints()) {
-            throw new IllegalStateException("Attacking can not give healthPoints");
-        }
-        opponent.hit(newHealthPoints);
+        opponent.setHealthPoints(newHealthPoints);
     }
 
     public void attack(Unit opponent, Terrain terrain) throws IllegalStateException {
@@ -93,10 +90,7 @@ public abstract class Unit implements Comparable<Unit> {
                 opponent.getArmorPoints() +
                 opponent.getResistBonus(terrain);
 
-        if (newHealthPoints > opponent.getHealthPoints()) {
-            throw new IllegalStateException("Attacking can not give healthPoints");
-        }
-        opponent.hit(newHealthPoints);
+        opponent.setHealthPoints(newHealthPoints);
     }
 
     /**
@@ -155,7 +149,7 @@ public abstract class Unit implements Comparable<Unit> {
      * @param newHealthPoints the newHealthPoints of the Unit
      */
 
-    public void hit(int newHealthPoints) {
+    public void setHealthPoints(int newHealthPoints) {
         this.healthPoints = newHealthPoints;
     }
 

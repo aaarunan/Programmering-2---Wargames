@@ -103,13 +103,6 @@ public class Battle extends Subject {
         exit = true;
     }
 
-    public void continueSimulation() {
-        if (exit) {
-            exit = false;
-            this.simulateDelayWithTerrain(delay);
-        }
-    }
-
     /**
      * Attack once. Random unit from attacker army
      * attacks a random defender unit. The armies get swapped.

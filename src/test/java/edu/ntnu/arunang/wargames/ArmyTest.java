@@ -189,14 +189,4 @@ public class ArmyTest {
 
         assertEquals(12, army.getTotalArmorPoints());
     }
-
-    @Test
-    @DisplayName("Testing average health points")
-    void testAverageHealthPoints() {
-        Army army = new Army("test");
-
-        army.add(new CavalryUnit("yo", 10), 10);
-
-        assertEquals(10, army.getTotalHealthPoints());
-    }
 }

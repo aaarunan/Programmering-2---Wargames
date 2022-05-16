@@ -109,6 +109,8 @@
     -fx-hgap: 10px;
     -fx-vgap: 10px;
     -fx-padding: 20px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
 
 }
 

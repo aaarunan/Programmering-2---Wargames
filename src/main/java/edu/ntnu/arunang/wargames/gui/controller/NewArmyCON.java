@@ -2,9 +2,9 @@ package edu.ntnu.arunang.wargames.gui.controller;
 
 import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
-import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
+import edu.ntnu.arunang.wargames.gui.container.UnitInformationContainer;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
@@ -34,7 +34,7 @@ public class NewArmyCON {
     @FXML
     private TextField fieldArmyName;
     @FXML
-    private TableView<Unit> tableUnits;
+    private VBox unitsWindow;
     @FXML
     private Text txtArmyName;
     @FXML
@@ -44,21 +44,21 @@ public class NewArmyCON {
     @FXML
     private TextField fieldName;
     @FXML
-    private MenuButton menuUnitType;
+    private ComboBox<UnitType> menuUnitType;
     @FXML
     private VBox vBoxAdd;
     @FXML
     private Text txtErrorMsg;
     @FXML
-    private HBox armyContainer;
+    private VBox armyContainer;
     @FXML
     private BorderPane borderPane;
 
     private final Army army = new Army("Army name");
 
-    private ArmyContainer armyGridPane = new ArmyContainer(army);
+    private UnitType unitType;
 
-    private final ArmySingleton armySingleton = ArmySingleton.getInstance();
+    private ArmyContainer armyGridPane = new ArmyContainer(army);
 
     /**
      * Changes the name of the army when typed in the army name textfield, and updates
@@ -124,7 +124,6 @@ public class NewArmyCON {
         }
 
         //removes the army from the singleton if successful, and adds the new army
-        armySingleton.addArmy(army);
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
 
@@ -138,21 +137,22 @@ public class NewArmyCON {
         ArrayList<Unit> units = new ArrayList<>();
 
         //check if the user has choosen a unittype
-        if (menuUnitType.getText().equals("UnitType")) {
+        if (unitType == null) {
             txtErrorMsg.setText("Choose an Unittype.");
             return;
         }
 
         //try to create a unit from the user input
         try {
-            units = (ArrayList<Unit>) UnitFactory.constructUnitsFromString(menuUnitType.getId(), fieldName.getText(), Integer.parseInt(fieldHealthPoints.getText()), Integer.parseInt(fieldCount.getText()));
+            units = (ArrayList<Unit>) UnitFactory.constructUnitsFromString(unitType.toString(), fieldName.getText(), Integer.parseInt(fieldHealthPoints.getText()), Integer.parseInt(fieldCount.getText()));
             army.add(units);
-            units.forEach(unit -> tableUnits.getItems().add(unit));
         } catch (IllegalArgumentException e) {
             txtErrorMsg.setText(e.getMessage());
         } catch (Exception e) {
             AlertFactory.createError("Unexpected error occured: \n" + e.getMessage()).show();
         }
+
+        repaintUnits();
 
         Button btnDelete = new Button("Delete");
 
@@ -163,9 +163,7 @@ public class NewArmyCON {
         VBox vBox = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName()).add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
 
         ArrayList<Unit> finalUnits = units;
-        btnDelete.setOnAction(event -> {
-            onDeleteUnits(event, finalUnits, vBox);
-        });
+        btnDelete.setOnAction(event -> onDeleteUnits(event, finalUnits));
 
         //add all the elements and update the page
         vBox.getChildren().add(btnDelete);
@@ -173,12 +171,11 @@ public class NewArmyCON {
         repaintDetails();
     }
 
-    void onDeleteUnits(ActionEvent event, List<Unit> units, VBox vBox) {
+    void onDeleteUnits(ActionEvent event, List<Unit> units) {
         for (Unit unit : units) {
             army.remove(unit);
-            vBoxAdd.getChildren().remove(vBox);
-            tableUnits.getItems().remove(unit);
             repaintDetails();
+            repaintUnits();
         }
     }
 
@@ -189,9 +186,9 @@ public class NewArmyCON {
     @FXML
     void initialize() {
         initMenuUnitType();
+        armyContainer.getChildren().add(armyGridPane.getGridPane());
         ButtonFactory.initNumberOnlyTextField(fieldCount);
         ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
-        ContainerFactory.initTableViewUnits(tableUnits);
         initBottomBar();
     }
 
@@ -200,7 +197,12 @@ public class NewArmyCON {
      */
 
     void repaintDetails() {
-        armyGridPane.updateData(army);
+        armyGridPane.updateData();
+    }
+
+    private void repaintUnits() {
+        unitsWindow.getChildren().clear();
+        unitsWindow.getChildren().add(new UnitInformationContainer(army, false).getFlowpane());
     }
 
     /**
@@ -209,13 +211,9 @@ public class NewArmyCON {
 
     void initMenuUnitType() {
         for (UnitType type : UnitType.values()) {
-            MenuItem menuItem = ButtonFactory.createMenuItem(type.toString());
-            menuItem.setOnAction(event -> {
-                menuUnitType.setText(type.toString());
-                menuUnitType.setId(type.toString());
-            });
-            menuUnitType.getItems().add(menuItem);
+            menuUnitType.getItems().add(type);
         }
+        menuUnitType.setOnAction(event -> this.unitType = menuUnitType.getValue());
     }
 
     /**
@@ -228,7 +226,6 @@ public class NewArmyCON {
         back.setOnAction(this::onCancel);
         Button save = ButtonFactory.createDefaultButton("Save");
         save.setOnAction(this::onSave);
-        Button save1 = ButtonFactory.createDefaultButton("Save");
         bottomBar.getChildren().addAll(back, save);
         borderPane.setBottom(bottomBar);
     }

@@ -31,7 +31,7 @@ public class ArmyContainer {
         gridPane.addRow(1, createSmallText("Total HP: "), avgHealth);
         gridPane.addRow(2, createSmallText("Total armor: "), avgArmor);
         gridPane.addRow(3, createSmallText("Total attack"), avgAttack);
-        updateData(army);
+        updateData();
 
         //add the css
         gridPane.getStyleClass().add("grid-pane");
@@ -39,7 +39,7 @@ public class ArmyContainer {
         return gridPane;
     }
 
-    public void updateData(Army army) {
+    public void updateData() {
         armySize.setText(Integer.toString(army.size()));
         avgHealth.setText(Integer.toString(army.getTotalHealthPoints()));
         avgArmor.setText(Integer.toString(army.getTotalAttackPoints()));
@@ -48,5 +48,9 @@ public class ArmyContainer {
 
     public GridPane getGridPane() {
         return this.gridPane;
+    }
+
+    public void setArmy(Army army) {
+        this.army = army;
     }
 }

@@ -102,8 +102,8 @@ public class RangedUnit extends Unit {
      */
 
     @Override
-    public void hit(int newHealthPoints) {
-        super.hit(newHealthPoints);
+    public void setHealthPoints(int newHealthPoints) {
+        super.setHealthPoints(newHealthPoints);
 
         if (resistBonus > BASE_RESIST_BONUS) {
             resistBonus -= RESIST_INTERVAL;
