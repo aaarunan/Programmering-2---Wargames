@@ -9,3 +9,5 @@
 - getUnits by type burde bruke enum
 - switch to combobox
 - fix updating text element rather than updating the entire gridpane
+- change getUnitsByType to use enum
+- adds elements aswell when updating unitcontainer

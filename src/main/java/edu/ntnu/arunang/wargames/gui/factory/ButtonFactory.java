@@ -1,12 +1,10 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
-import edu.ntnu.arunang.wargames.Terrain;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
-import javafx.scene.control.*;
-
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 
 /**
  * Factory for creating clickable elements.
@@ -22,11 +20,21 @@ public class ButtonFactory {
 
     public static Button createDefaultButton(String string) {
         Button button = new Button(string);
-        //set style
+        // set style
         button.getStyleClass().add("button");
 
         return button;
     }
+
+    /**
+     * Create a combobox. A combobox is a button with different options
+     * that can be selected. The combobox takes in an array of objects.
+     * These are the options in the combobox.
+     *
+     * @param values options of the combobox
+     * @param <T>    type of object
+     * @return constructed combobox
+     */
 
     public static <T> ComboBox<T> createMenuButton(T[] values) {
         ComboBox<T> comboBox = new ComboBox(FXCollections.observableArrayList(values));
@@ -43,22 +51,21 @@ public class ButtonFactory {
 
     public static Button listButton(String text) {
         Button button = new Button(text);
-        //Add css
+        // Add css
         button.getStyleClass().add("list-element");
 
         return button;
     }
 
     /**
-     * Make a textField number only. Adds an
-     * Event listener that deletes all regex matches.
+     * Make a textField number only. Adds an Event listener that deletes all regex matches.
      *
      * @param textField text-field that should be number only
      */
 
     public static void initNumberOnlyTextField(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            //regex values to remove letters
+            // regex values to remove letters
             if (!newValue.matches("\\d*")) {
                 textField.setText(newValue.replaceAll("[^\\d]", ""));
             }

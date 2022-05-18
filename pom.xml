@@ -23,8 +23,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
             </plugin>
-
-            <!-- Add a newer version of the JUnit test interface surefire, to be compliant with JUnit5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -32,6 +30,11 @@
             </plugin>
 
 
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <version>2.11.0</version>
+            </plugin>
             <!-- Add the JavaFX plugin allowing you to run/execute JavaFX from Maven -->
             <plugin>
                 <groupId>org.openjfx</groupId>

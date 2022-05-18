@@ -1,16 +1,15 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.battle.Terrain;
 
 import java.util.Objects;
 
 /**
- * A Unit is an abstract base class for a specific Unit.
- * A unit is a military troop that can attack and deal damage, and be attacked and take damage
- * It implements Comparable because the Unit implements compareTo.
+ * A Unit is an abstract base class for a specific Unit. A unit is a military troop that can attack and deal damage, and
+ * be attacked and take damage It implements Comparable because the Unit implements compareTo.
  * <p>
- * The healthPoints of a Unit are points that determines the Unit state:
- * HealthPoints > 0 = alive,  healthPoints < 0 = dead
+ * The healthPoints of a Unit are points that determines the Unit state: HealthPoints > 0 = alive, healthPoints < 0 =
+ * dead
  * <p>
  * AttackPoints represents the base-attack of a Unit.
  * <p>
@@ -58,37 +57,41 @@ public abstract class Unit implements Comparable<Unit> {
     public abstract Unit copy();
 
     /**
-     * Makes a copy of the unit and resets its stats. Essentially making it a new unit.
-     * Used to generalize Units.
+     * Makes a copy of the unit and resets its stats.
+     * Essentially making it a new unit. Used to generalize Units.
      */
 
     public abstract Unit getResetCopy();
 
     /**
      * Attacking deals damage to a given opponent.
-     * The damage is measured by:
-     * opponent.healthPoints - this.attackPoints - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
+     * The damage is measured by: opponent.healthPoints - this.attackPoints
+     * - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
      *
      * @param opponent The opposing unit that is being attacked
      * @throws IllegalStateException if damage dealt is positive
      */
 
     public void attack(Unit opponent) throws IllegalStateException {
-        int newHealthPoints = opponent.getHealthPoints() -
-                this.getAttackPoints() -
-                this.getAttackBonus() +
-                opponent.getArmorPoints() +
-                opponent.getResistBonus();
+        int newHealthPoints = opponent.getHealthPoints() - this.getAttackPoints() - this.getAttackBonus()
+                + opponent.getArmorPoints() + opponent.getResistBonus();
 
         opponent.setHealthPoints(newHealthPoints);
     }
 
+    /**
+     * Attacking deals damage to a given opponent. The damage is measured by: opponent.healthPoints - this.attackPoints
+     * - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
+     * <p>
+     * The attack is specified on a specific terrain
+     *
+     * @param opponent The opposing unit that is being attacked
+     * @throws IllegalStateException if damage dealt is positive
+     */
+
     public void attack(Unit opponent, Terrain terrain) throws IllegalStateException {
-        int newHealthPoints = opponent.getHealthPoints() -
-                this.getAttackPoints() -
-                this.getAttackBonus(terrain) +
-                opponent.getArmorPoints() +
-                opponent.getResistBonus(terrain);
+        int newHealthPoints = opponent.getHealthPoints() - this.getAttackPoints() - this.getAttackBonus(terrain)
+                + opponent.getArmorPoints() + opponent.getResistBonus(terrain);
 
         opponent.setHealthPoints(newHealthPoints);
     }
@@ -124,10 +127,22 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
+     * When a Unit is hit this function will be called. A unit is hit is when it is being attack, and usually takes
+     * damage.
+     *
+     * @param newHealthPoints the newHealthPoints of the Unit
+     */
+
+    public void setHealthPoints(int newHealthPoints) {
+        this.healthPoints = newHealthPoints;
+    }
+
+    /**
      * Get the attackPoints of the Unit.
      *
      * @return this.attackPoints
      */
+
     public int getAttackPoints() {
         return attackPoints;
     }
@@ -140,17 +155,6 @@ public abstract class Unit implements Comparable<Unit> {
 
     public int getArmorPoints() {
         return armorPoints;
-    }
-
-    /**
-     * When a Unit is hit this function will be called.
-     * A unit is hit is when it is being attack, and usually takes damage.
-     *
-     * @param newHealthPoints the newHealthPoints of the Unit
-     */
-
-    public void setHealthPoints(int newHealthPoints) {
-        this.healthPoints = newHealthPoints;
     }
 
     /**
@@ -193,25 +197,20 @@ public abstract class Unit implements Comparable<Unit> {
 
     public String toCsv() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n").append(getClass().getSimpleName()).append(",").append(this.getName()).append(",").append(this.getHealthPoints());
+        sb.append("\n").append(getClass().getSimpleName()).append(",").append(this.getName()).append(",")
+                .append(this.getHealthPoints());
 
         return sb.toString();
     }
 
     @Override
     public String toString() {
-        return
-                "Name: " + name +
-                        " HP: " + healthPoints +
-                        " Attack: " + attackPoints +
-                        " Armor: " + armorPoints +
-                        " Bonus(Attack/Resist): " + this.getAttackBonus() +
-                        "/" + this.getResistBonus();
+        return "Name: " + name + " HP: " + healthPoints + " Attack: " + attackPoints + " Armor: " + armorPoints
+                + " Bonus(Attack/Resist): " + this.getAttackBonus() + "/" + this.getResistBonus();
     }
 
     /**
-     * Compares to units together. In this sequence:
-     * name->healthPoints->armorPoints->attackBonus->defenceBonus.
+     * Compares to units together. In this sequence: name->healthPoints->armorPoints->attackBonus->defenceBonus.
      *
      * @param other Unit that is being compared to
      * @return integer that represents the difference
@@ -254,6 +253,7 @@ public abstract class Unit implements Comparable<Unit> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, healthPoints, attackPoints, armorPoints, this.getAttackBonus(), this.getResistBonus());
+        return Objects.hash(name, healthPoints, attackPoints, armorPoints, this.getAttackBonus(),
+                this.getResistBonus());
     }
 }

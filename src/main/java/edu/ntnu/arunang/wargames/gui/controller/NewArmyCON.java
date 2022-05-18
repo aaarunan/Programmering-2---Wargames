@@ -4,7 +4,7 @@ import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
-import edu.ntnu.arunang.wargames.gui.container.UnitInformationContainer;
+import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
@@ -31,6 +31,8 @@ import java.util.Optional;
  */
 
 public class NewArmyCON {
+    private final Army army = new Army("Army name");
+    private final ArmyContainer armyGridPane = new ArmyContainer(army);
     @FXML
     private TextField fieldArmyName;
     @FXML
@@ -46,29 +48,23 @@ public class NewArmyCON {
     @FXML
     private ComboBox<UnitType> menuUnitType;
     @FXML
-    private VBox vBoxAdd;
+    private VBox historyContainer;
     @FXML
     private Text txtErrorMsg;
     @FXML
     private VBox armyContainer;
     @FXML
     private BorderPane borderPane;
-
-    private final Army army = new Army("Army name");
-
     private UnitType unitType;
 
-    private ArmyContainer armyGridPane = new ArmyContainer(army);
-
     /**
-     * Changes the name of the army when typed in the army name textfield, and updates
-     * the detail container accordingly.
+     * Changes the name of the army when typed in the army name text-field, and updates the detail container accordingly.
      */
 
     @FXML
     void onArmyName() {
         txtErrorMsg.setText("");
-        //throw error if name is empty
+        // throw error if name is empty
         try {
             army.setName(fieldArmyName.getText());
         } catch (IllegalArgumentException e) {
@@ -88,8 +84,7 @@ public class NewArmyCON {
     }
 
     /**
-     * Saves the army to the /resources/army folder.
-     * If the file already exists, the user will be warned.
+     * Saves the army to the /resources/army folder. If the file already exists, the user will be warned.
      *
      * @param event triggering event.
      */
@@ -103,27 +98,29 @@ public class NewArmyCON {
             return;
         }
 
-        //checks if file exists
+        // checks if file exists
         if (armyFSH.fileExists(new File(ArmyFSH.getPath(army.getName())))) {
-            Alert alert = AlertFactory.createConfirmation(String.format("Army '%s' already exists, do you want to override it?", army.getName()));
+            Alert alert = AlertFactory.createConfirmation(
+                    String.format("Army '%s' already exists, do you want to override it?", army.getName()));
             Optional<ButtonType> result = alert.showAndWait();
 
-            //cancels the process if the user declines
-            if (result.get() == ButtonType.CANCEL) {
+            // cancels the process if the user declines
+            if (result.isEmpty() || result.get() == ButtonType.CANCEL) {
                 return;
             }
         }
-        //Checks if the army can be written
+        // Checks if the army can be written
         try {
             armyFSH.writeArmy(army);
         } catch (IOException e) {
             AlertFactory.createError("Could not overwrite file. File might be in use... \n " + e.getMessage()).show();
+            return;
         } catch (Exception e) {
             AlertFactory.createError("Un unexpected exception occurred... \n " + e.getMessage()).show();
             return;
         }
 
-        //removes the army from the singleton if successful, and adds the new army
+        // removes the army from the singleton if successful, and adds the new army
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
 
@@ -134,42 +131,52 @@ public class NewArmyCON {
     @FXML
     void onAdd() {
         txtErrorMsg.setText("");
-        ArrayList<Unit> units = new ArrayList<>();
+        ArrayList<Unit> units;
 
-        //check if the user has choosen a unittype
+        // check if the user has choosen a unittype
         if (unitType == null) {
             txtErrorMsg.setText("Choose an Unittype.");
             return;
         }
 
-        //try to create a unit from the user input
+        // try to create a unit from the user input
         try {
-            units = (ArrayList<Unit>) UnitFactory.constructUnitsFromString(unitType.toString(), fieldName.getText(), Integer.parseInt(fieldHealthPoints.getText()), Integer.parseInt(fieldCount.getText()));
+            units = (ArrayList<Unit>) UnitFactory.constructUnitsFromString(unitType.toString(), fieldName.getText(),
+                    Integer.parseInt(fieldHealthPoints.getText()), Integer.parseInt(fieldCount.getText()));
             army.add(units);
         } catch (IllegalArgumentException e) {
             txtErrorMsg.setText(e.getMessage());
+            return;
         } catch (Exception e) {
             AlertFactory.createError("Unexpected error occured: \n" + e.getMessage()).show();
+            return;
         }
 
         repaintUnits();
 
         Button btnDelete = new Button("Delete");
-
-        Unit target = units.get(0);
-
-        //Add a card to the history container
-        ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
-        VBox vBox = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName()).add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
-
         ArrayList<Unit> finalUnits = units;
         btnDelete.setOnAction(event -> onDeleteUnits(event, finalUnits));
 
-        //add all the elements and update the page
-        vBox.getChildren().add(btnDelete);
-        vBoxAdd.getChildren().add(vBox);
+        Unit target = units.get(0);
+        // Add a card to the history container
+        ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
+        VBox listCard = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName())
+                .add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
+
+
+        // add all the elements and update the page
+        listCard.getChildren().add(btnDelete);
+        historyContainer.getChildren().add(listCard);
         repaintDetails();
     }
+
+    /**
+     * Deletes a list of units from the army.
+     *
+     * @param event triggering event
+     * @param units units that are removed
+     */
 
     void onDeleteUnits(ActionEvent event, List<Unit> units) {
         for (Unit unit : units) {
@@ -180,19 +187,6 @@ public class NewArmyCON {
     }
 
     /**
-     * Initializes the page. Initializes number only fields and the tableview.
-     */
-
-    @FXML
-    void initialize() {
-        initMenuUnitType();
-        armyContainer.getChildren().add(armyGridPane.getGridPane());
-        ButtonFactory.initNumberOnlyTextField(fieldCount);
-        ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
-        initBottomBar();
-    }
-
-    /**
      * Update the stats of the army.
      */
 
@@ -200,20 +194,13 @@ public class NewArmyCON {
         armyGridPane.updateData();
     }
 
-    private void repaintUnits() {
-        unitsWindow.getChildren().clear();
-        unitsWindow.getChildren().add(new UnitInformationContainer(army, false).getFlowpane());
-    }
-
     /**
-     * Intializes the menuButton for unitType. Loops through the UnitType enum.
+     * Repaint the unit cards.
      */
 
-    void initMenuUnitType() {
-        for (UnitType type : UnitType.values()) {
-            menuUnitType.getItems().add(type);
-        }
-        menuUnitType.setOnAction(event -> this.unitType = menuUnitType.getValue());
+    private void repaintUnits() {
+        unitsWindow.getChildren().clear();
+        unitsWindow.getChildren().add(new UnitContainerManager(army, false).getFlowpane());
     }
 
     /**
@@ -228,5 +215,21 @@ public class NewArmyCON {
         save.setOnAction(this::onSave);
         bottomBar.getChildren().addAll(back, save);
         borderPane.setBottom(bottomBar);
+    }
+
+    /**
+     * Initializes the page. Initializes number only fields and the tableview.
+     */
+
+    @FXML
+    void initialize() {
+        for (UnitType type : UnitType.values()) {
+            menuUnitType.getItems().add(type);
+        }
+        menuUnitType.setOnAction(event -> this.unitType = menuUnitType.getValue());
+        armyContainer.getChildren().add(armyGridPane.getGridPane());
+        ButtonFactory.initNumberOnlyTextField(fieldCount);
+        ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
+        initBottomBar();
     }
 }

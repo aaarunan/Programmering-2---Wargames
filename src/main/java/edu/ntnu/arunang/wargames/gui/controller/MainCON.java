@@ -1,17 +1,17 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
-import edu.ntnu.arunang.wargames.gui.ArmySingleton;
+import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 
 /**
  * Controller for the mainpage.
  */
 
 public class MainCON {
-    private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     /**
      * Redirect to the list- army page and set simulate to false in the singleton.
@@ -21,7 +21,19 @@ public class MainCON {
 
     @FXML
     void onBtnArmies(ActionEvent event) {
-        armySingleton.setSimulate(false);
+        StateHandler.getInstance().setSimulate(false);
+        GUI.setSceneFromActionEvent(event, "listArmy");
+    }
+
+    /**
+     * Redirects to the listArmy and sets simulation to true.
+     *
+     * @param event triggering event
+     */
+
+    @FXML
+    void onBtnSimulate(ActionEvent event) {
+        StateHandler.getInstance().setSimulate(true);
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
 
@@ -34,25 +46,4 @@ public class MainCON {
         Platform.exit();
     }
 
-    /**
-     * Redirects to the listArmy and sets simulation to true.
-     *
-     * @param event triggering event
-     */
-
-    @FXML
-    void onBtnSimulate(ActionEvent event) {
-        armySingleton.setSimulate(true);
-        GUI.setSceneFromActionEvent(event, "listArmy");
-    }
-
-    /**
-     * Clears the singleton when the page is initialized. This is to flush out
-     * information from past activities.
-     */
-
-    @FXML
-    void initialize() {
-        ArmySingleton.getInstance().clear();
-    }
 }

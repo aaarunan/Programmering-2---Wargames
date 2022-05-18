@@ -9,12 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**
- * Main GUI class of the JavaFX application. Contains helper methods and boilder plate code
- * for use in the controllers, and verification of FXML loaders.
+ * Main GUI class of the JavaFX application. Contains helper methods and boilder plate code for use in the controllers,
+ * and verification of FXML loaders.
  */
 
 public class GUI extends Application {
@@ -23,8 +22,8 @@ public class GUI extends Application {
     private static final int STAGE_MIN_WIDTH = 625;
 
     /**
-     * Sets a scene by getting the current stage from a given node
-     * and replacing the scene. The paths default is /resources.
+     * Sets a scene by getting the current stage from a given node and replacing the scene. The paths default is
+     * /resources.
      *
      * @param node that can extract the current stage
      * @param page fxml page from /resources/gui
@@ -60,8 +59,8 @@ public class GUI extends Application {
     }
 
     /**
-     * Set the scene of the stage by extracting the stage from an event.
-     * This might be a better solution if there is no node to extract the stage from.
+     * Set the scene of the stage by extracting the stage from an event. This might be a better solution if there is no
+     * node to extract the stage from.
      *
      * @param actionEvent a javafx event
      * @param page        the page from /src/resources/gui directory
@@ -77,14 +76,14 @@ public class GUI extends Application {
     }
 
     /**
-     * This is a helper method that checks the loader for exceptions and returns
-     * the Parent if successful. This is for easy troubleshooting.
+     * This is a helper method that checks the loader for exceptions and returns the Parent if successful. This is for
+     * easy troubleshooting.
      *
      * @param url the url that is added to the loader
      * @return the loaded Parent
      */
 
-    public static FXMLLoader initLoader(URL url)  {
+    public static FXMLLoader initLoader(URL url) {
         FXMLLoader loader = null;
 
         try {
@@ -96,17 +95,19 @@ public class GUI extends Application {
             e.printStackTrace();
         } catch (IllegalStateException e) {
             System.out.println("Most likely, you mistyped the fxml resource path that you tried to load.");
-            System.out.println("Remember to add / in the beginning of the path and give the path relative to the resources folder.");
+            System.out.println(
+                    "Remember to add / in the beginning of the path and give the path relative to the resources folder.");
             System.out.println("\n" + e.getClass() + ": " + e.getMessage());
             System.out.println("Stack Trace:");
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("A different, unexpected exception was thrown while loading the FXML file...\n\n" + e.getClass() + ": " + e.getMessage());
+            System.out.println("A different, unexpected exception was thrown while loading the FXML file...\n\n"
+                    + e.getClass() + ": " + e.getMessage());
             System.out.println("Stack Trace:");
             e.printStackTrace();
         }
 
-        //throw new exceptions to not get NullPointerException down the line
+        // throw new exceptions to not get NullPointerException down the line
         if (loader == null) {
             throw new IllegalStateException("Root is null");
         }
@@ -118,8 +119,7 @@ public class GUI extends Application {
     }
 
     /**
-     * Main method of the GUI, and starts the application by applying the mainpage
-     * to the primaryStage.
+     * Main method of the GUI, and starts the application by applying the mainpage to the primaryStage.
      *
      * @param primaryStage primary window of the application
      */

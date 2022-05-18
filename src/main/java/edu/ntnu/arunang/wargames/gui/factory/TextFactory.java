@@ -17,15 +17,14 @@ public class TextFactory {
 
     public static Text createSmallText(String string) {
         Text text = new Text(string);
-        //add css class
+        // add css class
         text.getStyleClass().add("text-small");
 
         return text;
     }
 
     /**
-     * Create a text element with the title-small css class.
-     * Used to make a sub header.
+     * Create a text element with the title-small css class. Used to make a sub header.
      *
      * @param string text to be shown
      * @return text element
@@ -33,7 +32,7 @@ public class TextFactory {
 
     public static Text createSmallTitle(String string) {
         Text text = new Text(string);
-        //add css
+        // add css
         text.getStyleClass().add("title-small");
 
         return text;

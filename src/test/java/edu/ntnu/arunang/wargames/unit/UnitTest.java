@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.battle.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -176,7 +176,6 @@ class UnitTest {
         assertEquals("Health-points must be greater than or equal to 0", exception.getMessage());
     }
 
-
     @Test
     @DisplayName("Constructing Unit wrong should throw exception when attackPoints are less than 0")
     void testConstructWrongOnAttackPoints() {
@@ -216,7 +215,6 @@ class UnitTest {
 
         assertEquals("Attack-points and armor-points must be greater than 0", exception.getMessage());
     }
-
 
     @Test
     @DisplayName("Constructing Unit wrong should throw exception when armorPoints are less than 0")

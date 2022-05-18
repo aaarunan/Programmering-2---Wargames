@@ -76,9 +76,7 @@ public class ArmyTest {
     @Test
     @DisplayName("Check getRandom() on empty Army")
     void getRandomEmpty() {
-        IllegalStateException thrown = assertThrows(
-                IllegalStateException.class,
-                () -> attacker.getRandom(),
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> attacker.getRandom(),
                 "Army has no units."
 
         );
@@ -171,22 +169,22 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Testing average attack")
-    void testAverageAttackBonus() {
+    @DisplayName("Testing total attack")
+    void testTotalAttack() {
         Army army = new Army("test");
 
         army.add(new CavalryUnit("yo", 10), 10);
 
-        assertEquals(20, army.getTotalAttackPoints());
+        assertEquals(200, army.getTotalAttackPoints());
     }
 
     @Test
-    @DisplayName("Testing average armor")
-    void testAverageArmorPoints() {
+    @DisplayName("Test the total of armor points")
+    void testTotalArmorPoints() {
         Army army = new Army("test");
 
         army.add(new CavalryUnit("yo", 10), 10);
 
-        assertEquals(12, army.getTotalArmorPoints());
+        assertEquals(120, army.getTotalArmorPoints());
     }
 }

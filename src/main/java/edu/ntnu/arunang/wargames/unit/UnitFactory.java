@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a Factory class that creates Units from strings. This is usually done
- * when reading from files. When adding new Units, they should also be added to the factory.
- * This class is private because it only has static methods and variables, and there is therefore no point
- * to it being instantiated.
+ * This is a Factory class that creates Units from strings. This is usually done when reading from files. When adding
+ * new Units, they should also be added to the factory. This class is private because it only has static methods and
+ * variables, and there is therefore no point to it being instantiated.
  */
 
 public class UnitFactory {
@@ -30,7 +29,6 @@ public class UnitFactory {
      */
 
     public static Unit constructUnitFromString(String type, String name, int health) throws IllegalArgumentException {
-
         return constructUnit(UnitType.getUnitType(type), name, health);
     }
 
@@ -50,10 +48,7 @@ public class UnitFactory {
             case CommanderUnit -> new CommanderUnit(name, health);
             case InfantryUnit -> new InfantryUnit(name, health);
             case RangedUnit -> new RangedUnit(name, health);
-            //not necessary but just in case if an unittype has not been add here
-            default -> throw new IllegalArgumentException(String.format("Unittype %s does not exist", type));
         };
-
     }
 
     /**
@@ -74,6 +69,7 @@ public class UnitFactory {
         for (int i = 0; i < count; i++) {
             units.add(constructUnit(unitType, name, health));
         }
+
         return units;
     }
 }

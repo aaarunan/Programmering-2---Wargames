@@ -10,27 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ArmyFSH is a fileSystemHandling class for Army. This class saves armies in
- * csv files, and reads from csv files. The units are stored in the following manner:
+ * ArmyFSH is a file system handler (FSH) class for an Army.
+ * This class manages how armies are stored and read from the file system.
+ * <p>
+ * The units are stored in the following manner:
  * unitType, unitName, unitHealth, count.
  * <p>
  * count is the amount of the units in the army.
  * <p>
- * More information about how the units are stored is written in the readme.
+ * Specific details can be found in the readme document.
  * <p>
- * ArmyFSH implements FSH which is the basic FileSystemHandling interface for every FSH in Wargames.
+ * ArmyFSH implements FSH which is the basic FileSystemHandling interface for every FSH in War games.
  * <p>
- * ArmyFSH uses Buffered- Reader and Writer, for easily reading and writing to lines.
+ * The FSH uses Buffered- Reader and Writer, for easily reading and writing to a line.
  */
 
 public class ArmyFSH implements FSH {
-
-    private final String FILETYPE = "csv";
+    public final static String FILETYPE = "csv";
     private int lineNr = 1;
 
     /**
-     * Constructs the FSH with no parameters. The class can be instantiated
-     * and the constructor is therefore public.
+     * Constructs the FSH with no parameters.
+     * The class can be instantiated and the constructor is therefore public.
      */
 
     public ArmyFSH() {
@@ -38,19 +39,18 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Helper method to get the path of the army. This is by default:
-     * /src/main/resources/army
+     * Helper method to get the path of the army. This is by default in resources root /army.
      *
-     * @param armyName armyName is the filename
+     * @param fileName the name of the army is the name of the file
      * @return the full system path
      */
 
-    public static String getPath(String armyName) {
-        return FileSystems.getDefault().getPath("src", "main", "resources", "army", armyName + ".csv").toString();
+    public static String getPath(String fileName) {
+        return FileSystems.getDefault().getPath("src", "main", "resources", "army", fileName + ".csv").toString();
     }
 
     /**
-     * Get the test path of the army this is by default /src/test/resources/army
+     * Get the test path of the army this is by default in test recources root folder in /army.
      *
      * @param armyName armyname is the filename.
      * @return full path
@@ -61,17 +61,18 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Writes to a file that is given by the armyName. The file is stored in:
-     * /src/main/resources/army
+     * Writes to a file that is given by the armyName. The file is stored in: /src/main/resources/army
      * <p>
      * If the file is not found or not accessible, an IOException will be thrown.
      *
-     * @param army
+     * @param army army that is going to be written
+     * @throws IOException if the file is unavailable or cannot be written to.
      */
 
     public void writeArmy(Army army) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(getPath(army.getName())));
         write(new File(getPath(army.getName())), army);
+
         writer.flush();
         writer.close();
     }
@@ -81,9 +82,12 @@ public class ArmyFSH implements FSH {
      *
      * @param file the directory or file.
      * @param army army that is written.
+     * @throws IllegalArgumentException if the filetype is not supported for writing to
+     * @throws IOException              if the file is not writable or unavailable.
      */
 
     public void writeArmyTo(File file, Army army) throws IllegalArgumentException, IOException {
+        //check if file is csv
         if (!isCsv(file.toString())) {
             throw new IllegalArgumentException("Filetype is not supported");
         }
@@ -92,12 +96,9 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Load an Army from a specific file. It constructs a
-     * fully reset army. The method will throw an IllegalStateException if
-     * the file was wrongly formatted. it will also throw an IOException if the file
-     * was not found or does not exist.
+     * Load an Army from a specific file. It constructs a fully reset army.
+     *
      * <p>
-     * Throws IOException if file cannot be found or is not accessible, which must be handled.
      *
      * @param file file that is parsed
      * @return The army parsed from the file
@@ -106,6 +107,7 @@ public class ArmyFSH implements FSH {
      */
 
     public Army loadFromFile(File file) throws FileFormatException, IOException {
+        //Check if file is csv
         if (!isCsv(file.toString())) {
             throw new FileFormatException(String.format("File '%s' is not csv.", file));
         }
@@ -116,16 +118,18 @@ public class ArmyFSH implements FSH {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String armyName = reader.readLine();
 
+        //check if file is empty
         if (armyName == null) {
             throw new FileFormatException(String.format("File '%s' is empty", file));
         }
 
+        //add army name
         army = new Army(armyName);
 
+        //parse the units
         lineNr = 1;
-
         while ((line = reader.readLine()) != null) {
-            army.add(parseLine(line));
+            army.add((ArrayList<Unit>) parseLine(line));
             parseLine(line);
             lineNr++;
         }
@@ -145,6 +149,8 @@ public class ArmyFSH implements FSH {
 
     public List<Army> loadFromFiles(File[] files) throws IOException, FileFormatException {
         List<Army> armies = new ArrayList<>();
+
+        //parse all files
         for (File file : files) {
             armies.add(this.loadFromFile(file));
         }
@@ -153,7 +159,9 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Deletes an army from /resources/army.
+     * Deletes an army from resources /army.
+     * This will delete the file corresponding to the
+     * army name.
      *
      * @param army army that is being deleted
      * @return true if successful
@@ -165,22 +173,22 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * A helper function that parses a line from a file.
-     * It uses regex to clean the values and checks if the
-     * health and count values can be parsed to int.
+     * A helper function that parses a line from a file. It uses regex to clean the values and checks if the health and
+     * count values can be parsed to int.
      *
      * @param line line that is being parsed
      * @return pares values
      * @throws FileFormatException if the line is wrongly formatted.
      */
 
-    private ArrayList<Unit> parseLine(String line) throws FileFormatException {
+    private List<Unit> parseLine(String line) throws FileFormatException {
         String[] values;
         String type, name;
         int health, count;
 
         values = line.split(",");
 
+        //try to parse the values
         try {
             type = values[0].replaceAll("\\s+", "");
             name = values[1];
@@ -195,12 +203,14 @@ public class ArmyFSH implements FSH {
 
         List<Unit> units;
 
+        //try to construct the units
         try {
             units = UnitFactory.constructUnitsFromString(type, name, health, count);
         } catch (IllegalArgumentException e) {
             throw new FileFormatException(String.format("%s on Line: %d", e.getMessage(), lineNr));
         }
-        return (ArrayList<Unit>) units;
+
+        return units;
     }
 
     /**
@@ -237,6 +247,12 @@ public class ArmyFSH implements FSH {
         writer.flush();
         writer.close();
     }
+
+    /**
+     * Get all the army files and stored armies.
+     *
+     * @return the files
+     */
 
     public File[] getAllArmyFiles() {
         File folder = new File(FSH.getPathFromResources("army"));

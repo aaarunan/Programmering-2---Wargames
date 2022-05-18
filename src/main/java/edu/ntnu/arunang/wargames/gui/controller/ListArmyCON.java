@@ -3,14 +3,16 @@ package edu.ntnu.arunang.wargames.gui.controller;
 import edu.ntnu.arunang.wargames.Army;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.fsh.FileFormatException;
-import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
+import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
-import edu.ntnu.arunang.wargames.gui.container.UnitContainer;
+import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.gui.factory.*;
-import edu.ntnu.arunang.wargames.unit.Unit;
+import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
+import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
+import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
+import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -28,8 +29,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,29 +37,29 @@ import java.util.Optional;
 
 public class ListArmyCON {
     @FXML
-    private VBox armyContainer;
+    private VBox armyListContainer;
     @FXML
     private Text txtArmyName;
     @FXML
-    private VBox detailsWindow;
+    private VBox informationContainer;
     @FXML
-    private FlowPane unitContainer;
+    private VBox unitDetailsContainer;
     @FXML
     private Text title;
     @FXML
-    private HBox armyDetails;
+    private VBox armyDetailsContainer;
     @FXML
     private BorderPane borderPane;
 
-    private Army army;
+    private Army army = new Army("army");
     private Army attacker;
     private Army defender;
-    private final ArmySingleton armySingleton = ArmySingleton.getInstance();
 
     private Text errorMsg;
-    private HBox bottomBar;
+
     private Button btnPressedArmy;
     private boolean isAttacker;
+    private ArmyContainer unitContainer;
 
     /**
      * Updates the details container. If the window is disabled it will be set to enabled.
@@ -68,24 +67,18 @@ public class ListArmyCON {
      * It creates a detailed gridPane of the army stats, and a tableview of with every unit.
      */
 
-    void repaintDetails() {
-        if (!detailsWindow.isVisible()) {
-            detailsWindow.setVisible(true);
+    void repaintArmyInformation() {
+        if (!informationContainer.isVisible()) {
+            informationContainer.setVisible(true);
         }
 
-        //update the army fields
         txtArmyName.setText(army.getName());
 
-        armyDetails.getChildren().clear();
-        armyDetails.getChildren().add(new ArmyContainer(army).getGridPane());
+        unitContainer.setArmy(army);
+        unitContainer.updateData();
 
-        unitContainer.getChildren().clear();
-        Map<Unit, Integer> map = army.getMap();
-
-        for (Map.Entry<Unit, Integer> unit : map.entrySet()) {
-            UnitContainer container = new UnitContainer(unit.getKey(), unit.getValue(), false);
-            unitContainer.getChildren().add(container.getGridPane());
-        }
+        unitDetailsContainer.getChildren().clear();
+        unitDetailsContainer.getChildren().add(new UnitContainerManager(army, false).getFlowpane());
     }
 
     /**
@@ -95,14 +88,16 @@ public class ListArmyCON {
      */
 
     void repaintArmies(File[] armyFiles) {
-        //clear the container before adding
-        armyContainer.getChildren().clear();
+        // clear the container before adding
+        armyListContainer.getChildren().clear();
+
         if (armyFiles == null) {
             return;
         }
+
         ArmyFSH armyFSH = new ArmyFSH();
 
-        //loop through all the armies
+        // loop through all the armies
         for (File file : armyFiles) {
             Button button = ButtonFactory.listButton(file.getName().substring(0, file.getName().lastIndexOf('.')));
             button.setOnAction(buttonEvent -> {
@@ -115,22 +110,35 @@ public class ListArmyCON {
                     AlertFactory.createError("Army is wrongly formatted! \n" + e.getMessage()).show();
                     return;
                 }
-                updatePressed(button);
-                repaintDetails();
+                updatePressedArmy(button);
+                repaintArmyInformation();
             });
-            armyContainer.getChildren().add(button);
+            armyListContainer.getChildren().add(button);
         }
     }
 
     /**
-     * Changes the status when an army is pressed.
-     * When the army is selected it will be highlighted, and the previous
+     * Update the header. This is according to whether simulation has been chosen and the attacker is not null.
+     */
+
+    void repaintHeader() {
+        if (StateHandler.getInstance().isSimulate()) {
+            if (attacker == null) {
+                title.setText("Choose attacker");
+            } else {
+                title.setText("Choose defender");
+            }
+        }
+    }
+
+    /**
+     * Changes the status when an army is pressed. When the army is selected it will be highlighted, and the previous
      * selected army will be set to default styling.
      *
      * @param button army that was pressed.
      */
 
-    void updatePressed(Button button) {
+    void updatePressedArmy(Button button) {
         if (btnPressedArmy != null && !isAttacker) {
             ButtonDecorator.makeListElementDefault(btnPressedArmy);
         }
@@ -146,99 +154,91 @@ public class ListArmyCON {
     }
 
     /**
-     * Update the header. This is according to whether simulation has been choosen
-     * and the attacker is not null.
-     */
-
-    void repaintHeader() {
-        if (armySingleton.isSimulate()) {
-            if (attacker == null) {
-                title.setText("Choose attacker");
-            } else {
-                title.setText("Choose defender");
-            }
-        }
-    }
-
-    /**
-     * Initialize the bottom bar. Buttons will be added according to whether simulation has been
-     * choosen.
+     * Initialize the bottom bar. Buttons will be added according to whether simulation has been chosen.
      */
 
     void initBottomBar() {
         HBox bottomBar = NavbarFactory.createBottomBar();
-        //create back button
+        // create back button
         Button btnBack = ButtonFactory.createDefaultButton("Back");
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
-
         errorMsg = TextFactory.createSmallText("");
 
         bottomBar.getChildren().addAll(errorMsg, btnBack);
 
-        //add the buttons to the bottom bar
+        // add the buttons to the bottom bar
         borderPane.setBottom(bottomBar);
 
-        //Change the buttons to the circumstances
-        if (!armySingleton.isSimulate()) {
-
-            Button btnNewArmy = ButtonFactory.createDefaultButton("New army");
-            btnNewArmy.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
-
-            Button btnImportArmy = ButtonFactory.createDefaultButton("Import army");
-            btnImportArmy.setOnAction(this::importArmy);
-
-            bottomBar.getChildren().addAll(btnImportArmy, btnNewArmy);
+        // Add button to whether or not the page is for choosing armies for simulation
+        if (StateHandler.getInstance().isSimulate()) {
+            Button btnContinue = ButtonFactory.createDefaultButton("Continue");
+            btnContinue.setOnAction(this::onContinue);
+            bottomBar.getChildren().add(btnContinue);
 
             return;
         }
 
-        Button btnContinue = ButtonFactory.createDefaultButton("Continue");
-        btnContinue.setOnAction(this::onContinue);
+        Button btnNewArmy = ButtonFactory.createDefaultButton("New army");
+        btnNewArmy.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
+        Button btnImportArmy = ButtonFactory.createDefaultButton("Import army");
+        btnImportArmy.setOnAction(this::importArmy);
 
-        bottomBar.getChildren().add(btnContinue);
+        bottomBar.getChildren().addAll(btnImportArmy, btnNewArmy);
+
     }
+
+    /**
+     * Import an army from the file system. The file will be re-saved in the folder where armies are
+     * stored by the ArmyFSH default.
+     *
+     * @param actionEvent triggering event
+     */
 
     private void importArmy(ActionEvent actionEvent) {
         ArmyFSH armyFSH = new ArmyFSH();
 
+        //get the file that is being imported
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(((Node) actionEvent.getSource()).getScene().getWindow());
 
+        //check that a file has been chosen
         if (file == null) {
             return;
         }
 
         Army army;
+        //try to load the file to an army
         try {
             army = armyFSH.loadFromFile(file);
         } catch (FileFormatException e) {
             AlertFactory.createError("The file is wrongly formatted! \n" + e.getMessage()).show();
             return;
         } catch (IOException e) {
-            AlertFactory.createError("An error occured when opening the file!\n" + e.getMessage()).show();
+            AlertFactory.createError("An error occurred when opening the file!\n" + e.getMessage()).show();
             return;
         }
 
+        //check if the file already exists
         if (armyFSH.fileExists(file)) {
-            Optional<ButtonType> result = AlertFactory.createConfirmation("This army already exists, do you want to override it?").showAndWait();
-            if (result.get() != ButtonType.YES) {
+            Optional<ButtonType> result = AlertFactory
+                    .createConfirmation("This army already exists, do you want to override it?").showAndWait();
+            if (result.isEmpty() || result.get() != ButtonType.YES) {
                 return;
             }
         }
         try {
             armyFSH.writeArmy(army);
         } catch (IOException e) {
-            AlertFactory.createError("An error occured when writing the army!\n" + e.getMessage()).show();
+            AlertFactory.createError("An error occurred when writing the army!\n" + e.getMessage()).show();
             return;
         }
-        repaintArmies(armyFSH.getAllArmyFiles());
 
+        repaintArmies(armyFSH.getAllArmyFiles());
         AlertFactory.createInformation("Import successful").show();
     }
 
     /**
-     * Method called when the user presses the continue button. It sets the attacking army
-     * and defending army.
+     * Method called when the user presses the continue button. It sets the attacking army and defending army.
      *
      * @param event triggered by continue button
      */
@@ -258,57 +258,60 @@ public class ListArmyCON {
         } else {
             defender = army;
             FXMLLoader loader = GUI.initLoader(GUI.getPath("simulate"));
-            SimulateCON con = loader.getController();
-            con.setAttacker(attacker);
-            con.setDefender(defender);
+            ((SimulateCON) loader.getController()).initialize(attacker, defender);
             Scene scene = btnPressedArmy.getScene();
             Stage stage = (Stage) scene.getWindow();
             stage.setScene(new Scene(loader.getRoot(), scene.getWidth(), scene.getHeight()));
         }
         repaintHeader();
-        detailsWindow.setVisible(false);
+        informationContainer.setVisible(false);
         army = null;
     }
 
     /**
-     * Deletes an Army from the Singleton and in the stored files in /resources/army folder.
-     * The method will show a pop-up warning that the user must confirm.
+     * Deletes an Army from the Singleton and in the stored files in /resources/army folder. The method will show a
+     * pop-up warning that the user must confirm.
      */
 
     @FXML
     void onDelete() {
         ArmyFSH armyFSH = new ArmyFSH();
-        //get the result of the popup
-        Optional<ButtonType> result = AlertFactory.createConfirmation("Are you sure you want to delete army?").showAndWait();
+        // get the result of the popup
+        Optional<ButtonType> result = AlertFactory.createConfirmation("Are you sure you want to delete army?")
+                .showAndWait();
 
-        if (result.get() == ButtonType.CANCEL) {
+        if (result.isEmpty() || result.get() == ButtonType.CANCEL) {
             return;
         }
 
-        //show error if failed
+        // show error if failed
         if (!armyFSH.deleteArmy(army)) {
-            AlertFactory.createWarning("Could not remove army. \n The army file might be in use or does not exist.").show();
+            AlertFactory.createWarning("Could not remove army. \n The army file might be in use or does not exist.")
+                    .show();
             return;
         }
 
-        //refresh page
+        // refresh page
         File[] armyFiles = armyFSH.getAllArmyFiles();
         repaintArmies(armyFiles);
 
-        //hides the detailswindow
-        detailsWindow.setVisible(false);
+        // hides the details window
+        informationContainer.setVisible(false);
     }
 
     /**
-     * Initializes the page. It repaints the header and the army int the singleton.
-     * Lastly in initializes the bottom bar.
+     * Initializes the page. It repaints the header and the army int the singleton. Lastly in initializes the bottom
+     * bar.
      */
 
     @FXML
     void initialize() {
         repaintHeader();
-        detailsWindow.setVisible(false);
         initBottomBar();
+
+        informationContainer.setVisible(false);
+        unitContainer = new ArmyContainer(army);
+        armyDetailsContainer.getChildren().add(unitContainer.getGridPane());
 
         ArmyFSH armyFSH = new ArmyFSH();
         repaintArmies(armyFSH.getAllArmyFiles());

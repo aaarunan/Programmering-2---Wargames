@@ -4,7 +4,6 @@ import edu.ntnu.arunang.wargames.Army;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -15,17 +14,17 @@ import javafx.scene.layout.VBox;
 public class ChartFactory {
 
     /**
-     * Creates a line chart used to represent a battle. Shows the units of the
-     * attacking and defending army. Used when simulating a battle.
+     * Creates a line chart used to represent a battle. Shows the units of the attacking and defending army. Used when
+     * simulating a battle.
      *
      * @param attacker attacking army
      * @param defender defending army
      * @return barchart element
      */
 
-    public static LineChart<Number, Number> createBarChart(Army attacker, Army defender) {
+    public static LineChart<Number, Number> createLineChart(Army attacker, Army defender) {
 
-        //create the axes of the barchart
+        // create the axes of the barchart
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Number of attacks");
 
@@ -42,7 +41,7 @@ public class ChartFactory {
         LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
 
         lineChart.setCreateSymbols(false);
-        //can be turned off for performance
+        // can be turned off for performance
         lineChart.setAnimated(false);
         lineChart.setHorizontalGridLinesVisible(false);
         lineChart.setVerticalGridLinesVisible(false);
@@ -66,11 +65,11 @@ public class ChartFactory {
     }
 
     /**
-     * Creates a data element. Requires a xIndex, which is the x-coordinates of the value.
-     * values is the y-coordinate of the value.
+     * Creates a data element. Requires a xIndex, which is the x-coordinates of the value. values is the y-coordinate of
+     * the value.
      *
      * @param xIndex - x-coordinate
-     * @param value y-coordinate
+     * @param value  y-coordinate
      * @return Constructed data
      */
 

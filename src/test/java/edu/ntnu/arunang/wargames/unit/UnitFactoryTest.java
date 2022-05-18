@@ -10,7 +10,8 @@ class UnitFactoryTest {
     @DisplayName("Test creating a CavalryUnit")
     void testOnCreatingCavalryUnit() {
         CavalryUnit cavalryUnit = new CavalryUnit("name", 10);
-        CavalryUnit cavalryUnitFromFactory = (CavalryUnit) UnitFactory.constructUnitFromString("CavalryUnit", "name", 10);
+        CavalryUnit cavalryUnitFromFactory = (CavalryUnit) UnitFactory.constructUnitFromString("CavalryUnit", "name",
+                10);
 
         assertEquals(cavalryUnit, cavalryUnitFromFactory);
     }

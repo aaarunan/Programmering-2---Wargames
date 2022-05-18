@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class ArmyFSHTest {
 
     CavalryUnit cavUnit = new CavalryUnit("cavUnit", 20);
@@ -40,9 +39,9 @@ public class ArmyFSHTest {
 
         ArmyFSH armyFSH = new ArmyFSH();
         armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
-        assertEquals(-1, Files.mismatch(Paths.get(ArmyFSH.getTestPath("TestFasit")), Paths.get(ArmyFSH.getTestPath("Test"))));
+        assertEquals(-1,
+                Files.mismatch(Paths.get(ArmyFSH.getTestPath("TestFasit")), Paths.get(ArmyFSH.getTestPath("Test"))));
     }
-
 
     @Test
     @DisplayName("Test file reading")
@@ -61,7 +60,6 @@ public class ArmyFSHTest {
         assertEquals(army, armyFromFile);
     }
 
-
     @Test
     @DisplayName("Test file reading, when no units are specified")
     void testFileReadingOnOnlyArmyName() throws FileFormatException, IOException {
@@ -78,25 +76,21 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test file reading, on empty file")
     void testFileReadingOnEmpty() {
-        Throwable exception = assertThrows(
-                FileFormatException.class, () -> {
-                    ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blank")));
-                }
-        );
+        Throwable exception = assertThrows(FileFormatException.class, () -> {
+            ArmyFSH armyFSH = new ArmyFSH();
+            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blank")));
+        });
 
-        assertEquals("File '" + ArmyFSH.getTestPath("blank") +"' is empty", exception.getMessage());
+        assertEquals("File '" + ArmyFSH.getTestPath("blank") + "' is empty", exception.getMessage());
     }
 
     @Test
     @DisplayName("Test on reading non-supported Unit type")
     void testOnReadingNonSupportedType() {
-        Throwable exception = assertThrows(
-                FileFormatException.class, () -> {
-                    ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("notUnit")));
-                }
-        );
+        Throwable exception = assertThrows(FileFormatException.class, () -> {
+            ArmyFSH armyFSH = new ArmyFSH();
+            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("notUnit")));
+        });
 
         assertEquals("Unittype NotaUnit does not exist on Line: 1", exception.getMessage());
     }
@@ -116,14 +110,11 @@ public class ArmyFSHTest {
     @Test
     @DisplayName("Test on reading file that has blank fields")
     void testOnFileWithBlankFields() {
-        Throwable exception = assertThrows(
-                FileFormatException.class, () -> {
-                    ArmyFSH armyFSH = new ArmyFSH();
-                    armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blankFields")));
-                }
-        );
+        Throwable exception = assertThrows(FileFormatException.class, () -> {
+            ArmyFSH armyFSH = new ArmyFSH();
+            armyFSH.loadFromFile(new File(ArmyFSH.getTestPath("blankFields")));
+        });
 
         assertEquals("Too few fields on line: 1", exception.getMessage());
     }
 }
-

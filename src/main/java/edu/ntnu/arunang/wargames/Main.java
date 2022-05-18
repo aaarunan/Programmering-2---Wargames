@@ -1,6 +1,5 @@
 package edu.ntnu.arunang.wargames;
 
-import edu.ntnu.arunang.wargames.gui.ArmySingleton;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import javafx.application.Application;
 
@@ -17,7 +16,6 @@ public class Main {
      */
 
     public static void main(String[] args) {
-        ArmySingleton.getInstance();
         Application.launch(GUI.class, args);
     }
 

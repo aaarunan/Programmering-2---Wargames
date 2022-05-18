@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.battle.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ class RangedUnitTest {
 
         attacker.attack(defender);
 
-        //player should be dead
+        // player should be dead
         assertEquals(20, attacker.getHealthPoints());
         assertEquals(-3, defender.getHealthPoints());
 
@@ -93,4 +93,3 @@ class RangedUnitTest {
         }
     }
 }
-

@@ -2,7 +2,6 @@ package edu.ntnu.arunang.wargames.gui.decorator;
 
 import javafx.scene.control.Button;
 
-
 public class ButtonDecorator {
     private ButtonDecorator() {
 

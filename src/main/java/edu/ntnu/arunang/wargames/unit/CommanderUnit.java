@@ -1,14 +1,9 @@
 package edu.ntnu.arunang.wargames.unit;
 
 /**
- * The CommanderUnit is a more capable CavalryUnit.
- * It has the same special ability aswell.
+ * The CommanderUnit is a more capable CavalryUnit. It has the same special ability aswell.
  * <p>
- * Stats:
- * attackPoints: 25,
- * armorPoints: 15,
- * attackBonus: 4+2,
- * resistBonus: 1
+ * Stats: attackPoints: 25, armorPoints: 15, attackBonus: 4+2, resistBonus: 1
  */
 
 public class CommanderUnit extends CavalryUnit {
@@ -28,8 +23,7 @@ public class CommanderUnit extends CavalryUnit {
     }
 
     /**
-     * Constructor designed for objects in the same package
-     * that needs access to change the stats of the Unit.
+     * Constructor designed for objects in the same package that needs access to change the stats of the Unit.
      *
      * @param name         must not be empty
      * @param health       must be greater than 0
@@ -43,7 +37,8 @@ public class CommanderUnit extends CavalryUnit {
 
     @Override
     public CommanderUnit copy() {
-        CommanderUnit copy = new CommanderUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        CommanderUnit copy = new CommanderUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(),
+                this.getArmorPoints());
         copy.hasAttacked = this.hasAttacked;
         return copy;
     }

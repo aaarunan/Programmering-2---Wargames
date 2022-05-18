@@ -1,11 +1,10 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.battle.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class CommanderUnitTest {
 
@@ -37,7 +36,6 @@ class CommanderUnitTest {
         assertEquals(firstAttackBonus, defender.getAttackBonus());
     }
 
-
     @Test
     @DisplayName("Test attack bonus after attacking twice")
     void testAttackBonusTwice() {
@@ -61,7 +59,7 @@ class CommanderUnitTest {
 
         attacker.attack(defender);
 
-        //edu.ntnu.arunang.wargames.Unit should be dead
+        // edu.ntnu.arunang.wargames.Unit should be dead
         assertEquals(20, attacker.getHealthPoints());
         assertEquals(-6, defender.getHealthPoints());
 
@@ -106,4 +104,3 @@ class CommanderUnitTest {
         }
     }
 }
-

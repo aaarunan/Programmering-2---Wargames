@@ -1,20 +1,14 @@
 package edu.ntnu.arunang.wargames.unit;
 
-import edu.ntnu.arunang.wargames.Terrain;
+import edu.ntnu.arunang.wargames.battle.Terrain;
 
 /**
- * A CavalryUnit is a specialized melee unit, that does not have great defense.
- * CavalryUnit has a special ability where its first hit deals more damage.
+ * A CavalryUnit is a specialized melee unit, that does not have great defense. CavalryUnit has a special ability where
+ * its first hit deals more damage.
  * <p>
- * Stats:
- * attackPoints of 20,
- * armorPoints of 12,
- * attackBonus of 4+2,
- * resistBonus of 1
+ * Stats: attackPoints of 20, armorPoints of 12, attackBonus of 4+2, resistBonus of 1
  * <p>
- * Terrain:
- * +2 attackbonus on PLAINS
- * 0 resistbonus on FOREST
+ * Terrain: +2 attackbonus on PLAINS 0 resistbonus on FOREST
  */
 
 public class CavalryUnit extends Unit {
@@ -39,8 +33,7 @@ public class CavalryUnit extends Unit {
     }
 
     /**
-     * Constructor designed for objects in the same package that needs
-     * to change the Units stats.
+     * Constructor designed for objects in the same package that needs to change the Units stats.
      *
      * @param name         must not be empty
      * @param health       must be greater than 0
@@ -54,7 +47,8 @@ public class CavalryUnit extends Unit {
 
     @Override
     public CavalryUnit copy() {
-        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(),
+                this.getArmorPoints());
         copy.hasAttacked = this.hasAttacked;
         return copy;
     }
