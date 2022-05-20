@@ -1,0 +1,38 @@
+.armor-icon {
+    -fx-background-image: url('../icon/armorPoints.png');
+}
+
+.attack-icon {
+    -fx-background-image: url('../icon/attackPoints.png');
+}
+
+.health-icon {
+    -fx-background-image: url('../icon/healthPoints.png');
+}
+
+.infanryunit-icon {
+    -fx-background-image: url('../icon/InfantryUnit.png');
+}
+
+.commanderunit-icon {
+    -fx-background-image: url('../icon/CommanderUnit.png');
+}
+
+.infantryunit-icon {
+    -fx-background-image: url('../icon/InfantryUnit.png');
+}
+
+.cavalryunit-icon {
+    -fx-background-image: url('../icon/CavalryUnit.png');
+}
+
+.rangedunit-icon {
+    -fx-background-image: url('../icon/RangedUnit.png');
+}
+
+.icon-text {
+    -fx-background-size: 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 100%;
+    -fx-padding: 0 30 0 0;
+}

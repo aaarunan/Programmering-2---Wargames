@@ -59,6 +59,8 @@ public abstract class Unit implements Comparable<Unit> {
     /**
      * Makes a copy of the unit and resets its stats.
      * Essentially making it a new unit. Used to generalize Units.
+     *
+     * @return the unit with reset stats
      */
 
     public abstract Unit getResetCopy();
@@ -176,6 +178,7 @@ public abstract class Unit implements Comparable<Unit> {
     /**
      * An abstract method that is used to specialize the attack of an Unit.
      *
+     * @param  terrain of were the attack is happening
      * @return this.attackBonus
      */
 
@@ -184,6 +187,7 @@ public abstract class Unit implements Comparable<Unit> {
     /**
      * An abstract method that is used to specialize the defence of a specific Unit
      *
+     * @param terrain the terrain of where the attack is happening
      * @return this.resistBonus
      */
 

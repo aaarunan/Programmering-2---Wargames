@@ -1,8 +1,10 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.unit.Unit;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -87,40 +89,6 @@ public class ContainerFactory {
         private final VBox vBox = createInformationListCard();
 
         /**
-         * Creates a tableview to show units. Used to show details of an army.
-         *
-         * @param tableUnits tableview element
-         */
-
-        @Deprecated
-        public static void initTableViewUnits(TableView<Unit> tableUnits) {
-            // create the columns and add an observer on them
-
-            TableColumn<Unit, String> type = new TableColumn<>("Type");
-            type.setCellValueFactory(unit -> new SimpleStringProperty(unit.getValue().getClass().getSimpleName()));
-
-            TableColumn<Unit, String> name = new TableColumn<>("Name");
-            name.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-            TableColumn<Unit, Integer> healthPoints = new TableColumn<>("Health");
-            healthPoints.setCellValueFactory(new PropertyValueFactory<>("healthPoints"));
-
-            TableColumn<Unit, Integer> armorPoints = new TableColumn<>("Armorpoints");
-            armorPoints.setCellValueFactory(new PropertyValueFactory<>("armorPoints"));
-
-            TableColumn<Unit, Integer> attackPoints = new TableColumn<>("Attack");
-            attackPoints.setCellValueFactory(new PropertyValueFactory<>("attackPoints"));
-
-            // Add all the columns to the table
-
-            tableUnits.getColumns().add(type);
-            tableUnits.getColumns().add(name);
-            tableUnits.getColumns().add(healthPoints);
-            tableUnits.getColumns().add(armorPoints);
-            tableUnits.getColumns().add(attackPoints);
-        }
-
-        /**
          * Add a text element with a given string
          *
          * @param string text element
@@ -128,9 +96,9 @@ public class ContainerFactory {
          */
 
         public ListCardBuilder add(String string) {
-            Text text = new Text(string);
+            Label text = TextFactory.createSmallText(string);
             // add css to the element
-            text.getStyleClass().add("text-small");
+            TextDecorator.makeColored(text);
             // add the element to the vbox
             vBox.getChildren().add(text);
 

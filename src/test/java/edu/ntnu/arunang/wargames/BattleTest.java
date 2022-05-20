@@ -22,14 +22,14 @@ class BattleTest {
     Battle battle = new Battle(attacker, defender, null);
 
     @Test
-    @DisplayName("Test empty on when both armies are empty")
+    @DisplayName("Test when both armies are empty")
     void testBattleOnFullEmpty() {
         IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(),
-                "All armies must have atleast one unit."
+                "All armies must have at least one unit."
 
         );
 
-        assertEquals("All armies must have atleast one unit.", thrown.getMessage());
+        assertEquals("All armies must have at least one unit.", thrown.getMessage());
     }
 
     @Test
@@ -38,11 +38,11 @@ class BattleTest {
         attacker.add(infUnit);
         battle = new Battle(attacker, defender, null);
         IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(),
-                "All armies must have atleast one unit."
+                "All armies must have at least one unit."
 
         );
 
-        assertEquals("All armies must have atleast one unit.", thrown.getMessage());
+        assertEquals("All armies must have at least one unit.", thrown.getMessage());
     }
 
     @Test

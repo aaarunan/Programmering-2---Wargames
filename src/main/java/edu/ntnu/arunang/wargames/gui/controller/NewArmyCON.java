@@ -5,6 +5,7 @@ import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
@@ -154,9 +155,6 @@ public class NewArmyCON {
 
         repaintUnits();
 
-        Button btnDelete = new Button("Delete");
-        ArrayList<Unit> finalUnits = units;
-        btnDelete.setOnAction(event -> onDeleteUnits(event, finalUnits));
 
         Unit target = units.get(0);
         // Add a card to the history container
@@ -164,6 +162,9 @@ public class NewArmyCON {
         VBox listCard = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName())
                 .add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
 
+        Button btnDelete = new Button("Delete");
+        ArrayList<Unit> finalUnits = units;
+        btnDelete.setOnAction(event -> onDeleteUnits(event, finalUnits, listCard));
 
         // add all the elements and update the page
         listCard.getChildren().add(btnDelete);
@@ -178,12 +179,14 @@ public class NewArmyCON {
      * @param units units that are removed
      */
 
-    void onDeleteUnits(ActionEvent event, List<Unit> units) {
+    void onDeleteUnits(ActionEvent event, List<Unit> units, VBox vBox) {
         for (Unit unit : units) {
             army.remove(unit);
-            repaintDetails();
-            repaintUnits();
         }
+        repaintDetails();
+        repaintUnits();
+
+        historyContainer.getChildren().remove(vBox);
     }
 
     /**
@@ -218,7 +221,7 @@ public class NewArmyCON {
     }
 
     /**
-     * Initializes the page. Initializes number only fields and the tableview.
+     * Initializes the page. Initializes number only fields, and bottombar.
      */
 
     @FXML
@@ -230,6 +233,9 @@ public class NewArmyCON {
         armyContainer.getChildren().add(armyGridPane.getGridPane());
         ButtonFactory.initNumberOnlyTextField(fieldCount);
         ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
+        TextDecorator.makeErrorText(txtErrorMsg);
+
         initBottomBar();
+
     }
 }

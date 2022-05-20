@@ -1,4 +1,4 @@
-open module edu.ntnu.arunang.wargames {
+open module wargames {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.base;

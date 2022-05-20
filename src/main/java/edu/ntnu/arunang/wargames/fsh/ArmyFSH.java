@@ -46,7 +46,17 @@ public class ArmyFSH implements FSH {
      */
 
     public static String getPath(String fileName) {
-        return FileSystems.getDefault().getPath("src", "main", "resources", "army", fileName + ".csv").toString();
+        return getDir() + "/" + fileName + "." + FILETYPE;
+    }
+
+    /**
+     * Get the directory of were the army files are saved.
+     *
+     * @return directory as string.
+     */
+
+    public static String getDir() {
+        return System.getProperty("user.home") + "/Wargames/Army";
     }
 
     /**
@@ -109,7 +119,7 @@ public class ArmyFSH implements FSH {
     public Army loadFromFile(File file) throws FileFormatException, IOException {
         //Check if file is csv
         if (!isCsv(file.toString())) {
-            throw new FileFormatException(String.format("File '%s' is not csv.", file));
+            throw new FileFormatException(String.format("File '%s' is not csv.", file.getName()));
         }
 
         Army army;
@@ -255,7 +265,7 @@ public class ArmyFSH implements FSH {
      */
 
     public File[] getAllArmyFiles() {
-        File folder = new File(FSH.getPathFromResources("army"));
+        File folder = new File(getDir());
         return folder.listFiles();
     }
 }

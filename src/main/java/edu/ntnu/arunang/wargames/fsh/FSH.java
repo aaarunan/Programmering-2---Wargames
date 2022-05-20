@@ -11,17 +11,6 @@ import java.nio.file.FileSystems;
 public interface FSH {
 
     /**
-     * Get the full system path from resources.
-     *
-     * @param string fileName or directory
-     * @return full path
-     */
-
-    static String getPathFromResources(String string) {
-        return FileSystems.getDefault().getPath("src", "main", "resources", string).toString();
-    }
-
-    /**
      * Check if a file exists. Useful for overwrite protection.
      *
      * @param file file that is being checked

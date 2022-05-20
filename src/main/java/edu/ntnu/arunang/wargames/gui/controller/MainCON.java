@@ -2,7 +2,6 @@ package edu.ntnu.arunang.wargames.gui.controller;
 
 import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.GUI;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -20,7 +19,7 @@ public class MainCON {
      */
 
     @FXML
-    void onBtnArmies(ActionEvent event) {
+    void onArmies(ActionEvent event) {
         StateHandler.getInstance().setSimulate(false);
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
@@ -32,7 +31,7 @@ public class MainCON {
      */
 
     @FXML
-    void onBtnSimulate(ActionEvent event) {
+    void onSimulate(ActionEvent event) {
         StateHandler.getInstance().setSimulate(true);
         GUI.setSceneFromActionEvent(event, "listArmy");
     }
@@ -42,8 +41,9 @@ public class MainCON {
      */
 
     @FXML
-    void onBtnQuit() {
-        Platform.exit();
+    void onCreate(ActionEvent event) {
+        GUI.setSceneFromActionEvent(event, "newArmy");
     }
+
 
 }

@@ -15,6 +15,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -60,10 +61,10 @@ public class SimulateCON {
     private Button btnStart;
     private Button btnCleanChart;
     private ComboBox<Terrain> terrainComboBox;
-    private Text simulationText = TextFactory.createSmallText("Simulation run: " + 0);
+    private Label simulationText = TextFactory.createSmallText("Simulation run: " + 0);
     private Text attackerHeader;
     private Text defenderHeader;
-    private Text txtErrorMsg;
+    private Label txtErrorMsg;
     private ArmyContainer attackerDetails;
     private ArmyContainer defenderDetails;
     private UnitContainerManager attackerUnitsContainer;
@@ -289,8 +290,8 @@ public class SimulateCON {
         this.attacker = originalAttacker.copy();
         this.defender = originalDefender.copy();
 
-        attackerHeader = TextFactory.createSmallTitle("");
-        defenderHeader = TextFactory.createSmallTitle("");
+        attackerHeader = TextFactory.createSmallTitle("", false);
+        defenderHeader = TextFactory.createSmallTitle("", false);
 
         attackerArmyContainer.getChildren().add(attackerHeader);
         defenderArmyContainer.getChildren().add(defenderHeader);
@@ -305,7 +306,7 @@ public class SimulateCON {
         battle.attach(attackObserver);
 
         simulationText = TextFactory.createSmallText("");
-        infoContainer.getChildren().add(TextFactory.createTitle(this.attacker.getName() + " vs. " + this.defender.getName()));
+        infoContainer.getChildren().add(TextFactory.createTitle(this.attacker.getName() + " vs. " + this.defender.getName(), true));
         infoContainer.getChildren().add(simulationText);
 
         // create barchart
@@ -315,8 +316,8 @@ public class SimulateCON {
         createNewDataSeries();
         resetArmyInformation();
 
-        attackerArmyContainer.getChildren().add(TextFactory.createSmallTitle("Attacker units:"));
-        defenderArmyContainer.getChildren().add(TextFactory.createSmallTitle("Defender units:"));
+        attackerArmyContainer.getChildren().add(TextFactory.createSmallTitle("Attacker units:", false));
+        defenderArmyContainer.getChildren().add(TextFactory.createSmallTitle("Defender units:", false));
 
         initUnitsWindow();
 

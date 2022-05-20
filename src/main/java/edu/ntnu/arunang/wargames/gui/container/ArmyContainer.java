@@ -1,8 +1,9 @@
 package edu.ntnu.arunang.wargames.gui.container;
 
 import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
@@ -13,10 +14,10 @@ import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 public class ArmyContainer {
 
-    private final Text armySize = createSmallText("");
-    private final Text avgHealth = createSmallText("");
-    private final Text avgArmor = createSmallText("");
-    private final Text avgAttack = createSmallText("");
+    private final Label armySize = createSmallText("");
+    private final Label avgHealth = createSmallText("");
+    private final Label avgArmor = createSmallText("");
+    private final Label avgAttack = createSmallText("");
     private final int row = 0;
     private Army army;
     private GridPane gridPane;
@@ -32,11 +33,16 @@ public class ArmyContainer {
 
     private void initArmyContainer() {
         gridPane = new GridPane();
+        int i = 0;
 
-        gridPane.addRow(0, createSmallText("Count:"), armySize);
-        gridPane.addRow(1, createSmallText("Total HP: "), avgHealth);
-        gridPane.addRow(2, createSmallText("Total armor: "), avgArmor);
-        gridPane.addRow(3, createSmallText("Total attack"), avgAttack);
+        TextDecorator.setIcon(avgHealth, "health");
+        TextDecorator.setIcon(avgArmor, "armor");
+        TextDecorator.setIcon(avgAttack, "attack");
+
+        gridPane.addRow(i++, createSmallText("Count:"), armySize);
+        gridPane.addRow(i++, createSmallText("Total HP: "), avgHealth);
+        gridPane.addRow(i++, createSmallText("Total armor: "), avgArmor);
+        gridPane.addRow(i, createSmallText("Total attack"), avgAttack);
         updateData();
 
         // add the css

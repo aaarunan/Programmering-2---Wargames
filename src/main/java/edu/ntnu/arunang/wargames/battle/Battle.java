@@ -31,6 +31,7 @@ public class Battle extends Subject {
      *
      * @param attacker attacking Army.
      * @param defender defending Army.
+     * @param terrain terrain of the battle
      */
 
     public Battle(Army attacker, Army defender, Terrain terrain) {

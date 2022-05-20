@@ -109,13 +109,13 @@ public class GUI extends Application {
 
         // throw new exceptions to not get NullPointerException down the line
         if (loader == null) {
-            throw new IllegalStateException("Root is null");
+            throw new NullPointerException("Root is null");
         }
         return loader;
     }
 
     public static URL getPath(String page) {
-        return GUI.class.getResource("/gui/" + page + ".fxml");
+        return GUI.class.getResource("/gui/view/" + page + ".fxml");
     }
 
     /**

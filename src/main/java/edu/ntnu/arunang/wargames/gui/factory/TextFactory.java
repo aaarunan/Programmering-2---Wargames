@@ -1,5 +1,6 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 /**
@@ -15,8 +16,8 @@ public class TextFactory {
      * @return text element
      */
 
-    public static Text createSmallText(String string) {
-        Text text = new Text(string);
+    public static Label createSmallText(String string) {
+        Label text = new Label(string);
         // add css class
         text.getStyleClass().add("text-small");
 
@@ -30,11 +31,13 @@ public class TextFactory {
      * @return text element
      */
 
-    public static Text createSmallTitle(String string) {
+    public static Text createSmallTitle(String string, boolean colored) {
         Text text = new Text(string);
         // add css
         text.getStyleClass().add("title-small");
-
+        if (colored) {
+            text.getStyleClass().add("text-colored");
+        }
         return text;
     }
 
@@ -45,9 +48,12 @@ public class TextFactory {
      * @return constructed text element.
      */
 
-    public static Text createTitle(String string) {
+    public static Text createTitle(String string, boolean colored) {
         Text text = new Text(string);
         text.getStyleClass().add("title");
+        if (colored) {
+            text.getStyleClass().add("text-colored");
+        }
         return text;
     }
 }

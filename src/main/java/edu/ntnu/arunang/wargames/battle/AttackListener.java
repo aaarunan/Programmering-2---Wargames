@@ -14,6 +14,11 @@ import javafx.application.Platform;
 public class AttackListener implements EventListener {
     private final SimulateCON simulateCON;
 
+    /**
+     * Creates an attacklistener with the reference of the object that is listening.
+     *
+     * @param simulateCON - javafx controller class
+     */
     public AttackListener(SimulateCON simulateCON) {
         this.simulateCON = simulateCON;
     }

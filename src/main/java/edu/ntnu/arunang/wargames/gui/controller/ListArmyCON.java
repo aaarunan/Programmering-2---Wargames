@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,8 +55,7 @@ public class ListArmyCON {
     private Army army = new Army("army");
     private Army attacker;
     private Army defender;
-
-    private Text errorMsg;
+    private Label txtErrorMsg;
 
     private Button btnPressedArmy;
     private boolean isAttacker;
@@ -91,9 +91,11 @@ public class ListArmyCON {
         // clear the container before adding
         armyListContainer.getChildren().clear();
 
-        if (armyFiles == null) {
+        if (armyFiles == null || armyFiles.length == 0) {
+            armyListContainer.getChildren().add(TextFactory.createSmallTitle("No armies found!", false));
             return;
         }
+
 
         ArmyFSH armyFSH = new ArmyFSH();
 
@@ -162,9 +164,10 @@ public class ListArmyCON {
         // create back button
         Button btnBack = ButtonFactory.createDefaultButton("Back");
         btnBack.setOnAction(event -> GUI.setSceneFromActionEvent(event, "main"));
-        errorMsg = TextFactory.createSmallText("");
+        txtErrorMsg = TextFactory.createSmallText("");
+        TextDecorator.makeErrorText(txtErrorMsg);
 
-        bottomBar.getChildren().addAll(errorMsg, btnBack);
+        bottomBar.getChildren().addAll(txtErrorMsg, btnBack);
 
         // add the buttons to the bottom bar
         borderPane.setBottom(bottomBar);
@@ -245,8 +248,8 @@ public class ListArmyCON {
 
     void onContinue(ActionEvent event) {
         if (army == null) {
-            TextDecorator.makeErrorText(errorMsg);
-            errorMsg.setText("Choose an army");
+
+            txtErrorMsg.setText("Choose an army");
             return;
         }
 
@@ -300,7 +303,7 @@ public class ListArmyCON {
     }
 
     /**
-     * Initializes the page. It repaints the header and the army int the singleton. Lastly in initializes the bottom
+     * Initializes the page. It repaints the header and initializes the bottom
      * bar.
      */
 

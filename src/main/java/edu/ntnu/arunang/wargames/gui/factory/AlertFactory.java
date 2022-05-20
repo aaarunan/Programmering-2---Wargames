@@ -60,7 +60,6 @@ public class AlertFactory {
      * the gui application.
      *
      * @param message message to be shown on the popup
-     * @return an alert element
      */
 
     public static void showJOptionPaneError(String message) {
