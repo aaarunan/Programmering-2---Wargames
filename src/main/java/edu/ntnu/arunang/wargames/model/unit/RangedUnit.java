@@ -1,6 +1,6 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
-import edu.ntnu.arunang.wargames.battle.Terrain;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 
 /**
  * A RangedUnit is a Unit that has a ranged speciality. It has a special ability where it receives less damage with

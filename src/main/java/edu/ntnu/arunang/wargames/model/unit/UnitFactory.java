@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
 import java.util.ArrayList;
 import java.util.List;

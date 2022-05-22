@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
 /**
  * List of all unit-types. These unit-types are used in the UnitFactory to create a Unit. They are also used to get the

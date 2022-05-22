@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
 /**
  * The CommanderUnit is a more capable CavalryUnit. It has the same special ability aswell.

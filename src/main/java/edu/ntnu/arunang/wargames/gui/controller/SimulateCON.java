@@ -1,14 +1,15 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
-import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.battle.AttackListener;
-import edu.ntnu.arunang.wargames.battle.Battle;
-import edu.ntnu.arunang.wargames.battle.Terrain;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
+import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.battle.AttackListener;
+import edu.ntnu.arunang.wargames.model.battle.Battle;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
+import edu.ntnu.arunang.wargames.event.gui.factory.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -92,15 +93,29 @@ public class SimulateCON {
         defenderDetails.updateData();
     }
 
+    /**
+     * Repaints the unit cards
+     */
+
     private void repaintUnitInformation() {
         attackerUnitsContainer.updateContainer();
         defenderUnitsContainer.updateContainer();
     }
 
+    /**
+     * Clears the chart and creates a new data series
+     *
+     * @param event triggering event
+     */
+
     private void onCleanChart(ActionEvent event) {
         lineChart.getData().clear();
         createNewDataSeries();
     }
+
+    /**
+     * Create a new data series for the linechart
+     */
 
     private void createNewDataSeries() {
         attackerData = ChartFactory.createDataSeries(attacker.getName() + ", run: " + simulations.size());
@@ -163,14 +178,16 @@ public class SimulateCON {
         btnStart.setOnAction(this::onStop);
     }
 
+    /**
+     * Stops the simulation
+     *
+     * @param event triggering event
+     */
+
     private void onStop(ActionEvent event) {
         battle.stopSimulation();
         btnStart.setText("Restart");
         btnStart.setOnAction(this::onRestart);
-    }
-
-    private void onSimulationError() {
-
     }
 
     /**
@@ -184,6 +201,13 @@ public class SimulateCON {
         btnStart.setText("Stop");
         btnStart.setOnAction(this::onStop);
     }
+
+    /**
+     * Resets the simulation page and loads a new Battle class with the original
+     * attacker and defender.
+     *
+     * @param event triggering event
+     */
 
     private void onRollBack(ActionEvent event) {
         attacker = originalAttacker.copy();
@@ -205,6 +229,11 @@ public class SimulateCON {
         initUnitsWindow();
     }
 
+    /**
+     * Finishes the simulation by announcing the winner and loser army
+     * Updates the gui elements accordingly.
+     */
+
     public void onSimulationFinish() {
         if (attacker.hasUnits()) {
             attackerHeader.setText("Winner: " + attacker.getName());
@@ -224,6 +253,11 @@ public class SimulateCON {
         repaintUnitInformation();
     }
 
+    /**
+     * Updates the graphical elements. Text updates every 30 ms, and the linechart updates
+     * every 100ms.
+     */
+
     public void onRepaint() {
         long now = new Date().getTime();
 
@@ -239,11 +273,19 @@ public class SimulateCON {
         }
     }
 
+    /**
+     * Resets the army names and updates the simulation runs.
+     */
+
     private void resetArmyInformation() {
         attackerHeader.setText(attacker.getName());
         defenderHeader.setText(defender.getName());
         simulationText.setText("Simulation run: " + simulations.size());
     }
+
+    /**
+     * Initializes the unit cards
+     */
 
     private void initUnitsWindow() {
         attackerUnitsContainer = new UnitContainerManager(attacker, false);
@@ -252,6 +294,10 @@ public class SimulateCON {
         attackerUnitsWindow.getChildren().add(attackerUnitsContainer.getFlowpane());
         defenderUnitsWindow.getChildren().add(defenderUnitsContainer.getFlowpane());
     }
+
+    /**
+     * Initializes the bottombar with Start, Finish, Clean, Terrain chooser buttons.
+     */
 
     private void initBottomBar() {
 
@@ -280,7 +326,8 @@ public class SimulateCON {
     }
 
     /**
-     * Initializes the gui elements and creates a barchart
+     * Initializes the gui elements and creates a barchart. The initialize method
+     * must be called manually and set an attacking and defending army.
      */
 
     protected void initialize(Army attacker, Army defender) {

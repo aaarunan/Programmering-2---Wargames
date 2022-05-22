@@ -1,6 +1,6 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
-import edu.ntnu.arunang.wargames.battle.Terrain;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -137,10 +137,10 @@ class UnitTest {
     };
 
     @Test
-    @DisplayName("Constructing Unit wrong should throw exception when healthPoints are less than or equals to 0")
+    @DisplayName("Constructing Unit wrong should throw exception when healthPoints are less than 0")
     void testConstructWrongOnHealth() {
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-            Unit unit = new Unit("", 0, 1, 1) {
+            Unit unit = new Unit("", -1, 1, 1) {
                 @Override
                 public Unit copy() {
                     return null;
@@ -173,7 +173,7 @@ class UnitTest {
             };
         });
 
-        assertEquals("Health-points must be greater than or equal to 0", exception.getMessage());
+        assertEquals("Health-points can not be less than 0", exception.getMessage());
     }
 
     @Test

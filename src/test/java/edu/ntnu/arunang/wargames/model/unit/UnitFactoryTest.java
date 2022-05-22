@@ -1,5 +1,8 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
+import edu.ntnu.arunang.wargames.model.unit.CavalryUnit;
+import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
+import edu.ntnu.arunang.wargames.model.unit.UnitType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

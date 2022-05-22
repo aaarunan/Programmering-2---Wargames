@@ -1,11 +1,10 @@
 package edu.ntnu.arunang.wargames.gui.container;
 
-import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
+import edu.ntnu.arunang.wargames.model.Army;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-
-import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 /**
  * An object for viewing army stats. The armies are viewed in a gridpane. The reason for a
@@ -14,11 +13,10 @@ import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 public class ArmyContainer {
 
-    private final Label armySize = createSmallText("");
-    private final Label avgHealth = createSmallText("");
-    private final Label avgArmor = createSmallText("");
-    private final Label avgAttack = createSmallText("");
-    private final int row = 0;
+    private final Label armySize = TextFactory.createSmallText("");
+    private final Label avgHealth = TextFactory.createSmallText("");
+    private final Label avgArmor = TextFactory.createSmallText("");
+    private final Label avgAttack = TextFactory.createSmallText("");
     private Army army;
     private GridPane gridPane;
 
@@ -39,10 +37,10 @@ public class ArmyContainer {
         TextDecorator.setIcon(avgArmor, "armor");
         TextDecorator.setIcon(avgAttack, "attack");
 
-        gridPane.addRow(i++, createSmallText("Count:"), armySize);
-        gridPane.addRow(i++, createSmallText("Total HP: "), avgHealth);
-        gridPane.addRow(i++, createSmallText("Total armor: "), avgArmor);
-        gridPane.addRow(i, createSmallText("Total attack"), avgAttack);
+        gridPane.addRow(i++, TextFactory.createSmallText("Count:"), armySize);
+        gridPane.addRow(i++, TextFactory.createSmallText("Total HP: "), avgHealth);
+        gridPane.addRow(i++, TextFactory.createSmallText("Total armor: "), avgArmor);
+        gridPane.addRow(i, TextFactory.createSmallText("Total attack"), avgAttack);
         updateData();
 
         // add the css

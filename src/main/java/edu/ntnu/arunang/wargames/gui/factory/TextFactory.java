@@ -56,4 +56,5 @@ public class TextFactory {
         }
         return text;
     }
+
 }

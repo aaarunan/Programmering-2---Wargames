@@ -1,14 +1,13 @@
 package edu.ntnu.arunang.wargames.gui.container;
 
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.unit.Unit;
+import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
+import edu.ntnu.arunang.wargames.model.unit.Unit;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 
 import java.util.Locale;
-
-import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 
 /**
  * Container that is used to make a gui element to view units. The stats of the units
@@ -22,12 +21,12 @@ import static edu.ntnu.arunang.wargames.gui.factory.TextFactory.createSmallText;
 class UnitContainer {
     private final Unit unit;
     private final boolean condensed;
-    private final Label name = createSmallText("");
-    private final Label healthPoints = createSmallText("");
-    private final Label armorPoints = createSmallText("");
-    private final Label attackPoints = createSmallText("");
-    private final Label txtCount = createSmallText("");
-    private final Label unitType = createSmallText("");
+    private final Label name = TextFactory.createSmallText("");
+    private final Label healthPoints = TextFactory.createSmallText("");
+    private final Label armorPoints = TextFactory.createSmallText("");
+    private final Label attackPoints = TextFactory.createSmallText("");
+    private final Label txtCount = TextFactory.createSmallText("");
+    private final Label unitType = TextFactory.createSmallText("");
     private int count;
     private GridPane gridPane;
 
@@ -61,14 +60,14 @@ class UnitContainer {
         TextDecorator.setIcon(unitType, unit.getClass().getSimpleName().toLowerCase(Locale.ROOT));
 
         //add all fields
-        gridPane.addRow(i++, createSmallText("Name:"), name);
-        gridPane.addRow(i++, createSmallText("Type:"), unitType);
-        gridPane.addRow(i++, createSmallText("Armorpoints:"), armorPoints);
-        gridPane.addRow(i++, createSmallText("Attackpoints:"), attackPoints);
+        gridPane.addRow(i++, TextFactory.createSmallText("Name:"), name);
+        gridPane.addRow(i++, TextFactory.createSmallText("Type:"), unitType);
+        gridPane.addRow(i++, TextFactory.createSmallText("Armorpoints:"), armorPoints);
+        gridPane.addRow(i++, TextFactory.createSmallText("Attackpoints:"), attackPoints);
         if (!condensed) {
-            gridPane.addRow(i++, createSmallText("Healthpoints:"), healthPoints);
+            gridPane.addRow(i++, TextFactory.createSmallText("Healthpoints:"), healthPoints);
         }
-        gridPane.addRow(i, createSmallText("Count:"), txtCount);
+        gridPane.addRow(i, TextFactory.createSmallText("Count:"), txtCount);
 
         //update the values according to the unit
         name.setText(unit.getName());

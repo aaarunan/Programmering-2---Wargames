@@ -6,7 +6,6 @@ import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import javafx.application.Application;
 
 import java.io.File;
-import java.nio.file.FileSystems;
 
 /**
  * Main class of the application. Loads all the necessary resources and starts the gui.

@@ -1,6 +1,6 @@
-package edu.ntnu.arunang.wargames;
+package edu.ntnu.arunang.wargames.model;
 
-import edu.ntnu.arunang.wargames.unit.Unit;
+import edu.ntnu.arunang.wargames.model.unit.Unit;
 
 import java.util.*;
 
@@ -159,7 +159,7 @@ public class Army {
      */
 
     public int getTotalHealthPoints() {
-        return this.units.stream().mapToInt(Unit::getHealthPoints).sum();
+        return this.shallowCopy().stream().mapToInt(Unit::getHealthPoints).sum();
     }
 
     /**
@@ -169,7 +169,7 @@ public class Army {
      */
 
     public int getTotalAttackPoints() {
-        return this.units.stream().mapToInt(Unit::getAttackPoints).sum();
+        return this.shallowCopy().stream().mapToInt(Unit::getAttackPoints).sum();
     }
 
     /**
@@ -179,7 +179,7 @@ public class Army {
      */
 
     public int getTotalArmorPoints() {
-        return this.units.stream().mapToInt(Unit::getArmorPoints).sum();
+        return this.shallowCopy().stream().mapToInt(Unit::getArmorPoints).sum();
     }
 
     /**
@@ -207,6 +207,10 @@ public class Army {
 
     public Army copy() {
         return new Army(this.getName(), this.deepCopy());
+    }
+
+    public ArrayList<Unit> shallowCopy() {
+        return new ArrayList<>(this.units);
     }
 
     /**
@@ -286,7 +290,7 @@ public class Army {
 
     public Map<Unit, Integer> getMap() {
         Map<Unit, Integer> army = new HashMap<>();
-        units.forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+        this.shallowCopy().forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
         return army;
     }
 
@@ -301,7 +305,7 @@ public class Army {
 
     public Map<Unit, Integer> getCondensedMap() {
         Map<Unit, Integer> army = new HashMap<>();
-        for (Unit unit : units) {
+        for (Unit unit : this.shallowCopy()) {
             Unit copy = unit.getResetCopy();
             copy.setHealthPoints(1);
             army.merge(copy, 1, Integer::sum);

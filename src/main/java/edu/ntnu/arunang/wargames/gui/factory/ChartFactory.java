@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames.gui.factory;
 
-import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.model.Army;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -27,10 +27,11 @@ public class ChartFactory {
         // create the axes of the barchart
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Number of attacks");
+        xAxis.setAutoRanging(true);
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Units");
-        yAxis.autoRangingProperty().setValue(false);
+        yAxis.setAutoRanging(true);
 
         int size = defender.size();
         if (attacker.size() > defender.size()) {

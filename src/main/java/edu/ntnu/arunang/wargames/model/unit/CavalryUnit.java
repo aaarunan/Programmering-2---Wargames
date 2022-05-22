@@ -1,6 +1,6 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
-import edu.ntnu.arunang.wargames.battle.Terrain;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 
 /**
  * A CavalryUnit is a specialized melee unit, that does not have great defense. CavalryUnit has a special ability where

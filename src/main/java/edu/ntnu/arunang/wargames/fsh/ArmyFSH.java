@@ -1,8 +1,8 @@
 package edu.ntnu.arunang.wargames.fsh;
 
-import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.unit.Unit;
-import edu.ntnu.arunang.wargames.unit.UnitFactory;
+import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.unit.Unit;
+import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;

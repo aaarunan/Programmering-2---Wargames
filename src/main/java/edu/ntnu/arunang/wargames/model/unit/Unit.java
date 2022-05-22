@@ -1,6 +1,6 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
-import edu.ntnu.arunang.wargames.battle.Terrain;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 
 import java.util.Objects;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
  * A Unit is an abstract base class for a specific Unit. A unit is a military troop that can attack and deal damage, and
  * be attacked and take damage It implements Comparable because the Unit implements compareTo.
  * <p>
- * The healthPoints of a Unit are points that determines the Unit state: HealthPoints > 0 = alive, healthPoints < 0 =
+ * The healthPoints of a Unit are points that determines the Unit state: HealthPoints less than 0 = alive.
  * dead
  * <p>
  * AttackPoints represents the base-attack of a Unit.
@@ -34,8 +34,8 @@ public abstract class Unit implements Comparable<Unit> {
      */
 
     public Unit(String name, int healthPoints, int attackPoints, int armorPoints) throws IllegalStateException {
-        if (healthPoints <= 0) {
-            throw new IllegalArgumentException("Health-points must be greater than or equal to 0");
+        if (healthPoints < 0) {
+            throw new IllegalArgumentException("Health-points can not be less than 0");
         }
 
         if (attackPoints < 0 || armorPoints < 0) {
@@ -130,13 +130,13 @@ public abstract class Unit implements Comparable<Unit> {
 
     /**
      * When a Unit is hit this function will be called. A unit is hit is when it is being attack, and usually takes
-     * damage.
+     * damage. If the healthpoints are lower than 0, the new healthpoints will be set to 0.
      *
      * @param newHealthPoints the newHealthPoints of the Unit
      */
 
     public void setHealthPoints(int newHealthPoints) {
-        this.healthPoints = newHealthPoints;
+        this.healthPoints = Integer.max(0, newHealthPoints);
     }
 
     /**
@@ -178,7 +178,7 @@ public abstract class Unit implements Comparable<Unit> {
     /**
      * An abstract method that is used to specialize the attack of an Unit.
      *
-     * @param  terrain of were the attack is happening
+     * @param terrain of were the attack is happening
      * @return this.attackBonus
      */
 

@@ -1,18 +1,18 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
-import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
-import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
 import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
+import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
+import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
+import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -1,9 +1,9 @@
-package edu.ntnu.arunang.wargames.battle;
+package edu.ntnu.arunang.wargames.model.battle;
 
-import edu.ntnu.arunang.wargames.Army;
+import edu.ntnu.arunang.wargames.model.Army;
 import edu.ntnu.arunang.wargames.event.EventType;
 import edu.ntnu.arunang.wargames.event.Subject;
-import edu.ntnu.arunang.wargames.unit.Unit;
+import edu.ntnu.arunang.wargames.model.unit.Unit;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -129,13 +129,14 @@ public class Battle extends Subject {
             attackerUnit.attack(defenderUnit, terrain);
         }
 
-        // notify observers
-        notifyObservers(EventType.UPDATE);
 
         // remove the unit if it is dead
         if (defenderUnit.isDead()) {
             defender.remove(defenderUnit);
         }
+
+        // notify observers
+        notifyObservers(EventType.UPDATE);
 
         // swap attacker and defender
         temp = attacker;

@@ -1,18 +1,18 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
-import edu.ntnu.arunang.wargames.Army;
-import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
-import edu.ntnu.arunang.wargames.unit.Unit;
-import edu.ntnu.arunang.wargames.unit.UnitFactory;
-import edu.ntnu.arunang.wargames.unit.UnitType;
+import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
+import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
+import edu.ntnu.arunang.wargames.model.unit.Unit;
+import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
+import edu.ntnu.arunang.wargames.model.unit.UnitType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -164,7 +164,7 @@ public class NewArmyCON {
 
         Button btnDelete = new Button("Delete");
         ArrayList<Unit> finalUnits = units;
-        btnDelete.setOnAction(event -> onDeleteUnits(event, finalUnits, listCard));
+        btnDelete.setOnAction(event -> onDeleteUnits(finalUnits, listCard));
 
         // add all the elements and update the page
         listCard.getChildren().add(btnDelete);
@@ -175,11 +175,10 @@ public class NewArmyCON {
     /**
      * Deletes a list of units from the army.
      *
-     * @param event triggering event
      * @param units units that are removed
      */
 
-    void onDeleteUnits(ActionEvent event, List<Unit> units, VBox vBox) {
+    void onDeleteUnits(List<Unit> units, VBox vBox) {
         for (Unit unit : units) {
             army.remove(unit);
         }
@@ -231,8 +230,8 @@ public class NewArmyCON {
         }
         menuUnitType.setOnAction(event -> this.unitType = menuUnitType.getValue());
         armyContainer.getChildren().add(armyGridPane.getGridPane());
-        ButtonFactory.initNumberOnlyTextField(fieldCount);
-        ButtonFactory.initNumberOnlyTextField(fieldHealthPoints);
+        TextDecorator.makeNumberFieldOnly(fieldCount);
+        TextDecorator.makeNumberFieldOnly(fieldHealthPoints);
         TextDecorator.makeErrorText(txtErrorMsg);
 
         initBottomBar();

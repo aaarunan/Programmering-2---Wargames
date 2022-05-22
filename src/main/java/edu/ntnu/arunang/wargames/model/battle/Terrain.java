@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.battle;
+package edu.ntnu.arunang.wargames.model.battle;
 
 /**
  * A terrain defines where a battle is simulated.

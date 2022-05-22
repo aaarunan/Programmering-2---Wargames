@@ -1,39 +1,35 @@
-package edu.ntnu.arunang.wargames.unit;
+package edu.ntnu.arunang.wargames.model.unit;
 
-import edu.ntnu.arunang.wargames.battle.Terrain;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommanderUnitTest {
+class CavalryUnitTest {
 
-    CommanderUnit attacker = new CommanderUnit("attacker", 20);
-    CommanderUnit defender = new CommanderUnit("defender", 20);
+    CavalryUnit attacker = new CavalryUnit("attacker", 20);
+    CavalryUnit defender = new CavalryUnit("defender", 15);
 
     @Test
     @DisplayName("Test attacking once")
-    void testAttack() {
+    void testAttackOnce() {
         attacker.attack(defender);
 
         assertEquals(20, attacker.getHealthPoints());
-        assertEquals(5, defender.getHealthPoints());
-
+        assertEquals(2, defender.getHealthPoints());
     }
 
     @Test
-    @DisplayName("Test attack bonus after attacking once")
+    @DisplayName("Checking attack bonus after attacking once")
     void testAttackBonus() {
-        int baseAttackBonus = CommanderUnit.BASE_ATTACK_BONUS;
-        int firstAttackBonus = CommanderUnit.FIRST_ATTACK_BONUS;
-
-        assertEquals(firstAttackBonus, attacker.getAttackBonus());
-        assertEquals(firstAttackBonus, defender.getAttackBonus());
+        int baseAttackBonus = CavalryUnit.BASE_ATTACK_BONUS;
+        int attackBonus = CavalryUnit.FIRST_ATTACK_BONUS;
 
         attacker.attack(defender);
 
         assertEquals(baseAttackBonus, attacker.getAttackBonus());
-        assertEquals(firstAttackBonus, defender.getAttackBonus());
+        assertEquals(attackBonus, defender.getAttackBonus());
     }
 
     @Test
@@ -50,28 +46,28 @@ class CommanderUnitTest {
     }
 
     @Test
-    @DisplayName("Testing death of CommanderUnit")
+    @DisplayName("Test death of CavalryUnit (attacking twice)")
     void testDeath() {
         attacker.attack(defender);
 
         assertEquals(20, attacker.getHealthPoints());
-        assertEquals(5, defender.getHealthPoints());
+        assertEquals(2, defender.getHealthPoints());
 
         attacker.attack(defender);
 
-        // edu.ntnu.arunang.wargames.Unit should be dead
+        // Unit should be dead
         assertEquals(20, attacker.getHealthPoints());
-        assertEquals(-6, defender.getHealthPoints());
+        assertEquals(0, defender.getHealthPoints());
 
         assertTrue(defender.isDead());
         assertFalse(attacker.isDead());
     }
 
     @Test
-    @DisplayName("Test all fields on copying are equal when unit has attacked")
+    @DisplayName("Test all fields are equal when copying when the Unit has been Attacked")
     void testCopy() {
         attacker.attack(defender);
-        CommanderUnit copy = attacker.copy();
+        CavalryUnit copy = attacker.copy();
         assertEquals(attacker, copy);
     }
 

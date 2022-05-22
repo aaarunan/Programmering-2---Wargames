@@ -3,8 +3,6 @@ package edu.ntnu.arunang.wargames.gui.factory;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 
 /**
  * Factory for creating clickable elements.
@@ -37,7 +35,7 @@ public class ButtonFactory {
      */
 
     public static <T> ComboBox<T> createMenuButton(T[] values) {
-        ComboBox<T> comboBox = new ComboBox(FXCollections.observableArrayList(values));
+        ComboBox<T> comboBox = new ComboBox<>(FXCollections.observableArrayList(values));
         comboBox.getStyleClass().add("menu-button");
         return comboBox;
     }
@@ -56,35 +54,4 @@ public class ButtonFactory {
 
         return button;
     }
-
-    /**
-     * Make a textField number only. Adds an Event listener that deletes all regex matches.
-     *
-     * @param textField text-field that should be number only
-     */
-
-    public static void initNumberOnlyTextField(TextField textField) {
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // regex values to remove letters
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
-    /**
-     * Create a Menu item and add text as text and id.
-     *
-     * @param text string
-     * @return menuItem element
-     */
-
-    public static MenuItem createMenuItem(String text) {
-        MenuItem menuItem = new MenuItem();
-        menuItem.setText(text);
-        menuItem.setId(text);
-
-        return menuItem;
-    }
-
 }

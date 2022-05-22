@@ -1,9 +1,8 @@
 package edu.ntnu.arunang.wargames.gui;
 
 /**
- * Singleton for storing settings and choosen attacker and defender.. Works as a cache, so there is no need
- * to load again. It can also sort the cached armies. It also caches an attacking -
- * and defending army for simulation purposes.
+ *  This singleton handles session specific details. Works as a cache. Currently, it only saves
+ *  whether the user wants to simulate. It can store further session settings aswell.
  */
 
 public class StateHandler {

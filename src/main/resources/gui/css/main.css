@@ -154,3 +154,8 @@
     -fx-background-radius: 0.7em;
     -fx-padding: 10px;
 }
+
+.image-container {
+    -fx-background-size: 60px;
+    -fx-background-image: url("../media/logo.png");
+}
