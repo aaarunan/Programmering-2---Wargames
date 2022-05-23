@@ -2,12 +2,11 @@ package edu.ntnu.arunang.wargames.fsh;
 
 import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
-import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
+import edu.ntnu.arunang.wargames.model.unit.util.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -38,38 +37,6 @@ public class ArmyFSH implements FSH {
 
     public ArmyFSH() {
 
-    }
-
-    /**
-     * Helper method to get the path of the army. This is by default in resources root /army.
-     *
-     * @param fileName the name of the army is the name of the file
-     * @return the full system path
-     */
-
-    public static String getPath(String fileName) {
-        return getDir() + "/" + fileName + "." + FILETYPE;
-    }
-
-    /**
-     * Get the directory of were the army files are saved.
-     *
-     * @return directory as string.
-     */
-
-    public static String getDir() {
-        return System.getProperty("user.home") + "/Wargames/Army";
-    }
-
-    /**
-     * Get the test path of the army this is by default in test recources root folder in /army.
-     *
-     * @param armyName armyname is the filename.
-     * @return full path
-     */
-
-    protected static String getTestPath(String armyName) {
-        return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
     }
 
     /**
@@ -151,6 +118,17 @@ public class ArmyFSH implements FSH {
     }
 
     /**
+     * Get all the army files and stored armies.
+     *
+     * @return the files
+     */
+
+    public File[] getAllArmyFiles() {
+        File folder = new File(getDir());
+        return folder.listFiles();
+    }
+
+    /**
      * Deletes an army from resources /army.
      * This will delete the file corresponding to the
      * army name.
@@ -162,6 +140,28 @@ public class ArmyFSH implements FSH {
     public boolean deleteArmy(Army army) {
         File file = new File(ArmyFSH.getPath(army.getName()));
         return file.delete();
+    }
+
+    /**
+     * Helper method for writing armies to increase cohesion.
+     * <p>
+     * throws IOException if the file can not be written to.
+     *
+     * @param file file that is being written
+     * @param army army that is being written to the file
+     * @throws IOException if the file can not be written to
+     */
+
+    private void write(File file, Army army) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(army.getName() + '\n');
+
+        for (Map.Entry<Unit, Integer> entry : army.getMap().entrySet()) {
+            writer.append(unitToCsv(entry.getKey())).append(',').append(entry.getValue().toString()).append('\n');
+        }
+
+        writer.flush();
+        writer.close();
     }
 
     /**
@@ -223,39 +223,6 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Helper method for writing armies to increase cohesion.
-     * <p>
-     * throws IOException if the file can not be written to.
-     *
-     * @param file file that is being written
-     * @param army army that is being written to the file
-     * @throws IOException if the file can not be written to
-     */
-
-    private void write(File file, Army army) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(army.getName() + '\n');
-
-        for (Map.Entry<Unit, Integer> entry : army.getMap().entrySet()) {
-            writer.append(unitToCsv(entry.getKey())).append(',').append(entry.getValue().toString()).append('\n');
-        }
-
-        writer.flush();
-        writer.close();
-    }
-
-    /**
-     * Get all the army files and stored armies.
-     *
-     * @return the files
-     */
-
-    public File[] getAllArmyFiles() {
-        File folder = new File(getDir());
-        return folder.listFiles();
-    }
-
-    /**
      * Converts the Unit to a string that represents how Units are stored in a file: unitType,unitName,health,count
      *
      * @return string that represents the unit
@@ -263,5 +230,37 @@ public class ArmyFSH implements FSH {
 
     public String unitToCsv(Unit unit) {
         return unit.getClass().getSimpleName() + ',' + unit.getName() + ',' + unit.getHealthPoints();
+    }
+
+    /**
+     * Helper method to get the path of the army. This is by default in resources root /army.
+     *
+     * @param fileName the name of the army is the name of the file
+     * @return the full system path
+     */
+
+    public static String getPath(String fileName) {
+        return getDir() + "/" + fileName + "." + FILETYPE;
+    }
+
+    /**
+     * Get the directory of were the army files are saved.
+     *
+     * @return directory as string.
+     */
+
+    public static String getDir() {
+        return System.getProperty("user.home") + "/Wargames/Army";
+    }
+
+    /**
+     * Get the test path of the army this is by default in test recources root folder in /army.
+     *
+     * @param armyName armyname is the filename.
+     * @return full path
+     */
+
+    protected static String getTestPath(String armyName) {
+        return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
     }
 }

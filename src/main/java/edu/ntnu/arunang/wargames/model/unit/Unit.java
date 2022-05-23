@@ -49,23 +49,6 @@ public abstract class Unit implements Comparable<Unit> {
     }
 
     /**
-     * Creates another instance of the Unit, by copying every field in the current object.
-     *
-     * @return copy
-     */
-
-    public abstract Unit copy();
-
-    /**
-     * Makes a copy of the unit and resets its stats.
-     * Essentially making it a new unit. Used to generalize Units.
-     *
-     * @return the unit with reset stats
-     */
-
-    public abstract Unit getResetCopy();
-
-    /**
      * Attacking deals damage to a given opponent.
      * The damage is measured by: opponent.healthPoints - this.attackPoints
      * - this.attackBonus + opponent.getArmorPoints + opponent.resistBonus.
@@ -98,6 +81,23 @@ public abstract class Unit implements Comparable<Unit> {
 
         opponent.setHealthPoints(newHealthPoints);
     }
+
+    /**
+     * Creates another instance of the Unit, by copying every field in the current object.
+     *
+     * @return copy
+     */
+
+    public abstract Unit copy();
+
+    /**
+     * Makes a copy of the unit and resets its stats.
+     * Essentially making it a new unit. Used to generalize Units.
+     *
+     * @return the unit with reset stats
+     */
+
+    public abstract Unit getResetCopy();
 
     /**
      * Checks if the unit is dead. A Unit is dead if it has less than or equal to 0 healthPoints.

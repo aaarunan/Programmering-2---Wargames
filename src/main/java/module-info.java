@@ -12,4 +12,5 @@ module wargames {
     exports edu.ntnu.arunang.wargames.event;
 
     opens edu.ntnu.arunang.wargames.gui.controller;
+    exports edu.ntnu.arunang.wargames.model.unit.util;
 }

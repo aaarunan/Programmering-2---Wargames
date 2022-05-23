@@ -19,8 +19,7 @@ import java.util.concurrent.locks.LockSupport;
 public class Battle extends Subject {
     private boolean exit = false;
 
-    private final Army attacker;
-    private final Army defender;
+    private final Army attacker, defender;
 
     private Terrain terrain;
 
@@ -93,14 +92,6 @@ public class Battle extends Subject {
     }
 
     /**
-     * Stops the simulation.
-     */
-
-    public void stopSimulation() {
-        exit = true;
-    }
-
-    /**
      * Helper method for attacking once. Random unit from attacker army attacks a random defender unit. The armies get
      * swapped. If the attack is not in a terrain, null can be passed.
      */
@@ -155,6 +146,14 @@ public class Battle extends Subject {
     }
 
     /**
+     * Stops the simulation.
+     */
+
+    public void stopSimulation() {
+        exit = true;
+    }
+
+    /**
      * Get attacker army
      *
      * @return army
@@ -172,16 +171,6 @@ public class Battle extends Subject {
 
     public Army getDefender() {
         return defender;
-    }
-
-    /**
-     * Get the number of attacks in the battle. If noe simulations have been run numOfAttacks will be 0
-     *
-     * @return number of attacks
-     */
-
-    public int getNumOfAttacks() {
-        return numOfAttacks;
     }
 
     /**
@@ -225,6 +214,16 @@ public class Battle extends Subject {
 
     public void setTerrain(Terrain terrain) {
         this.terrain = terrain;
+    }
+
+    /**
+     * Get the number of attacks in the battle. If noe simulations have been run numOfAttacks will be 0
+     *
+     * @return number of attacks
+     */
+
+    public int getNumOfAttacks() {
+        return numOfAttacks;
     }
 
     @Override

@@ -24,13 +24,14 @@ public class ContainerFactory {
      * @return VBox element
      */
 
-    public static VBox createInformationListCard() {
+    private static VBox createInformationListCard() {
         VBox vBox = new VBox();
         // add css
         vBox.getStyleClass().add("list-card");
 
         return vBox;
     }
+
 
     /**
      * Creates a VBox with alignment center. If the width is lower than 0, the width will be set to fit width.

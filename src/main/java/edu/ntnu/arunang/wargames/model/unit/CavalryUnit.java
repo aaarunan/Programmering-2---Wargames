@@ -45,6 +45,18 @@ public class CavalryUnit extends Unit {
         super(name, health, attackPoints, armorPoints);
     }
 
+    /**
+     * Attacking once will demote to from FIRST_ATTACK_BONUS to BASE_ATTACK_BONUS.
+     *
+     * @param opponent The opposing Unit that is being attacked
+     */
+
+    @Override
+    public void attack(Unit opponent) {
+        super.attack(opponent);
+        hasAttacked = true;
+    }
+
     @Override
     public CavalryUnit copy() {
         CavalryUnit copy = getResetCopy();
@@ -81,17 +93,5 @@ public class CavalryUnit extends Unit {
     @Override
     public int getResistBonus() {
         return RESIST_BONUS;
-    }
-
-    /**
-     * Attacking once will demote to from FIRST_ATTACK_BONUS to BASE_ATTACK_BONUS.
-     *
-     * @param opponent The opposing Unit that is being attacked
-     */
-
-    @Override
-    public void attack(Unit opponent) {
-        super.attack(opponent);
-        hasAttacked = true;
     }
 }

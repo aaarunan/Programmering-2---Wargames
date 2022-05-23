@@ -4,19 +4,21 @@ import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
 import edu.ntnu.arunang.wargames.gui.util.ArmyFSHutil;
 import edu.ntnu.arunang.wargames.model.army.Army;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
-import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
-import edu.ntnu.arunang.wargames.model.unit.UnitType;
+import edu.ntnu.arunang.wargames.model.unit.util.UnitFactory;
+import edu.ntnu.arunang.wargames.model.unit.util.UnitType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -99,7 +101,7 @@ public class NewArmyCON {
         }
 
 
-        if(!ArmyFSHutil.writeArmy(army)) {
+        if (!ArmyFSHutil.writeArmy(army)) {
             return;
         }
 
@@ -138,21 +140,7 @@ public class NewArmyCON {
         }
 
         repaintUnits();
-
-
-        Unit target = units.get(0);
-        // Add a card to the history container
-        ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
-        VBox listCard = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName())
-                .add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
-
-        Button btnDelete = new Button("Delete");
-        ArrayList<Unit> finalUnits = units;
-        btnDelete.setOnAction(event -> onDeleteUnits(finalUnits, listCard));
-
-        // add all the elements and update the page
-        listCard.getChildren().add(btnDelete);
-        historyContainer.getChildren().add(listCard);
+        createListCard(units);
         repaintDetails();
     }
 
@@ -190,17 +178,23 @@ public class NewArmyCON {
     }
 
     /**
-     * Initializes the bottombar.
+     * Create a list card element for units
+     *
+     * @param units untis that should be listed
      */
 
-    void initBottomBar() {
-        HBox bottomBar = NavbarFactory.createBottomBar();
-        Button back = ButtonFactory.createDefaultButton("Cancel");
-        back.setOnAction(this::onCancel);
-        Button save = ButtonFactory.createDefaultButton("Save");
-        save.setOnAction(this::onSave);
-        bottomBar.getChildren().addAll(back, save);
-        borderPane.setBottom(bottomBar);
+    private void createListCard(ArrayList<Unit> units) {
+        Unit target = units.get(0);
+        ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
+        VBox listCard = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName())
+                .add("Health points: " + target.getHealthPoints()).add("Count: " + units.size()).build();
+
+        Button btnDelete = new Button("Delete");
+        btnDelete.setOnAction(event -> onDeleteUnits(units, listCard));
+
+        // add all the elements and update the page
+        listCard.getChildren().add(btnDelete);
+        historyContainer.getChildren().add(listCard);
     }
 
     /**
@@ -220,5 +214,19 @@ public class NewArmyCON {
 
         initBottomBar();
 
+    }
+
+    /**
+     * Initializes the bottombar.
+     */
+
+    void initBottomBar() {
+        HBox bottomBar = NavbarFactory.createBottomBar();
+        Button back = ButtonFactory.createDefaultButton("Cancel");
+        back.setOnAction(this::onCancel);
+        Button save = ButtonFactory.createDefaultButton("Save");
+        save.setOnAction(this::onSave);
+        bottomBar.getChildren().addAll(back, save);
+        borderPane.setBottom(bottomBar);
     }
 }

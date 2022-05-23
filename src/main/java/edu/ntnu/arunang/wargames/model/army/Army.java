@@ -1,7 +1,7 @@
 package edu.ntnu.arunang.wargames.model.army;
 
 import edu.ntnu.arunang.wargames.model.unit.Unit;
-import edu.ntnu.arunang.wargames.model.unit.UnitType;
+import edu.ntnu.arunang.wargames.model.unit.util.UnitType;
 
 import java.util.*;
 
@@ -52,6 +52,16 @@ public class Army {
     }
 
     /**
+     * Add a Unit to the Army.
+     *
+     * @param unit Unit that is being added.
+     */
+
+    public void add(Unit unit) {
+        units.add((unit.copy()));
+    }
+
+    /**
      * Get a specific Unit in the Army by a given index.
      *
      * @param index in the collection.
@@ -74,16 +84,6 @@ public class Army {
     }
 
     /**
-     * Add a Unit to the Army.
-     *
-     * @param unit Unit that is being added.
-     */
-
-    public void add(Unit unit) {
-        units.add((unit.copy()));
-    }
-
-    /**
      * Adding multiples of the same Unit. Used for testing purposes and easily adding multiples Units.
      *
      * @param unit  Unit that is added
@@ -102,9 +102,16 @@ public class Army {
      */
 
     public void add(ArrayList<Unit> units) {
-        for (Unit unit : units) {
-            this.add(unit.copy());
-        }
+        units.forEach(this::add);
+    }
+
+    /**
+     * Get a List of the Units. The army is converted to an ArrayList. The units are copied.
+     *
+     * @return List of units.
+     */
+    public ArrayList<Unit> getUnits() {
+        return deepCopyUnits();
     }
 
     /**
@@ -176,6 +183,50 @@ public class Army {
     }
 
     /**
+     * Converts an Army into a map. This allows to get armies in a compact form with an Integer value that represents
+     * count. Used to save armies efficiently in csv files. The units are copied and reset before converting.
+     *
+     * @return a hashmap of the army.
+     */
+
+    public Map<Unit, Integer> getMap() {
+        Map<Unit, Integer> army = new HashMap<>();
+        this.shallowCopyUnits().forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+        return army;
+    }
+
+    /**
+     * Converts an Army into a map. This allows to get armies in a
+     * compact form with an Integer value that represents
+     * count. Unlike a normal map the healthpoints is set the 1,
+     * generalizing the map. The units are copied and reset before converting.
+     *
+     * @return a hashmap of the army.
+     */
+
+    public Map<Unit, Integer> getCondensedMap() {
+        Map<Unit, Integer> army = new HashMap<>();
+        for (Unit unit : this.shallowCopyUnits()) {
+            Unit copy = unit.getResetCopy();
+            copy.setHealthPoints(1);
+            army.merge(copy, 1, Integer::sum);
+        }
+
+        return army;
+    }
+
+    /**
+     * Used for creating another instance of the same Army. Copies all units and put them in an ArrayList. Usually done
+     * before sorting, and for testing purposes.
+     *
+     * @return Arraylist of all the units in the Army.
+     */
+
+    public Army copy() {
+        return new Army(getName(), deepCopyUnits());
+    }
+
+    /**
      * Used for creating another instance of the same Army. Copies all units and put them in an ArrayList. Usually done
      * before sorting, and for testing purposes.
      *
@@ -192,33 +243,13 @@ public class Army {
     }
 
     /**
-     * Used for creating another instance of the same Army. Copies all units and put them in an ArrayList. Usually done
-     * before sorting, and for testing purposes.
-     *
-     * @return Arraylist of all the units in the Army.
-     */
-
-    public Army copy() {
-        return new Army(this.getName(), this.deepCopyUnits());
-    }
-
-    /**
      * Get a shallow copy of the units. The units are the same, put in a new arraylist.
      *
      * @return a shallow copy of the units
      */
 
     public ArrayList<Unit> shallowCopyUnits() {
-        return new ArrayList<>(this.units);
-    }
-
-    /**
-     * Get a List of the Units. The army is converted to an ArrayList. The units are copied.
-     *
-     * @return List of units.
-     */
-    public ArrayList<Unit> getUnits() {
-        return this.deepCopyUnits();
+        return new ArrayList<>(units);
     }
 
     /**
@@ -262,39 +293,6 @@ public class Army {
 
     public int size() {
         return units.size();
-    }
-
-    /**
-     * Converts an Army into a map. This allows to get armies in a compact form with an Integer value that represents
-     * count. Used to save armies efficiently in csv files. The units are copied and reset before converting.
-     *
-     * @return a hashmap of the army.
-     */
-
-    public Map<Unit, Integer> getMap() {
-        Map<Unit, Integer> army = new HashMap<>();
-        this.shallowCopyUnits().forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
-        return army;
-    }
-
-    /**
-     * Converts an Army into a map. This allows to get armies in a
-     * compact form with an Integer value that represents
-     * count. Unlike a normal map the healthpoints is set the 1,
-     * generalizing the map. The units are copied and reset before converting.
-     *
-     * @return a hashmap of the army.
-     */
-
-    public Map<Unit, Integer> getCondensedMap() {
-        Map<Unit, Integer> army = new HashMap<>();
-        for (Unit unit : this.shallowCopyUnits()) {
-            Unit copy = unit.getResetCopy();
-            copy.setHealthPoints(1);
-            army.merge(copy, 1, Integer::sum);
-        }
-
-        return army;
     }
 
     @Override

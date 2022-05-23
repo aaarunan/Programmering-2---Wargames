@@ -1,14 +1,13 @@
 package edu.ntnu.arunang.wargames.model.army;
 
-import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.*;
+import edu.ntnu.arunang.wargames.model.unit.util.UnitType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

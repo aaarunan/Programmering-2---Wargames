@@ -1,4 +1,6 @@
-package edu.ntnu.arunang.wargames.model.unit;
+package edu.ntnu.arunang.wargames.model.unit.util;
+
+import edu.ntnu.arunang.wargames.model.unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,25 +35,6 @@ public class UnitFactory {
     }
 
     /**
-     * Constructs a unit by a give UnitType
-     *
-     * @param type   unit type
-     * @param name   unit name
-     * @param health unit health
-     * @return A constructed Unit
-     * @throws IllegalArgumentException if the Unit type is not constructable
-     */
-
-    public static Unit constructUnit(UnitType type, String name, int health) throws IllegalArgumentException {
-        return switch (type) {
-            case CavalryUnit -> new CavalryUnit(name, health);
-            case CommanderUnit -> new CommanderUnit(name, health);
-            case InfantryUnit -> new InfantryUnit(name, health);
-            case RangedUnit -> new RangedUnit(name, health);
-        };
-    }
-
-    /**
      * Constructs units from a parsed line. The units are created with stats reset.
      *
      * @param type   unit type
@@ -71,5 +54,24 @@ public class UnitFactory {
         }
 
         return units;
+    }
+
+    /**
+     * Constructs a unit by a give UnitType
+     *
+     * @param type   unit type
+     * @param name   unit name
+     * @param health unit health
+     * @return A constructed Unit
+     * @throws IllegalArgumentException if the Unit type is not constructable
+     */
+
+    public static Unit constructUnit(UnitType type, String name, int health) throws IllegalArgumentException {
+        return switch (type) {
+            case CavalryUnit -> new CavalryUnit(name, health);
+            case CommanderUnit -> new CommanderUnit(name, health);
+            case InfantryUnit -> new InfantryUnit(name, health);
+            case RangedUnit -> new RangedUnit(name, health);
+        };
     }
 }
