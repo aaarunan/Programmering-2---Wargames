@@ -9,7 +9,7 @@ import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
 import edu.ntnu.arunang.wargames.gui.util.ArmyFSHutil;
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
