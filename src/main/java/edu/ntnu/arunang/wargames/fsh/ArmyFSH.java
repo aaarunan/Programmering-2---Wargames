@@ -1,13 +1,15 @@
 package edu.ntnu.arunang.wargames.fsh;
 
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
 
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ArmyFSH is a file system handler (FSH) class for an Army.
@@ -232,8 +234,12 @@ public class ArmyFSH implements FSH {
 
     private void write(File file, Army army) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(army.getName());
-        writer.write(army.toCsv());
+        writer.write(army.getName() + '\n');
+
+        for (Map.Entry<Unit, Integer> entry : army.getMap().entrySet()) {
+            writer.append(unitToCsv(entry.getKey())).append(',').append(entry.getValue().toString()).append('\n');
+        }
+
         writer.flush();
         writer.close();
     }
@@ -244,8 +250,18 @@ public class ArmyFSH implements FSH {
      * @return the files
      */
 
-    public File[] getAllArmyFiles() {
+    public File[] getAllFilesInDir() {
         File folder = new File(getDir());
         return folder.listFiles();
+    }
+
+    /**
+     * Converts the Unit to a string that represents how Units are stored in a file: unitType,unitName,health,count
+     *
+     * @return string that represents the unit
+     */
+
+    public String unitToCsv(Unit unit) {
+        return unit.getClass().getSimpleName() + ',' + unit.getName() + ',' + unit.getHealthPoints();
     }
 }
