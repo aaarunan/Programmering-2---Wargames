@@ -29,10 +29,10 @@
                                        <content>
                                           <VBox prefHeight="33.0" prefWidth="0.0">
                                              <children>
-                                                    <VBox fx:id="attackerArmyContainer" prefHeight="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
-                                                <VBox fx:id="attackerUnitsWindow" VBox.vgrow="ALWAYS">
+                                                    <VBox fx:id="attackerArmyContainer" prefHeight="0.0" prefWidth="0.0" />
+                                                <VBox fx:id="attackerUnitsWindow">
                                                    <VBox.margin>
-                                                      <Insets />
+                                                      <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </VBox>
                                              </children>
@@ -47,10 +47,10 @@
                                        <content>
                                           <VBox prefHeight="33.0" prefWidth="0.0">
                                              <children>
-                                                <VBox fx:id="defenderArmyContainer" prefHeight="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
-                                                <VBox fx:id="defenderUnitsWindow" VBox.vgrow="ALWAYS">
+                                                <VBox fx:id="defenderArmyContainer" prefHeight="0.0" prefWidth="0.0" />
+                                                <VBox fx:id="defenderUnitsWindow">
                                                    <VBox.margin>
-                                                      <Insets />
+                                                      <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </VBox>
                                              </children>
