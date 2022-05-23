@@ -1,6 +1,6 @@
 package edu.ntnu.arunang.wargames.fsh;
 
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.CavalryUnit;
 import edu.ntnu.arunang.wargames.model.unit.CommanderUnit;
 import edu.ntnu.arunang.wargames.model.unit.InfantryUnit;
@@ -31,19 +31,6 @@ public class ArmyFSHTest {
     }
 
     @Test
-    @DisplayName("Test file writing, by checking that the bytes are the same for a pre-made Army.")
-    void testFileWriting() throws IOException {
-        Army army = new Army("Test");
-        army.add(cavUnit, 50);
-        army.add(infUnit, 23);
-
-        ArmyFSH armyFSH = new ArmyFSH();
-        armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
-        assertEquals(-1,
-                Files.mismatch(Paths.get(ArmyFSH.getTestPath("TestFasit")), Paths.get(ArmyFSH.getTestPath("Test"))));
-    }
-
-    @Test
     @DisplayName("Test file reading")
     void testFileReading() throws FileFormatException, IOException {
         Army army = new Army("testReading");
@@ -57,7 +44,7 @@ public class ArmyFSHTest {
         armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
 
-        assertEquals(army, armyFromFile);
+    assertEquals(army, armyFromFile);
     }
 
     @Test
