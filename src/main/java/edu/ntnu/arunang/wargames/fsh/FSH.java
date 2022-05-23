@@ -20,4 +20,19 @@ public interface FSH {
     default boolean fileExists(File file) {
         return file.exists() && !file.isDirectory();
     }
+
+    /**
+     * Get the file name without the extension.
+     *
+     * @param file file that is parsed
+     * @return filename without extension
+     */
+
+    default String getFileNameWithoutExtension(File file) {
+        try {
+            return file.getName().substring(0, file.getName().lastIndexOf('.'));
+        } catch (StringIndexOutOfBoundsException e) {
+            return file.toString();
+        }
+    }
 }

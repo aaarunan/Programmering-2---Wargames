@@ -149,26 +149,6 @@ public class ArmyFSH implements FSH {
     }
 
     /**
-     * Load multiple files to a list.
-     *
-     * @param files files that are parsed
-     * @return parsed armies
-     * @throws IOException         if the file does not exist or could not be found
-     * @throws FileFormatException if one of the file has formatting issues
-     */
-
-    public List<Army> loadFromFiles(File[] files) throws IOException, FileFormatException {
-        List<Army> armies = new ArrayList<>();
-
-        //parse all files
-        for (File file : files) {
-            armies.add(this.loadFromFile(file));
-        }
-
-        return armies;
-    }
-
-    /**
      * Deletes an army from resources /army.
      * This will delete the file corresponding to the
      * army name.
@@ -230,7 +210,7 @@ public class ArmyFSH implements FSH {
      * @return true if csv
      */
 
-    private boolean isCsv(String fileName) {
+    protected boolean isCsv(String fileName) {
         int index = fileName.lastIndexOf('.');
 
         if (index > 0) {

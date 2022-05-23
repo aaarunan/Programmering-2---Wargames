@@ -84,7 +84,7 @@ class UnitContainer {
     }
 
     /**
-     * Update the gridpane with a given count.
+     * Update the grid-pane with a given count.
      *
      * @param newCount new count
      */
@@ -103,7 +103,7 @@ class UnitContainer {
     }
 
     /**
-     * Get the gridpane element.
+     * Get the grid-pane element.
      *
      * @return constructed gridpane
      */

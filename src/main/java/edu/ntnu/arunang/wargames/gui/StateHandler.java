@@ -6,7 +6,7 @@ package edu.ntnu.arunang.wargames.gui;
  */
 
 public class StateHandler {
-    private static boolean simulate;
+    private boolean simulate;
     private static StateHandler single_instance = null;
 
     /**
@@ -47,6 +47,6 @@ public class StateHandler {
      */
 
     public void setSimulate(boolean simulate) {
-        StateHandler.simulate = simulate;
+        this.simulate = simulate;
     }
 }

@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 /**
- * An object for viewing army stats. The armies are viewed in a gridpane. The reason for a
+ * An object for viewing army stats. The armies are viewed in a grid-pane. The reason for a
  * separate object is for easy and efficient update.
  */
 
@@ -60,9 +60,9 @@ public class ArmyContainer {
     }
 
     /**
-     * Get the gridpane element.
+     * Get the grid-pane element.
      *
-     * @return gridpane element
+     * @return grid-pane element
      */
 
     public GridPane getGridPane() {

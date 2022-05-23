@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * Manages multiple unit container by a given army. The cards are stored in a Flowpane.
- * the cards can be shown in a condensed or normal view. condensed view removes healthpoints
+ * Manages multiple unit container by a given army. The cards are stored in a Flow-pane.
+ * the cards can be shown in a condensed or normal view. condensed view removes health-points
  * and generalizes the units extensively. Condensed mode is used for simulation purposes.
  */
 

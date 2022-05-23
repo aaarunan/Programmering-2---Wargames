@@ -80,11 +80,15 @@ public class Battle extends Subject {
      *
      * @param delay the delay on each attack
      * @return the thread the simulation is running
-     * @throws IllegalStateException    if the armies has no Units.
-     * @throws IllegalArgumentException if the terrain is not set
+     * @throws IllegalStateException    if the armies has no Units.or the terrain is not set
+     * @throws IllegalArgumentException if the delay is less than 0
      */
 
-    public Army simulateDelayWithTerrain(int delay) throws IllegalStateException, IllegalArgumentException {
+    public Army simulateDelayWithTerrain(int delay) throws IllegalStateException, IllegalArgumentException{
+        //check if delay is less than 0
+        if (delay < 0) {
+            throw new IllegalArgumentException("Delay must be positive");
+        }
         // set exit to false
         prepareBattle(true);
         exit = false;
@@ -160,7 +164,7 @@ public class Battle extends Subject {
             throw new IllegalStateException("All armies must have at least one unit.");
         }
         if (terrain && this.terrain == null) {
-            throw new IllegalArgumentException("Terrain is null.");
+            throw new IllegalStateException("Terrain is null.");
         }
 
     }

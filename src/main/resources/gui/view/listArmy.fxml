@@ -45,7 +45,7 @@
                         </VBox>
                         <HBox alignment="TOP_RIGHT" prefHeight="0.0" prefWidth="345.0" VBox.vgrow="NEVER">
                            <children>
-                              <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-color: #a12828;" styleClass="button-delete" stylesheets="@css/main.css" text="Delete" />
+                              <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" style="-fx-background-color: #a12828;" styleClass="button-delete" text="Delete" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" />

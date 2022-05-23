@@ -1,6 +1,7 @@
 package edu.ntnu.arunang.wargames.model;
 
 import edu.ntnu.arunang.wargames.model.unit.Unit;
+import edu.ntnu.arunang.wargames.model.unit.UnitType;
 
 import java.util.*;
 
@@ -79,13 +80,12 @@ public class Army {
     /**
      * Get the all specific types of Unit. The method uses generics so that each Unit does not need their own method.
      *
-     * @param type   The class of the object
-     * @param <Type> Type of Unit
+     * @param type The unit type
      * @return List of matching Units.
      */
 
-    public <Type extends Unit> List<Unit> getUnitsByType(Class<Type> type) {
-        return units.stream().filter(e -> e.getClass().equals(type)).toList();
+    public List<Unit> getUnitsByType(UnitType type) {
+        return units.stream().filter(e -> UnitType.getUnitType(e.getClass().getSimpleName()).equals(type)).toList();
     }
 
     /**
@@ -208,6 +208,12 @@ public class Army {
     public Army copy() {
         return new Army(this.getName(), this.deepCopy());
     }
+
+    /**
+     * Get a shallow copy of the units. The units are the same, put in a new arraylist.
+     *
+     * @return a shallow copy of the units
+     */
 
     public ArrayList<Unit> shallowCopy() {
         return new ArrayList<>(this.units);

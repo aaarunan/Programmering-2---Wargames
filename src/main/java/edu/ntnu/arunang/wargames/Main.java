@@ -20,7 +20,7 @@ public class Main {
      */
 
     public static void main(String[] args) {
-        //make army directory if it does not exist already
+        //make army directory if it does not already exist
         File file = new File(ArmyFSH.getDir());
         if (!file.mkdirs()) {
             if (!file.exists()) {
@@ -31,7 +31,4 @@ public class Main {
         //Start the gui
         Application.launch(GUI.class, args);
     }
-
-
-
 }

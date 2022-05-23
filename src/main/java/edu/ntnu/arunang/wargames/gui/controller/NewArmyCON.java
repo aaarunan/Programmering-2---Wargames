@@ -1,15 +1,16 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
 import edu.ntnu.arunang.wargames.gui.GUI;
+import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
+import edu.ntnu.arunang.wargames.gui.util.ArmyFSHutil;
 import edu.ntnu.arunang.wargames.model.Army;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 import edu.ntnu.arunang.wargames.model.unit.UnitFactory;
 import edu.ntnu.arunang.wargames.model.unit.UnitType;
@@ -21,19 +22,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Controller for the newArmy page.
  */
 
 public class NewArmyCON {
-    private final Army army = new Army("Army name");
-    private final ArmyContainer armyGridPane = new ArmyContainer(army);
     @FXML
     private TextField fieldArmyName;
     @FXML
@@ -55,8 +51,12 @@ public class NewArmyCON {
     @FXML
     private VBox armyContainer;
     @FXML
+
     private BorderPane borderPane;
     private UnitType unitType;
+
+    private final Army army = new Army("Army name");
+    private final ArmyContainer armyGridPane = new ArmyContainer(army);
 
     /**
      * Changes the name of the army when typed in the army name text-field, and updates the detail container accordingly.
@@ -91,35 +91,19 @@ public class NewArmyCON {
      */
 
     void onSave(ActionEvent event) {
-        ArmyFSH armyFSH = new ArmyFSH();
 
         txtErrorMsg.setText("");
         if (txtArmyName.getText().isBlank()) {
-            txtErrorMsg.setText("Choose an army name");
+            txtErrorMsg.setText("Specify an army name");
             return;
         }
 
-        // checks if file exists
-        if (armyFSH.fileExists(new File(ArmyFSH.getPath(army.getName())))) {
-            Alert alert = AlertFactory.createConfirmation(
-                    String.format("Army '%s' already exists, do you want to override it?", army.getName()));
-            Optional<ButtonType> result = alert.showAndWait();
 
-            // cancels the process if the user declines
-            if (result.isEmpty() || result.get() == ButtonType.CANCEL) {
-                return;
-            }
-        }
-        // Checks if the army can be written
-        try {
-            armyFSH.writeArmy(army);
-        } catch (IOException e) {
-            AlertFactory.createError("Could not overwrite file. File might be in use... \n " + e.getMessage()).show();
-            return;
-        } catch (Exception e) {
-            AlertFactory.createError("Un unexpected exception occurred... \n " + e.getMessage()).show();
+        if(!ArmyFSHutil.writeArmy(army)) {
             return;
         }
+
+        StateHandler.getInstance().setSimulate(false);
 
         // removes the army from the singleton if successful, and adds the new army
         GUI.setSceneFromActionEvent(event, "listArmy");

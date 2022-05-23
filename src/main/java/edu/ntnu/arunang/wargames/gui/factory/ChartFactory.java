@@ -14,6 +14,14 @@ import javafx.scene.layout.VBox;
 public class ChartFactory {
 
     /**
+     * Static class, should not be instantiated.
+     */
+
+    private ChartFactory() {
+
+    }
+
+    /**
      * Creates a line chart used to represent a battle. Shows the units of the attacking and defending army. Used when
      * simulating a battle.
      *
@@ -23,7 +31,6 @@ public class ChartFactory {
      */
 
     public static LineChart<Number, Number> createLineChart(Army attacker, Army defender) {
-
         // create the axes of the barchart
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Number of attacks");

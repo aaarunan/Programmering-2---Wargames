@@ -52,7 +52,7 @@ public class UnitFactory {
     }
 
     /**
-     * Constructs units from a parsed line. The units is created with stats reset.
+     * Constructs units from a parsed line. The units are created with stats reset.
      *
      * @param type   unit type
      * @param name   unit name

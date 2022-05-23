@@ -1,18 +1,18 @@
 package edu.ntnu.arunang.wargames.gui.controller;
 
+import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.gui.GUI;
 import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.ButtonDecorator;
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
 import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
+import edu.ntnu.arunang.wargames.gui.util.ArmyFSHutil;
 import edu.ntnu.arunang.wargames.model.Army;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
-import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -83,13 +82,15 @@ public class ListArmyCON {
 
     /**
      * Update the army list.
-     *
-     * @param armyFiles list of armies
      */
 
-    void repaintArmies(File[] armyFiles) {
+    void repaintArmies() {
         // clear the container before adding
         armyListContainer.getChildren().clear();
+
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        File[] armyFiles = armyFSH.getAllArmyFiles();
 
         if (armyFiles == null || armyFiles.length == 0) {
             armyListContainer.getChildren().add(TextFactory.createSmallTitle("No armies found!", false));
@@ -97,26 +98,23 @@ public class ListArmyCON {
         }
 
 
-        ArmyFSH armyFSH = new ArmyFSH();
-
         // loop through all the armies
         for (File file : armyFiles) {
-            Button button = ButtonFactory.listButton(file.getName().substring(0, file.getName().lastIndexOf('.')));
-            button.setOnAction(buttonEvent -> {
-                try {
-                    this.army = armyFSH.loadFromFile(file);
-                } catch (IOException e) {
-                    AlertFactory.createError("Army could not be loaded...\n" + e.getMessage()).show();
-                    return;
-                } catch (FileFormatException e) {
-                    AlertFactory.createError("Army is wrongly formatted! \n" + e.getMessage()).show();
-                    return;
-                }
-                updatePressedArmy(button);
-                repaintArmyInformation();
-            });
-            armyListContainer.getChildren().add(button);
+            Button armyButton = ButtonFactory.listButton(armyFSH.getFileNameWithoutExtension(file));
+            armyButton.setOnAction(buttonEvent -> onArmyChosen(armyButton, file));
+            armyListContainer.getChildren().add(armyButton);
         }
+    }
+
+
+    private void onArmyChosen(Button button, File file) {
+        army = ArmyFSHutil.loadArmyFromFile(file);
+        if (army == null) {
+            return;
+        }
+
+        updatePressedArmy(button);
+        repaintArmyInformation();
     }
 
     /**
@@ -198,8 +196,6 @@ public class ListArmyCON {
      */
 
     private void importArmy(ActionEvent actionEvent) {
-        ArmyFSH armyFSH = new ArmyFSH();
-
         //get the file that is being imported
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(((Node) actionEvent.getSource()).getScene().getWindow());
@@ -209,34 +205,19 @@ public class ListArmyCON {
             return;
         }
 
-        Army army;
         //try to load the file to an army
-        try {
-            army = armyFSH.loadFromFile(file);
-        } catch (FileFormatException e) {
-            AlertFactory.createError("The file is wrongly formatted! \n" + e.getMessage()).show();
-            return;
-        } catch (IOException e) {
-            AlertFactory.createError("An error occurred when opening the file!\n" + e.getMessage()).show();
+        army = ArmyFSHutil.loadArmyFromFile(file);
+        if (army == null) {
             return;
         }
 
-        //check if the file already exists
-        if (armyFSH.fileExists(file)) {
-            Optional<ButtonType> result = AlertFactory
-                    .createConfirmation("This army already exists, do you want to override it?").showAndWait();
-            if (result.isEmpty() || result.get() != ButtonType.YES) {
-                return;
-            }
-        }
-        try {
-            armyFSH.writeArmy(army);
-        } catch (IOException e) {
-            AlertFactory.createError("An error occurred when writing the army!\n" + e.getMessage()).show();
+        //Write the army
+        if (!ArmyFSHutil.writeArmy(army)) {
             return;
         }
 
-        repaintArmies(armyFSH.getAllArmyFiles());
+        repaintArmies();
+
         AlertFactory.createInformation("Import successful").show();
     }
 
@@ -248,7 +229,6 @@ public class ListArmyCON {
 
     void onContinue(ActionEvent event) {
         if (army == null) {
-
             txtErrorMsg.setText("Choose an army");
             return;
         }
@@ -295,8 +275,7 @@ public class ListArmyCON {
         }
 
         // refresh page
-        File[] armyFiles = armyFSH.getAllArmyFiles();
-        repaintArmies(armyFiles);
+        repaintArmies();
 
         // hides the details window
         informationContainer.setVisible(false);
@@ -308,7 +287,7 @@ public class ListArmyCON {
      */
 
     @FXML
-    void initialize() {
+    private void initialize() {
         repaintHeader();
         initBottomBar();
 
@@ -316,7 +295,6 @@ public class ListArmyCON {
         unitContainer = new ArmyContainer(army);
         armyDetailsContainer.getChildren().add(unitContainer.getGridPane());
 
-        ArmyFSH armyFSH = new ArmyFSH();
-        repaintArmies(armyFSH.getAllArmyFiles());
+        repaintArmies();
     }
 }
