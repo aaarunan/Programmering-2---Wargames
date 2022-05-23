@@ -11,6 +11,10 @@
     -fx-background-color: transparent;
 }
 
+/**
+ * Styling of scrollbar taken from StackOverflow on 24.05.2022: <a href="https://stackoverflow.com/questions/48048943/javafx-8-scroll-bar-css">Scrollbar</a>
+ */
+
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
