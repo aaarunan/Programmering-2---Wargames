@@ -93,7 +93,6 @@ public class NewArmyCON {
      */
 
     void onSave(ActionEvent event) {
-
         txtErrorMsg.setText("");
         if (txtArmyName.getText().isBlank()) {
             txtErrorMsg.setText("Specify an army name");

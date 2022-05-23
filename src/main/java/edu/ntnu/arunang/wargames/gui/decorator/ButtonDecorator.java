@@ -26,10 +26,4 @@ public class ButtonDecorator {
         button.getStyleClass().add("button");
         button.getStyleClass().add("list-element");
     }
-
-    public static void makeDeleteButton(Button button) {
-        button.getStyleClass().clear();
-        button.getStyleClass().add("button");
-        button.getStyleClass().add("button-delete");
-    }
 }
