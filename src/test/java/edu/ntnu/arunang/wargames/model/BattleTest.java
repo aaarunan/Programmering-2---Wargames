@@ -1,6 +1,7 @@
 package edu.ntnu.arunang.wargames.model;
 
 import edu.ntnu.arunang.wargames.model.battle.Battle;
+import edu.ntnu.arunang.wargames.model.battle.Terrain;
 import edu.ntnu.arunang.wargames.model.unit.CavalryUnit;
 import edu.ntnu.arunang.wargames.model.unit.CommanderUnit;
 import edu.ntnu.arunang.wargames.model.unit.InfantryUnit;
@@ -16,14 +17,13 @@ class BattleTest {
     CommanderUnit comUnit = new CommanderUnit("comUnit", 40);
     InfantryUnit infUnit = new InfantryUnit("infUnit", 60);
 
-    Army attacker = new Army("Attacker");
-    Army defender = new Army("Defender");
-
-    Battle battle = new Battle(attacker, defender, null);
 
     @Test
     @DisplayName("Test when both armies are empty")
     void testBattleOnFullEmpty() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+        Battle battle = new Battle(attacker, defender, null);
         IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(),
                 "All armies must have at least one unit."
 
@@ -35,9 +35,12 @@ class BattleTest {
     @Test
     @DisplayName("Test simulation on one empty army ")
     void testBattleOnOneEmptyArmy() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+        Battle battle = new Battle(attacker, defender, null);
+
         attacker.add(infUnit);
-        battle = new Battle(attacker, defender, null);
-        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(),
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, battle::simulate,
                 "All armies must have at least one unit."
 
         );
@@ -48,10 +51,12 @@ class BattleTest {
     @Test
     @DisplayName("Simulates an unfavorable match for the defender.")
     void testWinBattle() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+        Battle battle = new Battle(attacker, defender, null);
 
         attacker.add(opUnit);
         defender.add(comUnit);
-        battle = new Battle(attacker, defender, null);
 
         assertEquals(attacker, battle.simulate());
     }
@@ -59,13 +64,33 @@ class BattleTest {
     @Test
     @DisplayName("Tests simulation on two similar armies")
     void testSimilarArmies() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+        Battle battle = new Battle(attacker, defender, null);
+
         int count = 1000;
 
         attacker.add(infUnit, count);
         defender.add(infUnit, count);
 
-        battle = new Battle(attacker, defender, null);
-
         assertEquals(attacker, battle.simulate());
+    }
+
+    @Test
+    @DisplayName("Test on negative delay on simulation")
+    void testNegativeDelay() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+        Battle battle = new Battle(attacker, defender, null);
+
+        attacker.add(opUnit);
+        defender.add(opUnit);
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> battle.simulateDelayWithTerrain(-1),
+                "Delay must be positive"
+
+        );
+
+        assertEquals("Delay must be positive", thrown.getMessage());
     }
 }

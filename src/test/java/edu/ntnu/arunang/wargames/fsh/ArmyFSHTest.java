@@ -117,4 +117,55 @@ public class ArmyFSHTest {
 
         assertEquals("Too few fields on line: 1", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Test is CSV")
+    void testisCSV(){
+        ArmyFSH armyFSH = new ArmyFSH();
+        File file = new File(ArmyFSH.getTestPath("Blank.csv"));
+
+        assertTrue(armyFSH.isCsv(file.getName()));
+    }
+
+    @Test
+    @DisplayName("Test is CSV on non csv file")
+    void testisCSVonNonCsvFile(){
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        File file = new File("NotCSV.xxx");
+
+        assertFalse(armyFSH.isCsv(file.getName()));
+    }
+
+    @Test
+    @DisplayName("Test is CSV on no filetype")
+    void testIsCSVonNoFiletype(){
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        File file = new File("NotCSV");
+
+        assertFalse(armyFSH.isCsv(file.getName()));
+    }
+
+    @Test
+    @DisplayName("Test get filename only without filename")
+    void testGetFileNameOnlyWithoutFileName(){
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        File file = new File("NotCSV");
+
+        assertEquals("NotCSV", armyFSH.getFileNameWithoutExtension(file) );
+
+    }
+
+    @Test
+    @DisplayName("Test get filename only")
+    void testGetFileNameOnly(){
+        ArmyFSH armyFSH = new ArmyFSH();
+
+        File file = new File("NotCSV.csv");
+
+        assertEquals("NotCSV", armyFSH.getFileNameWithoutExtension(file) );
+
+    }
 }

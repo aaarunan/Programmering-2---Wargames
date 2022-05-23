@@ -1,10 +1,12 @@
 package edu.ntnu.arunang.wargames.model;
 
-import edu.ntnu.arunang.wargames.model.Army;
 import edu.ntnu.arunang.wargames.model.unit.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.TestDescriptor;
 
+import java.awt.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ArmyTest {
 
-    Army attacker = new Army("Attacker");
-    Army defender = new Army("Defender");
 
     CavalryUnit cavUnit = new CavalryUnit("cavUnit", 20);
     InfantryUnit infUnit = new InfantryUnit("infUnit", 40);
@@ -31,6 +31,9 @@ public class ArmyTest {
     @Test
     @DisplayName("Checks deletion when there are similar armies in the Army")
     void testRemoveSimilarUnit() {
+        Army attacker = new Army("Attacker");
+        Army defender = new Army("Defender");
+
         attacker.add(cavUnit);
         defender.add(cavUnit);
         defender.add(cavUnit);
@@ -45,6 +48,8 @@ public class ArmyTest {
     @Test
     @DisplayName("Checks deletion for sub-class specific differences.")
     void testRemoveSpecificUnit() {
+        Army attacker = new Army("Attacker");
+
         attacker.add(cavUnit, 2);
 
         Unit attackerUnit = attacker.get(0);
@@ -58,6 +63,8 @@ public class ArmyTest {
     @Test
     @DisplayName("Test that getRandom() works")
     void testGetRandom() {
+        Army attacker = new Army("Attacker");
+
         int count = 100;
         int units = 0;
 
@@ -77,21 +84,25 @@ public class ArmyTest {
     @Test
     @DisplayName("Check getRandom() on empty Army")
     void getRandomEmpty() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> attacker.getRandom(),
+        Army attacker = new Army("Attacker");
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, attacker::getRandom,
                 "Army has no units."
 
         );
     }
 
     @Test
-    @DisplayName("Check getting a specific type of Unit")
+    @DisplayName("Check getting a specific type of Unit, on matching units")
     void getUnitByType() {
+        Army attacker = new Army("Attacker");
+
         attacker.add(infUnit);
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
 
-        List<Unit> temp = attacker.getUnitsByType(CommanderUnit.class);
+        List<Unit> temp = attacker.getUnitsByType(UnitType.CommanderUnit);
 
         assertEquals(temp.get(0), overPoweredUnit);
         assertEquals(1, temp.size());
@@ -99,14 +110,16 @@ public class ArmyTest {
     }
 
     @Test
-    @DisplayName("Check getting a specific type of Unit")
+    @DisplayName("Check getting a specific type of Unit, when no unit match")
     void getUnitByUnitClass() {
+        Army attacker = new Army("Attacker");
+
         attacker.add(infUnit);
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
 
-        List<Unit> temp = attacker.getUnitsByType(RangedUnit.class);
+        List<Unit> temp = attacker.getUnitsByType(UnitType.RangedUnit);
 
         assertEquals(0, temp.size());
     }
