@@ -1,8 +1,8 @@
 package edu.ntnu.arunang.wargames.model.battle;
 
-import edu.ntnu.arunang.wargames.model.Army;
 import edu.ntnu.arunang.wargames.event.EventType;
 import edu.ntnu.arunang.wargames.event.Subject;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 
 import java.util.concurrent.TimeUnit;
@@ -19,10 +19,12 @@ import java.util.concurrent.locks.LockSupport;
 public class Battle extends Subject {
     private boolean exit = false;
 
-    private Army attacker;
-    private Army defender;
+    private final Army attacker;
+    private final Army defender;
 
     private Terrain terrain;
+
+    private boolean isAttackerTurn = true;
 
     private int numOfAttacks = 0;
 
@@ -31,7 +33,7 @@ public class Battle extends Subject {
      *
      * @param attacker attacking Army.
      * @param defender defending Army.
-     * @param terrain terrain of the battle
+     * @param terrain  terrain of the battle
      */
 
     public Battle(Army attacker, Army defender, Terrain terrain) {
@@ -50,24 +52,6 @@ public class Battle extends Subject {
         return new Battle(this.attacker.copy(), this.defender.copy(), this.terrain);
     }
 
-    /**
-     * This simulates a fight. A random Unit from each army will attack a random Unit of the opposing Army. This happens
-     * in a loop unit there is an army that has no units left to attack with.
-     *
-     * @return winning Army.
-     * @throws IllegalStateException if the armies has no Units.
-     */
-
-    public Army simulate() throws IllegalStateException {
-
-        prepareBattle(false);
-
-        while (attacker.hasUnits() && defender.hasUnits()) {
-            attack();
-        }
-
-        return getWinner();
-    }
 
     /**
      * This simulates a fight. A random Unit from each army will attack a random Unit of the opposing Army. This happens
@@ -76,7 +60,7 @@ public class Battle extends Subject {
      * When an attack has been done, the thread will be slept by 'delay' milliseconds. That can be used for slower
      * simulations in gui.
      * <p>
-     * The simulation happens on a terrain. If the terrain is not set, the simulation will not start.
+     * The simulation happens on a terrain. If the terrain is not set, the simulation will simulate without a terrain.
      *
      * @param delay the delay on each attack
      * @return the thread the simulation is running
@@ -84,13 +68,13 @@ public class Battle extends Subject {
      * @throws IllegalArgumentException if the delay is less than 0
      */
 
-    public Army simulateDelayWithTerrain(int delay) throws IllegalStateException, IllegalArgumentException{
+    public Army simulate(int delay) throws IllegalStateException, IllegalArgumentException {
         //check if delay is less than 0
         if (delay < 0) {
             throw new IllegalArgumentException("Delay must be positive");
         }
         // set exit to false
-        prepareBattle(true);
+        prepareBattle();
         exit = false;
 
         while (attacker.hasUnits() && defender.hasUnits() && !exit) {
@@ -122,9 +106,16 @@ public class Battle extends Subject {
      */
 
     private void attack() {
-        Army temp;
-        Unit attackerUnit = attacker.getRandom();
-        Unit defenderUnit = defender.getRandom();
+        //Check the turn
+        Unit attackerUnit;
+        Unit defenderUnit;
+        if (isAttackerTurn) {
+            attackerUnit = attacker.getRandom();
+            defenderUnit = defender.getRandom();
+        } else {
+            attackerUnit = defender.getRandom();
+            defenderUnit = attacker.getRandom();
+        }
 
         // check if the simulation is in a terrain
         if (terrain == null) {
@@ -133,40 +124,54 @@ public class Battle extends Subject {
             attackerUnit.attack(defenderUnit, terrain);
         }
 
-
         // remove the unit if it is dead
         if (defenderUnit.isDead()) {
             defender.remove(defenderUnit);
         }
 
-        // notify observers
-        notifyObservers(EventType.UPDATE);
+        numOfAttacks++;
 
         // swap attacker and defender
-        temp = attacker;
-        attacker = defender;
-        defender = temp;
+        isAttackerTurn = !isAttackerTurn;
 
-        numOfAttacks++;
+        // notify observers
+        notifyObservers(EventType.UPDATE);
     }
 
     /**
      * Checks if the armies are ready for simulation
      *
-     * @param terrain simulation on a terrain
-     * @throws IllegalStateException    if the armies has no Units.
-     * @throws IllegalArgumentException if the terrain is not set
+     * @throws IllegalStateException if the armies has no Units.
      */
 
-    public void prepareBattle(boolean terrain) throws IllegalStateException, IllegalArgumentException {
+    public void prepareBattle() throws IllegalStateException {
         // check armies and terrain
+        attacker.removeAllDeadUnits();
+        defender.removeAllDeadUnits();
+
         if (!attacker.hasUnits() || !defender.hasUnits()) {
             throw new IllegalStateException("All armies must have at least one unit.");
         }
-        if (terrain && this.terrain == null) {
-            throw new IllegalStateException("Terrain is null.");
-        }
+    }
 
+    /**
+     * Get attacker army
+     *
+     * @return army
+     */
+
+    public Army getAttacker() {
+        return attacker;
+    }
+
+    /**
+     * Get defender army
+     *
+     * @return defender army
+     */
+
+    public Army getDefender() {
+        return defender;
     }
 
     /**
@@ -186,10 +191,7 @@ public class Battle extends Subject {
      */
 
     public Army getLoser() {
-        if (attacker.hasUnits() && defender.hasUnits()) {
-            return null;
-        }
-        return attacker.hasUnits() ? defender : attacker;
+        return getWinner() == attacker ? defender : attacker;
     }
 
     /**
