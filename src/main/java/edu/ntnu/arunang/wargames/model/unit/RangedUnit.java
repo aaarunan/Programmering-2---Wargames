@@ -72,7 +72,7 @@ public class RangedUnit extends Unit {
 
     @Override
     public int getAttackBonus(Terrain terrain) {
-        int bonus = ATTACK_BONUS;
+        int bonus = getAttackBonus();
         if (terrain.equals(Terrain.HILL)) {
             bonus += HILL_ATTACK_BONUS;
         } else if (terrain.equals(Terrain.FOREST)) {
@@ -97,8 +97,6 @@ public class RangedUnit extends Unit {
     public void setHealthPoints(int newHealthPoints) {
         super.setHealthPoints(newHealthPoints);
 
-        if (resistBonus > BASE_RESIST_BONUS) {
-            resistBonus -= RESIST_INTERVAL;
-        }
+        Integer.max(BASE_RESIST_BONUS, resistBonus -= RESIST_INTERVAL);
     }
 }

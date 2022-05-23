@@ -15,7 +15,7 @@ public class CavalryUnit extends Unit {
 
     protected final static int BASE_ATTACK_BONUS = 2;
     protected final static int FIRST_ATTACK_BONUS = 6;
-    protected final static int PLAINS_ATTACK_BONUS = 10;
+    protected final static int PLAINS_ATTACK_BONUS = 2;
     protected final static int RESIST_BONUS = 1;
     protected final static int ATTACK_POINTS = 20;
     protected final static int ARMOR_POINTS = 12;
@@ -59,11 +59,8 @@ public class CavalryUnit extends Unit {
 
     @Override
     public int getAttackBonus(Terrain terrain) {
-        int bonus = BASE_ATTACK_BONUS;
+        int bonus = getAttackBonus();
 
-        if (hasAttacked) {
-            bonus += FIRST_ATTACK_BONUS;
-        }
         if (terrain.equals(Terrain.PLAINS)) {
             bonus += PLAINS_ATTACK_BONUS;
         }
@@ -78,7 +75,7 @@ public class CavalryUnit extends Unit {
 
     @Override
     public int getResistBonus(Terrain terrain) {
-        return terrain.equals(Terrain.FOREST) ? 0 : RESIST_BONUS;
+        return terrain.equals(Terrain.FOREST) ? 0 : getResistBonus();
     }
 
     @Override
