@@ -89,6 +89,7 @@ public abstract class Unit implements Comparable<Unit> {
      *
      * @param opponent The opposing unit that is being attacked
      * @throws IllegalStateException if damage dealt is positive
+     * @param terrain terrain enum
      */
 
     public void attack(Unit opponent, Terrain terrain) throws IllegalStateException {

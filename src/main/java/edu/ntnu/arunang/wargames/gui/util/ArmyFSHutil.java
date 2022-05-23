@@ -3,7 +3,7 @@ package edu.ntnu.arunang.wargames.gui.util;
 import edu.ntnu.arunang.wargames.fsh.ArmyFSH;
 import edu.ntnu.arunang.wargames.fsh.FileFormatException;
 import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 

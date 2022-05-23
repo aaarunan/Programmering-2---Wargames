@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.battle;
+package edu.ntnu.arunang.wargames.model.battle;
 
 import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.battle.Battle;

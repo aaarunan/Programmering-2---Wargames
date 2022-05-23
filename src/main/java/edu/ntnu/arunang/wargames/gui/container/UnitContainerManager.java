@@ -1,12 +1,13 @@
 package edu.ntnu.arunang.wargames.gui.container;
 
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 /**

@@ -14,6 +14,9 @@ import java.net.URL;
 /**
  * Main GUI class of the JavaFX application. Contains helper methods and boilder plate code for use in the controllers,
  * and verification of FXML loaders.
+ * <p>
+ * code was initially taken from the quizmaker application of k2g2 found here:
+ * https://gitlab.stud.idi.ntnu.no/idatt1002-2022-k2-02/idatt1002_2022_k2_02/-/blob/dev/quizmaker/src/main/java/org/ntnu/k2/g2/quizmaker/gui/GUI.java
  */
 
 public class GUI extends Application {
@@ -44,8 +47,9 @@ public class GUI extends Application {
     /**
      * Change the scene of a given stage. The path default is /resources.
      *
-     * @param stage stage that is switching scene
-     * @param page  fxml page from /recources/gui
+     * @param stage     stage that is switching scene
+     * @param page      fxml page from /recources/gui
+     * @param maximized wether the code should be
      */
 
     public static void setSceneFromStage(Stage stage, String page, boolean maximized) {
@@ -113,6 +117,13 @@ public class GUI extends Application {
         }
         return loader;
     }
+
+    /**
+     * Get the path for the fxml pages
+     *
+     * @param page name of the page
+     * @return Full URL
+     */
 
     public static URL getPath(String page) {
         return GUI.class.getResource("/gui/view/" + page + ".fxml");

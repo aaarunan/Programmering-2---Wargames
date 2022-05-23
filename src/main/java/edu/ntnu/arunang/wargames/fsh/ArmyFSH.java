@@ -250,7 +250,7 @@ public class ArmyFSH implements FSH {
      * @return the files
      */
 
-    public File[] getAllFilesInDir() {
+    public File[] getAllArmyFiles() {
         File folder = new File(getDir());
         return folder.listFiles();
     }
