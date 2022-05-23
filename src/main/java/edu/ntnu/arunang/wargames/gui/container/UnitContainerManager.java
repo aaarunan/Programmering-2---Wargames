@@ -44,9 +44,11 @@ public class UnitContainerManager {
      */
 
     private void initContainer() {
-        for (Map.Entry<Unit, Integer> entry : new HashSet<>(getMap().entrySet())) {
-            Unit unit = entry.getKey();
-            UnitContainer container = new UnitContainer(unit, entry.getValue(), condensed);
+        Map<Unit, Integer> map = getMap();
+
+        List<Unit> unitsSorted = map.keySet().stream().sorted().toList();
+        for (Unit unit : unitsSorted) {
+            UnitContainer container = new UnitContainer(unit, map.get(unit), condensed);
             containers.put(unit, container);
             flowPane.getChildren().add(container.getGridPane());
         }
@@ -67,6 +69,7 @@ public class UnitContainerManager {
                 entry.getValue().updateUnit(units.get(unit));
                 continue;
             }
+
             GridPane pane = entry.getValue().getGridPane();
 
             //hide the pane if it is not in the map

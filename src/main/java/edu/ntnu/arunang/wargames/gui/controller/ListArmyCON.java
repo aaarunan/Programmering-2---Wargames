@@ -12,7 +12,7 @@ import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
 import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
 import edu.ntnu.arunang.wargames.gui.util.ArmyFSHutil;
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,9 +51,9 @@ public class ListArmyCON {
     @FXML
     private BorderPane borderPane;
 
-    private Army army = new Army("army");
-    private Army attacker;
-    private Army defender;
+    private Army pickedArmy = new Army("army");
+    private Army choosenAttacker;
+
     private Label txtErrorMsg;
 
     private Button btnPressedArmy;
@@ -71,13 +71,13 @@ public class ListArmyCON {
             informationContainer.setVisible(true);
         }
 
-        txtArmyName.setText(army.getName());
+        txtArmyName.setText(pickedArmy.getName());
 
-        unitContainer.setArmy(army);
+        unitContainer.setArmy(pickedArmy);
         unitContainer.updateData();
 
         unitDetailsContainer.getChildren().clear();
-        unitDetailsContainer.getChildren().add(new UnitContainerManager(army, false).getFlowpane());
+        unitDetailsContainer.getChildren().add(new UnitContainerManager(pickedArmy, false).getFlowpane());
     }
 
     /**
@@ -108,8 +108,8 @@ public class ListArmyCON {
 
 
     private void onArmyChosen(Button button, File file) {
-        army = ArmyFSHutil.loadArmyFromFile(file);
-        if (army == null) {
+        pickedArmy = ArmyFSHutil.loadArmyFromFile(file);
+        if (pickedArmy == null) {
             return;
         }
 
@@ -123,7 +123,7 @@ public class ListArmyCON {
 
     void repaintHeader() {
         if (StateHandler.getInstance().isSimulate()) {
-            if (attacker == null) {
+            if (choosenAttacker == null) {
                 title.setText("Choose attacker");
             } else {
                 title.setText("Choose defender");
@@ -143,7 +143,7 @@ public class ListArmyCON {
             ButtonDecorator.makeListElementDefault(btnPressedArmy);
         }
 
-        if (!army.equals(attacker)) {
+        if (!pickedArmy.equals(choosenAttacker)) {
             ButtonDecorator.makeListElementHighlighted(button);
             isAttacker = false;
         } else {
@@ -181,6 +181,7 @@ public class ListArmyCON {
 
         Button btnNewArmy = ButtonFactory.createDefaultButton("New army");
         btnNewArmy.setOnAction(event -> GUI.setSceneFromActionEvent(event, "newArmy"));
+
         Button btnImportArmy = ButtonFactory.createDefaultButton("Import army");
         btnImportArmy.setOnAction(this::importArmy);
 
@@ -206,13 +207,13 @@ public class ListArmyCON {
         }
 
         //try to load the file to an army
-        army = ArmyFSHutil.loadArmyFromFile(file);
-        if (army == null) {
+        pickedArmy = ArmyFSHutil.loadArmyFromFile(file);
+        if (pickedArmy == null) {
             return;
         }
 
         //Write the army
-        if (!ArmyFSHutil.writeArmy(army)) {
+        if (!ArmyFSHutil.writeArmy(pickedArmy)) {
             return;
         }
 
@@ -228,27 +229,27 @@ public class ListArmyCON {
      */
 
     void onContinue(ActionEvent event) {
-        if (army == null) {
+        if (pickedArmy == null) {
             txtErrorMsg.setText("Choose an army");
             return;
         }
 
-        if (attacker == null) {
-            attacker = army;
+        if (choosenAttacker == null) {
+            choosenAttacker = pickedArmy;
             ButtonDecorator.makeListElementActive(btnPressedArmy);
             btnPressedArmy.setText("(Attacker) " + btnPressedArmy.getText());
             btnPressedArmy = null;
         } else {
-            defender = army;
+            Army choosenDefender = pickedArmy;
             FXMLLoader loader = GUI.initLoader(GUI.getPath("simulate"));
-            ((SimulateCON) loader.getController()).initialize(attacker, defender);
+            ((SimulateCON) loader.getController()).initialize(choosenAttacker, choosenDefender);
             Scene scene = btnPressedArmy.getScene();
             Stage stage = (Stage) scene.getWindow();
             stage.setScene(new Scene(loader.getRoot(), scene.getWidth(), scene.getHeight()));
         }
         repaintHeader();
         informationContainer.setVisible(false);
-        army = null;
+        pickedArmy = null;
     }
 
     /**
@@ -268,7 +269,7 @@ public class ListArmyCON {
         }
 
         // show error if failed
-        if (!armyFSH.deleteArmy(army)) {
+        if (!armyFSH.deleteArmy(pickedArmy)) {
             AlertFactory.createWarning("Could not remove army. \n The army file might be in use or does not exist.")
                     .show();
             return;
@@ -292,7 +293,7 @@ public class ListArmyCON {
         initBottomBar();
 
         informationContainer.setVisible(false);
-        unitContainer = new ArmyContainer(army);
+        unitContainer = new ArmyContainer(pickedArmy);
         armyDetailsContainer.getChildren().add(unitContainer.getGridPane());
 
         repaintArmies();

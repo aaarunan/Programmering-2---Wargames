@@ -1,4 +1,4 @@
-package edu.ntnu.arunang.wargames.model;
+package edu.ntnu.arunang.wargames.model.army;
 
 import edu.ntnu.arunang.wargames.model.unit.Unit;
 import edu.ntnu.arunang.wargames.model.unit.UnitType;
@@ -30,7 +30,7 @@ public class Army {
         if (name.isBlank()) {
             throw new IllegalArgumentException("Name can not be empty");
         }
-        this.name = name;
+        setName(name);
         this.units = new ArrayList<>();
     }
 
@@ -49,21 +49,6 @@ public class Army {
         }
         this.name = name;
         this.units = units;
-    }
-
-    /**
-     * Parse an army into a map. The units are created reset.
-     *
-     * @param name name of the army
-     * @param map  map of Units
-     * @return an Army parsed from map
-     */
-
-    public static Army parseMap(String name, Map<Unit, Integer> map) {
-        Army army = new Army(name);
-        map.forEach(army::add);
-
-        return army;
     }
 
     /**
@@ -106,7 +91,7 @@ public class Army {
      */
     public void add(Unit unit, int count) {
         for (int i = 0; i < count; i++) {
-            units.add(unit.copy());
+            add(unit.copy());
         }
     }
 
@@ -130,6 +115,14 @@ public class Army {
 
     public void remove(Unit unit) {
         units.remove(unit);
+    }
+
+    /**
+     * Removes all the dead units from the army.
+     */
+
+    public void removeAllDeadUnits() {
+        shallowCopyUnits().stream().filter(Unit::isDead).forEach(this::remove);
     }
 
     /**
@@ -159,7 +152,7 @@ public class Army {
      */
 
     public int getTotalHealthPoints() {
-        return this.shallowCopy().stream().mapToInt(Unit::getHealthPoints).sum();
+        return shallowCopyUnits().stream().mapToInt(Unit::getHealthPoints).sum();
     }
 
     /**
@@ -169,7 +162,7 @@ public class Army {
      */
 
     public int getTotalAttackPoints() {
-        return this.shallowCopy().stream().mapToInt(Unit::getAttackPoints).sum();
+        return shallowCopyUnits().stream().mapToInt(Unit::getAttackPoints).sum();
     }
 
     /**
@@ -179,7 +172,7 @@ public class Army {
      */
 
     public int getTotalArmorPoints() {
-        return this.shallowCopy().stream().mapToInt(Unit::getArmorPoints).sum();
+        return shallowCopyUnits().stream().mapToInt(Unit::getArmorPoints).sum();
     }
 
     /**
@@ -189,7 +182,7 @@ public class Army {
      * @return Arraylist of all the units in the Army.
      */
 
-    protected ArrayList<Unit> deepCopy() {
+    protected ArrayList<Unit> deepCopyUnits() {
         ArrayList<Unit> copy = new ArrayList<>();
 
         for (Unit unit : this.units) {
@@ -206,7 +199,7 @@ public class Army {
      */
 
     public Army copy() {
-        return new Army(this.getName(), this.deepCopy());
+        return new Army(this.getName(), this.deepCopyUnits());
     }
 
     /**
@@ -215,7 +208,7 @@ public class Army {
      * @return a shallow copy of the units
      */
 
-    public ArrayList<Unit> shallowCopy() {
+    public ArrayList<Unit> shallowCopyUnits() {
         return new ArrayList<>(this.units);
     }
 
@@ -225,7 +218,7 @@ public class Army {
      * @return List of units.
      */
     public ArrayList<Unit> getUnits() {
-        return this.deepCopy();
+        return this.deepCopyUnits();
     }
 
     /**
@@ -234,11 +227,8 @@ public class Army {
      * @return a copy of a sorted Army.
      */
 
-    protected ArrayList<Unit> sort() {
-        ArrayList<Unit> copy = this.deepCopy();
-        Collections.sort(copy);
-
-        return copy;
+    public List<Unit> sortUnits() {
+        return units.stream().sorted().toList();
     }
 
     /**
@@ -275,19 +265,6 @@ public class Army {
     }
 
     /**
-     * Converts the Unit to a string that represents how Units are stored in a file: unitType,unitName,health,count
-     *
-     * @return string that represents the unit
-     */
-
-    public String toCsv() {
-        StringBuilder sb = new StringBuilder();
-        this.getMap().forEach((k, v) -> sb.append(k.toCsv()).append(",").append(v));
-
-        return sb.toString();
-    }
-
-    /**
      * Converts an Army into a map. This allows to get armies in a compact form with an Integer value that represents
      * count. Used to save armies efficiently in csv files. The units are copied and reset before converting.
      *
@@ -296,7 +273,7 @@ public class Army {
 
     public Map<Unit, Integer> getMap() {
         Map<Unit, Integer> army = new HashMap<>();
-        this.shallowCopy().forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
+        this.shallowCopyUnits().forEach(unit -> army.merge(unit.getResetCopy(), 1, Integer::sum));
         return army;
     }
 
@@ -311,7 +288,7 @@ public class Army {
 
     public Map<Unit, Integer> getCondensedMap() {
         Map<Unit, Integer> army = new HashMap<>();
-        for (Unit unit : this.shallowCopy()) {
+        for (Unit unit : this.shallowCopyUnits()) {
             Unit copy = unit.getResetCopy();
             copy.setHealthPoints(1);
             army.merge(copy, 1, Integer::sum);
@@ -344,7 +321,7 @@ public class Army {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Army army)) return false;
-        return name.equals(army.name) && Objects.equals(this.sort(), army.sort());
+        return name.equals(army.name) && Objects.equals(this.sortUnits(), army.sortUnits());
     }
 
     /**
@@ -355,6 +332,6 @@ public class Army {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, this.sort());
+        return Objects.hash(name, this.sortUnits());
     }
 }
