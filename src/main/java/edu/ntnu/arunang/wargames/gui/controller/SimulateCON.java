@@ -6,9 +6,10 @@ import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.*;
-import edu.ntnu.arunang.wargames.model.Army;
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.battle.Battle;
 import edu.ntnu.arunang.wargames.model.battle.Terrain;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -29,51 +30,41 @@ import java.util.Date;
  */
 
 public class SimulateCON {
-
-    private final ArrayList<Battle> simulations = new ArrayList<>();
-    private final int delay = 1;
-    private final int updateGraphicsDelta = 100;
-    private final int updateTextDelta = 40;
-    @FXML
-    private VBox mainContainer;
     @FXML
     private BorderPane borderPane;
     @FXML
-    private VBox attackerArmyContainer;
-    @FXML
-    private VBox defenderArmyContainer;
-    @FXML
-    private VBox infoContainer;
-    @FXML
-    private VBox attackerUnitsWindow, defenderUnitsWindow;
+    private VBox mainContainer, attackerArmyContainer, defenderArmyContainer, infoContainer, attackerUnitsWindow, defenderUnitsWindow;
 
-    private Thread thread;
+    private final static int UPDATE_GRAPHICS_DELTA = 100;
+    private final static int UPDATE_TEXT_DELTA = 40;
 
-    private Army attacker;
-    private Army defender;
+    private final int delay = 1;
+    private long lastTextUpdate = new Date().getTime();
+    private long lastGraphicUpdate = new Date().getTime();
+
     private Army originalAttacker;
     private Army originalDefender;
+
+    private final ArrayList<Battle> simulations = new ArrayList<>();
 
     private Terrain terrain;
     private Battle battle;
 
-    // gui elements
+    // linechart
     private LineChart<Number, Number> lineChart;
     private XYChart.Series<Number, Number> attackerData;
     private XYChart.Series<Number, Number> defenderData;
-    private Button btnStart;
-    private Button btnCleanChart;
+
+    private Button btnStart, btnCleanChart;
     private ComboBox<Terrain> terrainComboBox;
+
     private final Label simulationText = TextFactory.createSmallText("Simulation run: " + 0);
     private final Text attackerHeader = TextFactory.createTitle("", true);
     private final Text defenderHeader = TextFactory.createTitle("", true);
     private final Label txtErrorMsg = TextFactory.createSmallText("");
-    private ArmyContainer attackerDetails;
-    private ArmyContainer defenderDetails;
-    private UnitContainerManager attackerUnitsContainer;
-    private UnitContainerManager defenderUnitsContainer;
-    private long lastTextUpdate = new Date().getTime();
-    private long lastGraphicUpdate = new Date().getTime();
+
+    private ArmyContainer attackerDetails, defenderDetails;
+    private UnitContainerManager attackerUnitsContainer, defenderUnitsContainer;
 
     /**
      * Updates the barchart by getting the data from the armies.
@@ -81,8 +72,8 @@ public class SimulateCON {
 
     private void repaintChart() {
         // add the data to the barchart
-        attackerData.getData().add(ChartFactory.createData(battle.getNumOfAttacks(), attacker.size()));
-        defenderData.getData().add(ChartFactory.createData(battle.getNumOfAttacks(), defender.size()));
+        attackerData.getData().add(ChartFactory.createData(battle.getNumOfAttacks(), battle.getAttacker().size()));
+        defenderData.getData().add(ChartFactory.createData(battle.getNumOfAttacks(), battle.getDefender().size()));
     }
 
     /**
@@ -113,11 +104,6 @@ public class SimulateCON {
     private void onFinish(ActionEvent event) {
         battle.stopSimulation();
 
-        //close the the thread incase it is still running
-        if (thread != null) {
-            thread.interrupt();
-        }
-
         GUI.setSceneFromActionEvent(event, "main");
     }
 
@@ -134,7 +120,7 @@ public class SimulateCON {
 
     /**
      * Starts the simulation. It prepares the battle first, and creates a new thread
-     * for the simulation
+     * for the simulation. Lastly the btnCleanChart and
      */
 
     private void onSimulationStart(ActionEvent event) {
@@ -148,7 +134,7 @@ public class SimulateCON {
         battle.setTerrain(terrain);
 
         try {
-            battle.prepareBattle(true);
+            battle.prepareBattle();
         } catch (IllegalStateException | IllegalArgumentException e) {
             AlertFactory.createError("Something went wrong! \n" + e.getMessage()).show();
             return;
@@ -156,7 +142,7 @@ public class SimulateCON {
 
         battle.attach(this::onRepaint);
 
-        thread = new Thread(() -> battle.simulateDelayWithTerrain(delay));
+        Thread thread = new Thread(() -> battle.simulate(delay));
         thread.setDaemon(true);
         thread.start();
 
@@ -189,7 +175,7 @@ public class SimulateCON {
 
     private void onSimulationResume(ActionEvent event) {
         //restart the thread
-        thread = new Thread(() -> battle.simulateDelayWithTerrain(delay));
+        Thread thread = new Thread(() -> battle.simulate(delay));
         thread.setDaemon(true);
         thread.start();
 
@@ -203,21 +189,17 @@ public class SimulateCON {
      */
 
     private void onSimulationReset() {
-        attacker = originalAttacker.copy();
-        defender = originalDefender.copy();
-
         simulations.add(battle.copy());
 
-        battle = new Battle(attacker, defender, null);
-
+        battle = new Battle(originalAttacker.copy(), originalDefender.copy(), null);
         battle.attach(this::onRepaint);
 
         //reset the start button
         btnStart.setText("Simulate");
         btnStart.setOnAction(this::onSimulationStart);
 
-        attackerDetails.setArmy(attacker);
-        defenderDetails.setArmy(defender);
+        attackerDetails.setArmy(battle.getAttacker());
+        defenderDetails.setArmy(battle.getDefender());
 
         repaintArmyInformation();
         createNewDataSeries();
@@ -231,15 +213,7 @@ public class SimulateCON {
      */
 
     public void onSimulationFinish() {
-        if (attacker.hasUnits()) {
-            attackerHeader.setText("Winner: " + attacker.getName());
-            defenderHeader.setText("Loser: " + defender.getName());
-            defenderUnitsWindow.getChildren().clear();
-        } else {
-            attackerHeader.setText("Loser: " + attacker.getName());
-            defenderHeader.setText("Winner: " + defender.getName());
-            attackerUnitsWindow.getChildren().clear();
-        }
+        AlertFactory.createInformation(battle.getWinner().getName() + " won!!");
 
         btnStart.setText("Reset");
         btnStart.setOnAction(event -> onSimulationReset());
@@ -261,19 +235,21 @@ public class SimulateCON {
         long now = new Date().getTime();
         switch (type) {
             case UPDATE -> {
-                if (now - updateTextDelta >= lastTextUpdate) {
-                    repaintArmyInformation();
-                    repaintUnitInformation();
+                if (now - UPDATE_TEXT_DELTA >= lastTextUpdate) {
+                    Platform.runLater(() -> {
+                            repaintArmyInformation();
+                            repaintUnitInformation();
+                    });
                     lastTextUpdate = now;
                 }
 
-                if (now - updateGraphicsDelta >= lastGraphicUpdate) {
-                    repaintChart();
+                if (now - UPDATE_GRAPHICS_DELTA >= lastGraphicUpdate) {
+                    Platform.runLater(this::repaintChart);
                     lastGraphicUpdate = now;
                 }
             }
 
-            case FINISH -> onSimulationFinish();
+            case FINISH -> Platform.runLater(this::onSimulationFinish);
         }
 
     }
@@ -283,8 +259,8 @@ public class SimulateCON {
      */
 
     private void resetArmyInformation() {
-        attackerHeader.setText(attacker.getName());
-        defenderHeader.setText(defender.getName());
+        attackerHeader.setText(battle.getAttacker().getName());
+        defenderHeader.setText(battle.getDefender().getName());
         simulationText.setText("Simulation run: " + simulations.size());
     }
 
@@ -293,8 +269,8 @@ public class SimulateCON {
      */
 
     private void createNewDataSeries() {
-        attackerData = ChartFactory.createDataSeries(attacker.getName() + ", run: " + simulations.size());
-        defenderData = ChartFactory.createDataSeries(defender.getName() + ", run: " + simulations.size());
+        attackerData = ChartFactory.createDataSeries(battle.getAttacker().getName() + ", run: " + simulations.size());
+        defenderData = ChartFactory.createDataSeries(battle.getDefender().getName() + ", run: " + simulations.size());
         lineChart.getData().add(attackerData);
         lineChart.getData().add(defenderData);
     }
@@ -312,8 +288,8 @@ public class SimulateCON {
         attackerUnitsWindow.getChildren().add(TextFactory.createSmallTitle("Attacker units:", false));
         defenderUnitsWindow.getChildren().add(TextFactory.createSmallTitle("Defender units:", false));
 
-        attackerUnitsContainer = new UnitContainerManager(attacker, condensed);
-        defenderUnitsContainer = new UnitContainerManager(defender, condensed);
+        attackerUnitsContainer = new UnitContainerManager(battle.getAttacker(), condensed);
+        defenderUnitsContainer = new UnitContainerManager(battle.getDefender(), condensed);
 
         attackerUnitsWindow.getChildren().add(attackerUnitsContainer.getFlowpane());
         defenderUnitsWindow.getChildren().add(defenderUnitsContainer.getFlowpane());
@@ -334,7 +310,7 @@ public class SimulateCON {
         btnCleanChart.setOnAction(this::onCleanChart);
 
         terrainComboBox = ButtonFactory.createMenuButton(Terrain.values());
-        terrainComboBox.setOnAction(actionEvent -> this.terrain = terrainComboBox.getValue());
+        terrainComboBox.setOnAction(actionEvent -> terrain = terrainComboBox.getValue());
         terrainComboBox.setPromptText("Choose a terrain");
 
         TextDecorator.makeErrorText(txtErrorMsg);
@@ -347,6 +323,31 @@ public class SimulateCON {
         borderPane.setBottom(bottomBar);
     }
 
+    private void initArmyWindows() {
+        attackerDetails = new ArmyContainer(battle.getAttacker());
+        defenderDetails = new ArmyContainer(battle.getDefender());
+
+        attackerArmyContainer.getChildren().add(attackerHeader);
+        defenderArmyContainer.getChildren().add(defenderHeader);
+        attackerArmyContainer.getChildren().add(attackerDetails.getGridPane());
+        defenderArmyContainer.getChildren().add(defenderDetails.getGridPane());
+    }
+
+    private void repaintInfoContainer() {
+        Text information = TextFactory.createTitle("", true);
+        if (battle.getWinner() != null) {
+            String winner = "(Loser)";
+            if (battle.getAttacker().hasUnits()) {
+                winner = "(Attacker)";
+            }
+
+            information.setText("Winner: " + battle.getWinner() + " " + winner);
+        }
+
+        infoContainer.getChildren().add(TextFactory.createTitle(battle.getAttacker().getName() + " vs. " + battle.getDefender().getName(), true));
+        infoContainer.getChildren().add(simulationText);
+    }
+
     /**
      * Initializes the gui elements and creates a barchart. The initialize method
      * must be called manually and set an attacking and defending army.
@@ -356,28 +357,17 @@ public class SimulateCON {
         originalDefender = defender;
         originalAttacker = attacker;
 
-        this.attacker = originalAttacker.copy();
-        this.defender = originalDefender.copy();
+        battle = new Battle(originalAttacker.copy(), originalDefender.copy(), null);
 
-        battle = new Battle(this.attacker, this.defender, null);
-
-        attackerArmyContainer.getChildren().add(attackerHeader);
-        defenderArmyContainer.getChildren().add(defenderHeader);
-
-        attackerDetails = new ArmyContainer(this.attacker);
-        defenderDetails = new ArmyContainer(this.defender);
-        attackerArmyContainer.getChildren().add(attackerDetails.getGridPane());
-        defenderArmyContainer.getChildren().add(defenderDetails.getGridPane());
-
-        infoContainer.getChildren().add(TextFactory.createTitle(this.attacker.getName() + " vs. " + this.defender.getName(), true));
-        infoContainer.getChildren().add(simulationText);
 
         // create linechart
-        lineChart = ChartFactory.createLineChart(this.attacker, this.defender);
+        lineChart = ChartFactory.createLineChart(battle.getAttacker(), battle.getDefender());
         mainContainer.getChildren().add(lineChart);
 
+        repaintInfoContainer();
         createNewDataSeries();
         resetArmyInformation();
+        initArmyWindows();
         initUnitsWindow(false);
         initBottomBar();
     }
