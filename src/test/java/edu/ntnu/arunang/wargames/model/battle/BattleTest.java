@@ -1,12 +1,13 @@
-package edu.ntnu.arunang.wargames.model;
+package edu.ntnu.arunang.wargames.battle;
 
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.battle.Battle;
-import edu.ntnu.arunang.wargames.model.battle.Terrain;
 import edu.ntnu.arunang.wargames.model.unit.CavalryUnit;
 import edu.ntnu.arunang.wargames.model.unit.CommanderUnit;
 import edu.ntnu.arunang.wargames.model.unit.InfantryUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,7 +25,7 @@ class BattleTest {
         Army attacker = new Army("Attacker");
         Army defender = new Army("Defender");
         Battle battle = new Battle(attacker, defender, null);
-        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(),
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(0),
                 "All armies must have at least one unit."
 
         );
@@ -40,7 +41,7 @@ class BattleTest {
         Battle battle = new Battle(attacker, defender, null);
 
         attacker.add(infUnit);
-        IllegalStateException thrown = assertThrows(IllegalStateException.class, battle::simulate,
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(0),
                 "All armies must have at least one unit."
 
         );
@@ -58,7 +59,7 @@ class BattleTest {
         attacker.add(opUnit);
         defender.add(comUnit);
 
-        assertEquals(attacker, battle.simulate());
+        assertEquals(attacker, battle.simulate(0));
     }
 
     @Test
@@ -73,7 +74,7 @@ class BattleTest {
         attacker.add(infUnit, count);
         defender.add(infUnit, count);
 
-        assertEquals(attacker, battle.simulate());
+        assertEquals(attacker, battle.simulate(0));
     }
 
     @Test
@@ -86,7 +87,7 @@ class BattleTest {
         attacker.add(opUnit);
         defender.add(opUnit);
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> battle.simulateDelayWithTerrain(-1),
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> battle.simulate(-1),
                 "Delay must be positive"
 
         );

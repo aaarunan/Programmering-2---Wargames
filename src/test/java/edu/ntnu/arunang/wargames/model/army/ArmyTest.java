@@ -1,14 +1,14 @@
-package edu.ntnu.arunang.wargames.model;
+package edu.ntnu.arunang.wargames.model.army;
 
+import edu.ntnu.arunang.wargames.model.army.Army;
 import edu.ntnu.arunang.wargames.model.unit.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.engine.TestDescriptor;
 
-import java.awt.*;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -144,7 +144,7 @@ public class ArmyTest {
         unitsUnsorted.add(P3);
         unitsUnsorted.add(P6);
 
-        assertEquals(unitsSorted, unitsUnsorted.sort());
+        assertEquals(unitsSorted, unitsUnsorted.sortUnits());
 
     }
 
@@ -171,7 +171,7 @@ public class ArmyTest {
         unitsUnsorted.add(P3);
         unitsUnsorted.add(P7);
 
-        assertEquals(unitsSorted, unitsUnsorted.sort());
+        assertEquals(unitsSorted, unitsUnsorted.sortUnits());
     }
 
     @Test
@@ -179,7 +179,7 @@ public class ArmyTest {
     void testSortOnEmpty() {
         Army army = new Army("test");
 
-        assertEquals(new ArrayList<Unit>(), army.sort());
+        assertEquals(new ArrayList<Unit>(), army.sortUnits());
     }
 
     @Test
@@ -200,5 +200,142 @@ public class ArmyTest {
         army.add(new CavalryUnit("yo", 10), 10);
 
         assertEquals(120, army.getTotalArmorPoints());
+    }
+
+    @Test
+    @DisplayName("Test getting map on two different units")
+    void testGetMap() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavalryUnit = new CavalryUnit("cav", 10);
+        InfantryUnit infantryUnit = new InfantryUnit("inf", 10);
+
+        army.add(cavalryUnit, 10);
+        army.add(infantryUnit, 10);
+
+        expectedMap.put(cavalryUnit, 10);
+        expectedMap.put(infantryUnit, 10);
+
+        assertEquals(expectedMap, army.getMap());
+    }
+
+    @Test
+    @DisplayName("Test getting map on different healthpoints")
+    void testGetMapOnDifferentHealthPoints() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavUnit1 = new CavalryUnit("cav", 10);
+        CavalryUnit cavUnit2 = new CavalryUnit("cav", 11);
+
+        army.add(cavUnit1, 10);
+        army.add(cavUnit2, 10);
+
+        expectedMap.put(cavUnit1, 10);
+        expectedMap.put(cavUnit2, 10);
+
+        assertEquals(expectedMap, army.getMap());
+    }
+
+    @Test
+    @DisplayName("Test getting map on non sorted")
+    void testGetMapOnNonSorted() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavUnit1 = new CavalryUnit("cav", 10);
+        CavalryUnit cavUnit2 = new CavalryUnit("cav", 11);
+
+        army.add(cavUnit1, 10);
+        army.add(cavUnit2, 10);
+        army.add(cavUnit1, 10);
+
+        expectedMap.put(cavUnit1, 20);
+        expectedMap.put(cavUnit2, 10);
+
+        assertEquals(expectedMap, army.getMap());
+    }
+
+    @Test
+    @DisplayName("Test get map on empty")
+    void testGetMapOnEmpty() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        assertEquals(expectedMap, army.getMap());
+    }
+
+    @Test
+    @DisplayName("Test getting condensed map on two different units")
+    void testGetMapCondensed() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavalryUnit = new CavalryUnit("cav", 10);
+        InfantryUnit infantryUnit = new InfantryUnit("inf", 10);
+
+        army.add(cavalryUnit, 10);
+        army.add(infantryUnit, 10);
+
+        cavalryUnit.setHealthPoints(1);
+        infantryUnit.setHealthPoints(1);
+
+        expectedMap.put(cavalryUnit, 10);
+        expectedMap.put(infantryUnit, 10);
+
+        assertEquals(expectedMap, army.getCondensedMap());
+    }
+
+    @Test
+    @DisplayName("Test getting condensed map on different healthpoints")
+    void testGetCondensedMapOnDiffrentHealthPoints() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavUnit1 = new CavalryUnit("cav", 10);
+        CavalryUnit cavUnit2 = new CavalryUnit("cav", 11);
+
+        army.add(cavUnit1, 10);
+        army.add(cavUnit2, 10);
+
+        cavUnit1.setHealthPoints(1);
+
+        expectedMap.put(cavUnit1, 20);
+
+        assertEquals(expectedMap, army.getCondensedMap());
+    }
+
+    @Test
+    @DisplayName("Test getting condensed map on non sorted")
+    void testGetCondensedMapOnNonSorted() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        CavalryUnit cavUnit1 = new CavalryUnit("cav", 10);
+        CavalryUnit cavUnit2 = new CavalryUnit("cav", 11);
+        InfantryUnit infantryUnit = new InfantryUnit("inf", 10);
+
+        army.add(cavUnit1, 10);
+        army.add(cavUnit2, 10);
+        army.add(infantryUnit, 10);
+        army.add(cavUnit1, 10);
+
+        cavUnit1.setHealthPoints(1);
+        infantryUnit.setHealthPoints(1);
+
+        expectedMap.put(cavUnit1, 30);
+        expectedMap.put(infantryUnit, 10);
+
+        assertEquals(expectedMap, army.getCondensedMap());
+    }
+
+    @Test
+    @DisplayName("Test get condensed map on empty")
+    void testGetCondensedMapOnEmpty() {
+        Army army = new Army("test");
+        HashMap<Unit,Integer> expectedMap = new HashMap<>();
+
+        assertEquals(expectedMap, army.getCondensedMap());
     }
 }
