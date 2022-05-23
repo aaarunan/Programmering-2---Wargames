@@ -37,15 +37,14 @@ public class CommanderUnit extends CavalryUnit {
 
     @Override
     public CommanderUnit copy() {
-        CommanderUnit copy = new CommanderUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(),
-                this.getArmorPoints());
-        copy.hasAttacked = this.hasAttacked;
+        CommanderUnit copy = getResetCopy();
+        copy.hasAttacked = hasAttacked;
         return copy;
     }
 
     @Override
     public CommanderUnit getResetCopy() {
-        return new CommanderUnit(this.getName(), this.getHealthPoints());
+        return new CommanderUnit(getName(), getHealthPoints(), getAttackPoints(), getArmorPoints());
     }
 
 }

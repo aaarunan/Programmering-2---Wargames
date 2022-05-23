@@ -50,15 +50,14 @@ public class RangedUnit extends Unit {
 
     @Override
     public RangedUnit copy() {
-        RangedUnit copy = new RangedUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(),
-                this.getArmorPoints());
-        copy.resistBonus = this.resistBonus;
+        RangedUnit copy = getResetCopy();
+        copy.resistBonus = resistBonus;
         return copy;
     }
 
     @Override
     public RangedUnit getResetCopy() {
-        return new RangedUnit(this.getName(), this.getHealthPoints());
+        return new RangedUnit(getName(), getHealthPoints(), getAttackPoints(), getArmorPoints());
     }
 
     @Override

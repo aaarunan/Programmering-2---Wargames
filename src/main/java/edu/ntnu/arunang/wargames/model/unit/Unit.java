@@ -193,20 +193,6 @@ public abstract class Unit implements Comparable<Unit> {
 
     public abstract int getResistBonus(Terrain terrain);
 
-    /**
-     * Converts the unit to csv. Used to save the unit to a file.
-     *
-     * @return string containing the unit
-     */
-
-    public String toCsv() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n").append(getClass().getSimpleName()).append(",").append(this.getName()).append(",")
-                .append(this.getHealthPoints());
-
-        return sb.toString();
-    }
-
     @Override
     public String toString() {
         return "Name: " + name + " HP: " + healthPoints + " Attack: " + attackPoints + " Armor: " + armorPoints

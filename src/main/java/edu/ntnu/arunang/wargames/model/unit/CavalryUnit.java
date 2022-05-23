@@ -47,15 +47,14 @@ public class CavalryUnit extends Unit {
 
     @Override
     public CavalryUnit copy() {
-        CavalryUnit copy = new CavalryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(),
-                this.getArmorPoints());
-        copy.hasAttacked = this.hasAttacked;
+        CavalryUnit copy = getResetCopy();
+        copy.hasAttacked = hasAttacked;
         return copy;
     }
 
     @Override
     public CavalryUnit getResetCopy() {
-        return new CavalryUnit(this.getName(), this.getHealthPoints());
+        return new CavalryUnit(getName(), getHealthPoints(), getAttackPoints(), getArmorPoints());
     }
 
     @Override

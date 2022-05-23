@@ -45,12 +45,12 @@ public class InfantryUnit extends Unit {
 
     @Override
     public InfantryUnit copy() {
-        return new InfantryUnit(this.getName(), this.getHealthPoints(), this.getAttackPoints(), this.getArmorPoints());
+        return new InfantryUnit(getName(), getHealthPoints(), getAttackPoints(), getArmorPoints());
     }
 
     @Override
     public InfantryUnit getResetCopy() {
-        return new InfantryUnit(this.getName(), this.getHealthPoints());
+        return copy();
     }
 
     @Override
