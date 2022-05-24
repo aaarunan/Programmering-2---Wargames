@@ -150,6 +150,7 @@ public class SimulateCON {
         defenderDetails.setArmy(battle.getDefender());
 
         repaintArmyInformation();
+        repaintInfoContainer();
         createNewDataSeries();
         resetArmyInformation();
         initUnitsWindow(false);
@@ -161,8 +162,6 @@ public class SimulateCON {
      */
 
     public void onSimulationFinish() {
-        AlertFactory.createInformation(battle.getWinner().getName() + " won!!");
-
         btnStart.setText("Reset");
         btnStart.setOnAction(event -> onSimulationReset());
 
@@ -171,6 +170,7 @@ public class SimulateCON {
 
         repaintArmyInformation();
         repaintUnitInformation();
+        repaintInfoContainer();
         repaintChart();
     }
 
@@ -255,17 +255,21 @@ public class SimulateCON {
     }
 
     private void repaintInfoContainer() {
-        Text information = TextFactory.createTitle("", true);
+        infoContainer.getChildren().clear();
+
+        Text information = TextFactory.createTitle(battle.getAttacker().getName() + "  vs. " + battle.getDefender().getName(), true);
+
         if (battle.getWinner() != null) {
             String winner = "(Loser)";
             if (battle.getAttacker().hasUnits()) {
                 winner = "(Attacker)";
             }
 
-            information.setText("Winner: " + battle.getWinner() + " " + winner);
+            information.setText("Winner: " + battle.getWinner().getName() + " " + winner);
+
         }
 
-        infoContainer.getChildren().add(TextFactory.createTitle(battle.getAttacker().getName() + " vs. " + battle.getDefender().getName(), true));
+        infoContainer.getChildren().add(information);
         infoContainer.getChildren().add(simulationText);
     }
 
