@@ -38,9 +38,15 @@ added, they should also be added in the factory, if the Unit is wished to be use
 
 ### JavaFX
 
-Todo
+The application uses a combination of fxml pages and Java code. The fxml pages can be found in resources/gui/view.
+For styling the document, only use CSS, since using both Java and CSS together might cause issues.
+
+## Creating an installer
+
+To create an installer. Run the create_installer.bat. To package the application
+<a href="https://wixtoolset.org/releases/">Wix Toolset</a> needs to be installed. 
 
 ## System requirements
 
 - Apache maven
-- Java 16
+- Java 17 
