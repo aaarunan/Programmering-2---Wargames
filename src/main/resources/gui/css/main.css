@@ -1,0 +1,165 @@
+.root {
+    -fx-font-family: Arial;
+}
+
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/**
+ * Styling of scrollbar taken from StackOverflow on 24.05.2022: <a href="https://stackoverflow.com/questions/48048943/javafx-8-scroll-bar-css">Scrollbar</a>
+ */
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.15em 0.0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0.0 0.15em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black, 90.0%);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: derive(#4D4C4F, 10.0%);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+.list-card {
+    -fx-background-color: #1c1c1c;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5px;
+    -fx-border-insets: 5px;
+    -fx-padding: 10px;
+    -fx-border-radius: 2.0em;
+    -fx-background-radius: 0.5em;
+}
+
+.grid-pane {
+    -fx-background-color: #007EA7;
+    -fx-background-radius: 6px;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+
+}
+
+.list-element {
+    -fx-pref-width: Infinity;
+    -fx-padding: 20px;
+    -fx-background-color: lightseagreen;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5 5 0 5;
+    -fx-border-insets: 5 5 0 5;
+}
+
+
+.list-element-active {
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+    -fx-background-radius: 6px;
+    -fx-padding: 15px;
+    -fx-border-color: black;
+    -fx-background-color: #1E1347;
+    -fx-border-radius: 6px;
+
+}
+
+.list-element-highlighted {
+    -fx-background-color: #20b273;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 1 0;
+    /* -fx-padding: 0.416667em 0.166667em 0.0em 0.833em; /* 5 2 0 10 */
+    -fx-padding: 0.416667em 0.166667em 0.0em 0.0em; /* overridden as 5 2 0 0 */
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 90px;
+}
+
+.tab {
+    -fx-background-insets: 0 2 0 2, 5, 5;
+    -fx-padding: 3 5 3 5;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #e6e6e6;
+
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #1E1347;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: lightseagreen;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+}
+
+.high-contrast-pane {
+    -fx-background-color: #E3F4FF;
+    -fx-background-radius: 0.7em;
+    -fx-padding: 10px;
+}
+
+.image-container {
+    -fx-background-size: 60px;
+    -fx-background-image: url("../media/logo.png");
+}

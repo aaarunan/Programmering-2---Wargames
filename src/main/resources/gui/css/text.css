@@ -1,0 +1,33 @@
+
+.title {
+    -fx-font-size: 45px;
+}
+
+.title-small {
+    -fx-font-size: 35px;
+}
+
+.text-colored {
+    -fx-fill: lightseagreen;
+    -fx-text-fill: lightseagreen;
+}
+
+.text-error {
+    -fx-text-fill: red;
+    -fx-fill:red;
+}
+
+.text-small {
+    -fx-font-size: 17px;
+}
+
+.text-field {
+    -fx-padding: 10px;
+    -fx-background-insets: 5px;
+    -fx-border-insets: 5px;
+    -fx-font-size: 16px;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-radius: 5px;
+}
