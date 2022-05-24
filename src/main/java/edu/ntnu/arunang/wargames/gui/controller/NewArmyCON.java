@@ -133,9 +133,6 @@ public class NewArmyCON {
         } catch (IllegalArgumentException e) {
             txtErrorMsg.setText(e.getMessage());
             return;
-        } catch (Exception e) {
-            AlertFactory.createError("Unexpected error occured: \n" + e.getMessage()).show();
-            return;
         }
 
         repaintUnits();
@@ -183,6 +180,9 @@ public class NewArmyCON {
      */
 
     private void createListCard(ArrayList<Unit> units) {
+        if (units.size() == 0) {
+            return;
+        }
         Unit target = units.get(0);
         ContainerFactory.ListCardBuilder listCardBuilder = new ContainerFactory.ListCardBuilder();
         VBox listCard = listCardBuilder.add("Type: " + target.getClass().getSimpleName()).add("Name: " + target.getName())
