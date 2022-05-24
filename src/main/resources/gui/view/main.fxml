@@ -39,13 +39,6 @@
          </children>
       </VBox>
    </center>
-   <bottom>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-small" text="Made by: Arunan Gnanasekaran" textAlignment="RIGHT" wrappingWidth="600.0045368671417" BorderPane.alignment="BOTTOM_RIGHT">
-         <BorderPane.margin>
-            <Insets right="4.0" />
-         </BorderPane.margin>
-      </Text>
-   </bottom>
    <stylesheets>
       <URL value="@../css/buttons.css" />
       <URL value="@../css/text.css" />
