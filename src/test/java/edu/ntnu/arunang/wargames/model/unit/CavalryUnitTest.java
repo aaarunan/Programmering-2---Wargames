@@ -49,10 +49,6 @@ class CavalryUnitTest {
     @DisplayName("Test death of CavalryUnit (attacking twice)")
     void testDeath() {
         attacker.attack(defender);
-
-        assertEquals(20, attacker.getHealthPoints());
-        assertEquals(2, defender.getHealthPoints());
-
         attacker.attack(defender);
 
         // Unit should be dead
@@ -68,6 +64,7 @@ class CavalryUnitTest {
     void testCopy() {
         attacker.attack(defender);
         CavalryUnit copy = attacker.copy();
+
         assertEquals(attacker, copy);
     }
 
@@ -81,7 +78,6 @@ class CavalryUnitTest {
                 attacker.attack(defender, terrain);
             } catch (Exception e) {
                 fail(String.format("Attack bonus: %d is not valid for terrain '%s'.", attackBonus, terrain));
-                e.printStackTrace();
             }
         }
     }

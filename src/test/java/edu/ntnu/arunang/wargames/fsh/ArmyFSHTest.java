@@ -25,6 +25,7 @@ public class ArmyFSHTest {
     void testFileCreation() throws IOException {
         ArmyFSH armyFSH = new ArmyFSH();
         File file = new File(ArmyFSH.getTestPath("fileCreation"));
+
         armyFSH.writeArmyTo(file, new Army("fileCreation"));
 
         assertTrue(armyFSH.fileExists(file));
@@ -34,12 +35,11 @@ public class ArmyFSHTest {
     @DisplayName("Test file reading")
     void testFileReading() throws FileFormatException, IOException {
         Army army = new Army("testReading");
+        ArmyFSH armyFSH = new ArmyFSH();
 
         army.add(cavUnit, 2);
         army.add(infUnit, 2);
         army.add(comUnit, 2);
-
-        ArmyFSH armyFSH = new ArmyFSH();
 
         armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
         Army armyFromFile = armyFSH.loadFromFile(new File(ArmyFSH.getTestPath(army.getName())));
@@ -51,7 +51,6 @@ public class ArmyFSHTest {
     @DisplayName("Test file reading, when no units are specified")
     void testFileReadingOnOnlyArmyName() throws FileFormatException, IOException {
         Army army = new Army("testReading");
-
         ArmyFSH armyFSH = new ArmyFSH();
 
         armyFSH.writeArmyTo(new File(ArmyFSH.getTestPath(army.getName())), army);
@@ -118,7 +117,6 @@ public class ArmyFSHTest {
     @DisplayName("Test is CSV on non csv file")
     void testisCSVonNonCsvFile(){
         ArmyFSH armyFSH = new ArmyFSH();
-
         File file = new File("NotCSV.xxx");
 
         assertFalse(armyFSH.isCsv(file.getName()));
@@ -128,7 +126,6 @@ public class ArmyFSHTest {
     @DisplayName("Test is CSV on no filetype")
     void testIsCSVonNoFiletype(){
         ArmyFSH armyFSH = new ArmyFSH();
-
         File file = new File("NotCSV");
 
         assertFalse(armyFSH.isCsv(file.getName()));
@@ -138,21 +135,17 @@ public class ArmyFSHTest {
     @DisplayName("Test get filename only without filename")
     void testGetFileNameOnlyWithoutFileName(){
         ArmyFSH armyFSH = new ArmyFSH();
-
         File file = new File("NotCSV");
 
         assertEquals("NotCSV", armyFSH.getFileNameWithoutExtension(file) );
-
     }
 
     @Test
     @DisplayName("Test get filename only")
     void testGetFileNameOnly(){
         ArmyFSH armyFSH = new ArmyFSH();
-
         File file = new File("NotCSV.csv");
 
         assertEquals("NotCSV", armyFSH.getFileNameWithoutExtension(file) );
-
     }
 }

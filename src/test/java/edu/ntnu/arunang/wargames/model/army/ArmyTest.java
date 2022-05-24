@@ -50,8 +50,8 @@ public class ArmyTest {
         Army attacker = new Army("Attacker");
 
         attacker.add(cavUnit, 2);
-
         Unit attackerUnit = attacker.get(0);
+
         attackerUnit.attack(cavUnit);
         attacker.remove(attackerUnit);
 
@@ -95,13 +95,12 @@ public class ArmyTest {
     @DisplayName("Check getting a specific type of Unit, on matching units")
     void getUnitByType() {
         Army attacker = new Army("Attacker");
-
         attacker.add(infUnit);
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
-
         List<Unit> temp = attacker.getUnitsByType(UnitType.CommanderUnit);
+
 
         assertEquals(temp.get(0), overPoweredUnit);
         assertEquals(1, temp.size());
@@ -112,13 +111,12 @@ public class ArmyTest {
     @DisplayName("Check getting a specific type of Unit, when no unit match")
     void getUnitByUnitClass() {
         Army attacker = new Army("Attacker");
+        List<Unit> temp = attacker.getUnitsByType(UnitType.RangedUnit);
 
         attacker.add(infUnit);
         attacker.add(infUnit);
         attacker.add(overPoweredUnit);
         attacker.add(cavUnit);
-
-        List<Unit> temp = attacker.getUnitsByType(UnitType.RangedUnit);
 
         assertEquals(0, temp.size());
     }

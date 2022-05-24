@@ -37,15 +37,7 @@ class RangedUnitTest {
     @DisplayName("Test death of the Unit")
     void testDeath() {
         attacker.attack(defender);
-
-        assertEquals(20, attacker.getHealthPoints());
-        assertEquals(11, defender.getHealthPoints());
-
         attacker.attack(defender);
-
-        assertEquals(20, attacker.getHealthPoints());
-        assertEquals(5, defender.getHealthPoints());
-
         attacker.attack(defender);
 
         // player should be dead

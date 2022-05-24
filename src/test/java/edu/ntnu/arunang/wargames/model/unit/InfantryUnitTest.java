@@ -24,15 +24,7 @@ class InfantryUnitTest {
     @DisplayName("Test death of Unit")
     void testDeath() {
         attacker.attack(defender);
-
-        assertEquals(20, attacker.getHealthPoints());
-        assertEquals(9, defender.getHealthPoints());
-
         attacker.attack(defender);
-
-        assertEquals(20, attacker.getHealthPoints());
-        assertEquals(3, defender.getHealthPoints());
-
         attacker.attack(defender);
 
         //Unit should be dead

@@ -25,6 +25,7 @@ class BattleTest {
         Army attacker = new Army("Attacker");
         Army defender = new Army("Defender");
         Battle battle = new Battle(attacker, defender, null);
+
         IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> battle.simulate(0),
                 "All armies must have at least one unit."
 
