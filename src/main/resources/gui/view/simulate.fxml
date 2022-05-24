@@ -1,86 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.SimulateCON">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+            fx:controller="edu.ntnu.arunang.wargames.gui.controller.SimulateCON">
     <center>
-      <TabPane>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-         </BorderPane.margin>
-         <tabs>
-            <Tab closable="false" text="Main">
-               <content>
-                  <VBox styleClass="high-contrast-pane">
-                     <children>
-                        <VBox fx:id="infoContainer" />
-                        <HBox VBox.vgrow="ALWAYS">
-                           <children>
-                              <VBox prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-                                       <content>
-                                          <VBox prefHeight="33.0" prefWidth="0.0">
-                                             <children>
-                                                    <VBox fx:id="attackerArmyContainer" prefHeight="0.0" prefWidth="0.0" />
-                                                <VBox fx:id="attackerUnitsWindow">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                </VBox>
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="36.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
-                                       <content>
-                                          <VBox prefHeight="33.0" prefWidth="0.0">
-                                             <children>
-                                                <VBox fx:id="defenderArmyContainer" prefHeight="0.0" prefWidth="0.0" />
-                                                <VBox fx:id="defenderUnitsWindow">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                </VBox>
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </VBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                        <VBox layoutX="10.0" layoutY="10.0" />
-                     </children>
-                  </VBox>
-               </content>
-            </Tab>
-            <Tab closable="false" text="Graph">
-               <content>
-                      <VBox fx:id="mainContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0" />
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
+        <TabPane>
+            <BorderPane.margin>
+                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+            </BorderPane.margin>
+            <tabs>
+                <Tab closable="false" text="Main">
+                    <content>
+                        <VBox styleClass="high-contrast-pane">
+                            <children>
+                                <VBox fx:id="infoContainer"/>
+                                <HBox VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                                    <content>
+                                                        <VBox prefHeight="33.0" prefWidth="0.0">
+                                                            <children>
+                                                                <VBox fx:id="attackerArmyContainer" prefHeight="0.0"
+                                                                      prefWidth="0.0"/>
+                                                                <VBox fx:id="attackerUnitsWindow">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0"/>
+                                                                    </VBox.margin>
+                                                                </VBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </content>
+                                                </ScrollPane>
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="36.0"
+                                                            prefWidth="0.0" VBox.vgrow="ALWAYS">
+                                                    <content>
+                                                        <VBox prefHeight="33.0" prefWidth="0.0">
+                                                            <children>
+                                                                <VBox fx:id="defenderArmyContainer" prefHeight="0.0"
+                                                                      prefWidth="0.0"/>
+                                                                <VBox fx:id="defenderUnitsWindow">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0"/>
+                                                                    </VBox.margin>
+                                                                </VBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </content>
+                                                </ScrollPane>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </HBox>
+                                <VBox layoutX="10.0" layoutY="10.0"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+                <Tab closable="false" text="Graph">
+                    <content>
+                        <VBox fx:id="mainContainer" alignment="CENTER_LEFT" prefHeight="283.0" prefWidth="212.0"/>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
     </center>
-   <stylesheets>
-      <URL value="@../css/main.css" />
-      <URL value="@../css/text.css" />
-      <URL value="@../css/icons.css" />
-      <URL value="@../css/buttons.css" />
-   </stylesheets>
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+        <URL value="@../css/text.css"/>
+        <URL value="@../css/icons.css"/>
+        <URL value="@../css/buttons.css"/>
+    </stylesheets>
 </BorderPane>

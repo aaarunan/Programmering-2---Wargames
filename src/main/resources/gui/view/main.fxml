@@ -1,47 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 <?import java.lang.String?>
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ntnu.arunang.wargames.gui.controller.MainCON">
-   <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wargames">
-               <VBox.margin>
-                  <Insets bottom="75.0" />
-               </VBox.margin>
-               <styleClass>
-                  <String fx:value="title" />
-                  <String fx:value="text-colored" />
-               </styleClass>
-            </Text>
-            <Button fx:id="btnSimulate" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onSimulate" styleClass="button-big" text="Simulate">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnArmies" alignment="CENTER" mnemonicParsing="false" onAction="#onArmies" styleClass="button-big" text="Armies">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="btnCreate" alignment="CENTER" mnemonicParsing="false" onAction="#onCreate" styleClass="button-big" text="Create army" />
-         </children>
-      </VBox>
-   </center>
-   <stylesheets>
-      <URL value="@../css/buttons.css" />
-      <URL value="@../css/text.css" />
-      <URL value="@../css/main.css" />
-   </stylesheets>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+            fx:controller="edu.ntnu.arunang.wargames.gui.controller.MainCON">
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wargames">
+                    <VBox.margin>
+                        <Insets bottom="75.0"/>
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="title"/>
+                        <String fx:value="text-colored"/>
+                    </styleClass>
+                </Text>
+                <Button fx:id="btnSimulate" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                        onAction="#onSimulate" styleClass="button-big" text="Simulate">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+                <Button fx:id="btnArmies" alignment="CENTER" mnemonicParsing="false" onAction="#onArmies"
+                        styleClass="button-big" text="Armies">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="btnCreate" alignment="CENTER" mnemonicParsing="false" onAction="#onCreate"
+                        styleClass="button-big" text="Create army"/>
+            </children>
+        </VBox>
+    </center>
+    <stylesheets>
+        <URL value="@../css/buttons.css"/>
+        <URL value="@../css/text.css"/>
+        <URL value="@../css/main.css"/>
+    </stylesheets>
 </BorderPane>

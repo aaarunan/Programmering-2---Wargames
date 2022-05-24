@@ -6,7 +6,6 @@ import edu.ntnu.arunang.wargames.model.unit.Unit;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-
 import java.util.Locale;
 
 /**

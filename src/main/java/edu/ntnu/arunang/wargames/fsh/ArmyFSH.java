@@ -40,6 +40,38 @@ public class ArmyFSH implements FSH {
     }
 
     /**
+     * Helper method to get the path of the army. This is by default in resources root /army.
+     *
+     * @param fileName the name of the army is the name of the file
+     * @return the full system path
+     */
+
+    public static String getPath(String fileName) {
+        return getDir() + "/" + fileName + "." + FILETYPE;
+    }
+
+    /**
+     * Get the directory of were the army files are saved.
+     *
+     * @return directory as string.
+     */
+
+    public static String getDir() {
+        return System.getProperty("user.home") + "/Wargames/Army";
+    }
+
+    /**
+     * Get the test path of the army this is by default in test recources root folder in /army.
+     *
+     * @param armyName armyname is the filename.
+     * @return full path
+     */
+
+    protected static String getTestPath(String armyName) {
+        return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
+    }
+
+    /**
      * Writes to a file that is given by the armyName. The file is stored in: /src/main/resources/army
      * <p>
      * If the file is not found or not accessible, an IOException will be thrown.
@@ -230,37 +262,5 @@ public class ArmyFSH implements FSH {
 
     public String unitToCsv(Unit unit) {
         return unit.getClass().getSimpleName() + ',' + unit.getName() + ',' + unit.getHealthPoints();
-    }
-
-    /**
-     * Helper method to get the path of the army. This is by default in resources root /army.
-     *
-     * @param fileName the name of the army is the name of the file
-     * @return the full system path
-     */
-
-    public static String getPath(String fileName) {
-        return getDir() + "/" + fileName + "." + FILETYPE;
-    }
-
-    /**
-     * Get the directory of were the army files are saved.
-     *
-     * @return directory as string.
-     */
-
-    public static String getDir() {
-        return System.getProperty("user.home") + "/Wargames/Army";
-    }
-
-    /**
-     * Get the test path of the army this is by default in test recources root folder in /army.
-     *
-     * @param armyName armyname is the filename.
-     * @return full path
-     */
-
-    protected static String getTestPath(String armyName) {
-        return FileSystems.getDefault().getPath("src", "test", "resources", "army", armyName + ".csv").toString();
     }
 }

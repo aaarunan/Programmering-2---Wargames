@@ -14,7 +14,7 @@
 
 .text-error {
     -fx-text-fill: red;
-    -fx-fill:red;
+    -fx-fill: red;
 }
 
 .text-small {

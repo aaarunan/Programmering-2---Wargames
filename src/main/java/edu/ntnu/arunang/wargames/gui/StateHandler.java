@@ -1,13 +1,13 @@
 package edu.ntnu.arunang.wargames.gui;
 
 /**
- *  This singleton handles session specific details. Works as a cache. Currently, it only saves
- *  whether the user wants to simulate. It can store further session settings aswell.
+ * This singleton handles session specific details. Works as a cache. Currently, it only saves
+ * whether the user wants to simulate. It can store further session settings aswell.
  */
 
 public class StateHandler {
-    private boolean simulate;
     private static StateHandler single_instance = null;
+    private boolean simulate;
 
     /**
      * Private constructor for initializing the Singleton. Can not

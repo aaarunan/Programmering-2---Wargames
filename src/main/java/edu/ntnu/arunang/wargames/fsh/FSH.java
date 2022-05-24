@@ -1,7 +1,6 @@
 package edu.ntnu.arunang.wargames.fsh;
 
 import java.io.File;
-import java.nio.file.FileSystems;
 
 /**
  * An interface for FileSystemHandlers in Wargames. This interface generalizes FSH methods. This is an interface every

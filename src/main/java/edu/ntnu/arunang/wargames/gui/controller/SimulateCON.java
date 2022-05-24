@@ -30,39 +30,30 @@ import java.util.Date;
  */
 
 public class SimulateCON {
-    @FXML
-    private BorderPane borderPane;
-    @FXML
-    private VBox mainContainer, attackerArmyContainer, defenderArmyContainer, infoContainer, attackerUnitsWindow, defenderUnitsWindow;
-
     private final static int UPDATE_GRAPHICS_DELTA = 100;
     private final static int UPDATE_TEXT_DELTA = 40;
-
     private final int delay = 1;
-    private long lastTextUpdate = new Date().getTime();
-    private long lastGraphicUpdate = new Date().getTime();
-
-    private Army originalAttacker;
-    private Army originalDefender;
-
     private final ArrayList<Battle> simulations = new ArrayList<>();
-
-    private Terrain terrain;
-    private Battle battle;
-
-    // linechart
-    private LineChart<Number, Number> lineChart;
-    private XYChart.Series<Number, Number> attackerData;
-    private XYChart.Series<Number, Number> defenderData;
-
-    private Button btnStart, btnCleanChart;
-    private ComboBox<Terrain> terrainComboBox;
-
     private final Label simulationText = TextFactory.createSmallText("Simulation run: " + 0);
     private final Text attackerHeader = TextFactory.createTitle("", true);
     private final Text defenderHeader = TextFactory.createTitle("", true);
     private final Label txtErrorMsg = TextFactory.createSmallText("");
-
+    @FXML
+    private BorderPane borderPane;
+    @FXML
+    private VBox mainContainer, attackerArmyContainer, defenderArmyContainer, infoContainer, attackerUnitsWindow, defenderUnitsWindow;
+    private long lastTextUpdate = new Date().getTime();
+    private long lastGraphicUpdate = new Date().getTime();
+    private Army originalAttacker;
+    private Army originalDefender;
+    private Terrain terrain;
+    private Battle battle;
+    // linechart
+    private LineChart<Number, Number> lineChart;
+    private XYChart.Series<Number, Number> attackerData;
+    private XYChart.Series<Number, Number> defenderData;
+    private Button btnStart, btnCleanChart;
+    private ComboBox<Terrain> terrainComboBox;
     private ArmyContainer attackerDetails, defenderDetails;
     private UnitContainerManager attackerUnitsContainer, defenderUnitsContainer;
 

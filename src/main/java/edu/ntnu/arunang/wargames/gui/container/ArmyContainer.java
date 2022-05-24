@@ -1,8 +1,8 @@
 package edu.ntnu.arunang.wargames.gui.container;
 
+import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import edu.ntnu.arunang.wargames.gui.factory.TextFactory;
 import edu.ntnu.arunang.wargames.model.army.Army;
-import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 

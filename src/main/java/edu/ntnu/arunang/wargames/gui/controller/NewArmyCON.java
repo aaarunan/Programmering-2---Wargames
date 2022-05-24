@@ -5,7 +5,6 @@ import edu.ntnu.arunang.wargames.gui.StateHandler;
 import edu.ntnu.arunang.wargames.gui.container.ArmyContainer;
 import edu.ntnu.arunang.wargames.gui.container.UnitContainerManager;
 import edu.ntnu.arunang.wargames.gui.decorator.TextDecorator;
-import edu.ntnu.arunang.wargames.gui.factory.AlertFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ButtonFactory;
 import edu.ntnu.arunang.wargames.gui.factory.ContainerFactory;
 import edu.ntnu.arunang.wargames.gui.factory.NavbarFactory;
@@ -32,6 +31,8 @@ import java.util.List;
  */
 
 public class NewArmyCON {
+    private final Army army = new Army("Army name");
+    private final ArmyContainer armyGridPane = new ArmyContainer(army);
     @FXML
     private TextField fieldArmyName;
     @FXML
@@ -56,9 +57,6 @@ public class NewArmyCON {
 
     private BorderPane borderPane;
     private UnitType unitType;
-
-    private final Army army = new Army("Army name");
-    private final ArmyContainer armyGridPane = new ArmyContainer(army);
 
     /**
      * Changes the name of the army when typed in the army name text-field, and updates the detail container accordingly.

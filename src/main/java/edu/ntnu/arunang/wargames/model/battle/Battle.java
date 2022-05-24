@@ -17,10 +17,8 @@ import java.util.concurrent.locks.LockSupport;
  */
 
 public class Battle extends Subject {
-    private boolean exit = false;
-
     private final Army attacker, defender;
-
+    private boolean exit = false;
     private Terrain terrain;
 
     private boolean isAttackerTurn = true;

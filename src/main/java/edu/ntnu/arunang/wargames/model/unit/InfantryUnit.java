@@ -65,11 +65,11 @@ public class InfantryUnit extends Unit {
 
     @Override
     public int getAttackBonus(Terrain terrain) {
-        return terrain.equals(Terrain.FOREST) ? getAttackBonus() : getAttackBonus()+ FOREST_BONUS;
+        return terrain.equals(Terrain.FOREST) ? getAttackBonus() : getAttackBonus() + FOREST_BONUS;
     }
 
     @Override
     public int getResistBonus(Terrain terrain) {
-        return terrain.equals(Terrain.FOREST) ? getResistBonus() : getResistBonus()+ FOREST_BONUS;
+        return terrain.equals(Terrain.FOREST) ? getResistBonus() : getResistBonus() + FOREST_BONUS;
     }
 }
