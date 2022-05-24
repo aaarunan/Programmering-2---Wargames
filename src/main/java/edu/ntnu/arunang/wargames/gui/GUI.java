@@ -16,7 +16,7 @@ import java.net.URL;
  * and verification of FXML loaders.
  * <p>
  * code was initially taken from the quizmaker application of k2g2 found on gitlab on 24.05.2022:
- * <a href"https://gitlab.stud.idi.ntnu.no/idatt1002-2022-k2-02/idatt1002_2022_k2_02/-/blob/dev/quizmaker/src/main/java/org/ntnu/k2/g2/quizmaker/gui/GUI.java">Gitlab - repository</a>
+ * <a href="https://gitlab.stud.idi.ntnu.no/idatt1002-2022-k2-02/idatt1002_2022_k2_02/-/blob/dev/quizmaker/src/main/java/org/ntnu/k2/g2/quizmaker/gui/GUI.java">Gitlab - repository</a>
  */
 
 public class GUI extends Application {
