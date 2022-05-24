@@ -1,0 +1,45 @@
+.button-big {
+    -fx-pref-width: 150px;
+    -fx-padding: 5px;
+    -fx-background-color: lightseagreen;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}
+
+.button:hover {
+    -fx-background-color: #149c94;
+    -fx-cursor: hand;
+}
+
+.button-delete {
+    -fx-background-color: #a12828;
+}
+
+.button {
+    -fx-padding: 15px;
+    -fx-font-weight: bold;
+    -fx-background-color: lightseagreen;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-background-insets: 5px;
+    -fx-border-insets: 5px;
+
+}
+
+.menu-button {
+    -fx-font-size: 17px;
+    -fx-background-insets: 0 6 0 6;
+    -fx-border-insets: 0 6 0 6;
+    -fx-padding: 4 10 4 10;
+    -fx-background-color: #1E1347;
+    -fx-pref-width: Infinity;
+}
+
+.button:pressed {
+    -fx-background-color: #149c11;
+}
+
+.combo-box > .list-cell {
+    -fx-text-fill: white;
+}
+
