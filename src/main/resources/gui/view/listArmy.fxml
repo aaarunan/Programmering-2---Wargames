@@ -16,9 +16,9 @@
          <children>
             <VBox prefHeight="291.0" prefWidth="132.0" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox>
+                  <VBox VBox.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="537.0" prefWidth="168.0">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="537.0" prefWidth="168.0" VBox.vgrow="ALWAYS">
                           <content>
                               <VBox fx:id="armyListContainer" prefHeight="287.0" prefWidth="236.0" styleClass="hi" />
                           </content>
