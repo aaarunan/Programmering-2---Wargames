@@ -1,4 +1,4 @@
-module wargames {
+open module wargames {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.base;
@@ -11,6 +11,5 @@ module wargames {
     exports edu.ntnu.arunang.wargames.model.battle;
     exports edu.ntnu.arunang.wargames.event;
 
-    opens edu.ntnu.arunang.wargames.gui.controller;
     exports edu.ntnu.arunang.wargames.model.unit.util;
 }
